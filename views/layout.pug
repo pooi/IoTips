@@ -1,0 +1,55 @@
+doctype html
+html(lang='en')
+  head
+    title IoT Shared Platform
+    meta(charset='utf-8')
+    //meta(name='viewport', content='width=device-width, initial-scale=1')
+    //meta(name='viewport', content='initial-scale=1, viewport-fit=cover')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover')
+
+    //meta(property='og:title', content='Discovery and Lost')
+    //meta(property='og:url', content='https://beta.denl.xyz/')
+    //meta(property='og:image', content='/images/logo/bg_og.png')
+    //meta(property='og:description', content='IoT 공유 플랫폼')
+
+
+
+    link(href='https://fonts.googleapis.com/css?family=Lato', rel='stylesheet', type='text/css')
+    link(href='https://fonts.googleapis.com/css?family=Montserrat', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', href='//cdn.jsdelivr.net/font-kopub/1.0/kopubdotum.css')
+    link(rel='stylesheet', href='http://fonts.googleapis.com/earlyaccess/notosanskr.css')
+
+
+    script(src='/javascripts/additional-func.js')
+    link(href='/stylesheets/style.css', rel='stylesheet')
+
+    script(src='/scripts/jquery.min.js')
+
+
+    script(src='/scripts/axios.min.js')
+
+    script(src='/scripts/vue.js')
+    link(href='/styles/vuetify.min.css', rel='stylesheet')
+    script(src='/scripts/vuetify.min.js')
+
+    link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons', rel='stylesheet')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+
+    script(src='/scripts/viewer.js')
+    link(href='/styles/viewer.css', rel='stylesheet')
+
+
+  body
+    #app
+
+      meta(name="theme-color", :content="statusColor")
+
+      v-app(light)
+
+        v-container#scroll-target.scroll-y.pa-0(fluid, style='overflow-x: hidden;', v-cloak)
+
+          v-layout(column, v-scroll="onScroll")
+
+            //include vue_toolbar
+
+            block content

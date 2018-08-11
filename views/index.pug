@@ -1,0 +1,13 @@
+extends layout
+
+block content
+
+  include toolbar
+
+  h1= title
+  p Welcome to #{title}
+
+
+  script(type="text/javascript" src='/javascripts/index-config.js')
+  script.
+      const vue = init();
