@@ -6,6 +6,13 @@ function init() {
         el: '#app',
         data: {
             title: 'IoT Shared Platform',
+            options: {
+                afterLoad: this.afterLoad,
+                menu: '#menu',
+                navigation: true,
+                anchors: ['home', 'about', 'page3'],
+                sectionsColor: ['#41b883', '#ff5f45', '#0798ec']
+            },
             scrollData: {
                 fab: false,
                 offsetTop: 0,
@@ -72,6 +79,9 @@ function init() {
                 $('html, body').animate({
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
+            },
+            afterLoad() {
+                console.log('After load');
             },
 
         },

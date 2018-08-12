@@ -1,11 +1,23 @@
 extends layout
 
 block content
+  script(src='/scripts/vue-fullpage.min.js')
 
-  include toolbar
+  include toolbar_index
 
-  h1= title
-  p Welcome to #{title}
+  div
+    full-page#fullpage(ref='fullpage', :options='options')
+      .section.section-full-page.pl-3.pr-3.pb-3
+        | First section ...
+        v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
+      .section.section-full-page.pl-3.pr-3.pb-3
+        | Second section ...
+        v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
+      .section.section-full-page.pl-3.pr-3.pb-3
+        | Third section ...
+        v-btn(flat, color="white", href="#home") Next
+
+
 
 
   script(type="text/javascript" src='/javascripts/index-config.js')

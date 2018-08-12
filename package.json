@@ -21,6 +21,7 @@
     "pug": "2.0.0-beta11",
     "viewerjs": "^1.2.0",
     "vue": "^2.5.17",
+    "vue-fullpage.js": "0.0.5",
     "vuetify": "^1.1.10"
   }
 }
