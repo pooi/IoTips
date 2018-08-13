@@ -1,19 +1,31 @@
 extends layout
 
 block content
+  link(href='/stylesheets/kenburn.css', rel='stylesheet')
   script(src='/scripts/vue-fullpage.min.js')
+  link(rel='stylesheet', type='text/css', href='https://unpkg.com/fullpage.js/dist/fullpage.min.css')
 
   include toolbar_index
 
   div
     full-page#fullpage(ref='fullpage', :options='options')
-      .section.section-full-page.pl-3.pr-3.pb-3
-        | First section ...
-        v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
-      .section.section-full-page.pl-3.pr-3.pb-3
+      .section.section-full-page
+        //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/nature/1600x1400')")
+        //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/buildings/1600x1400')")
+        //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/food/1600x1400')")
+        //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/technology/1600x1400')")
+        v-layout(style="height:100%;").slideshow
+          .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
+          .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
+          .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
+          .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
+          #overlay
+          //| First section ...
+          //v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
+      .section.section-full-page.pl-3.pr-3(style="z-index: 5;")
         | Second section ...
         v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
-      .section.section-full-page.pl-3.pr-3.pb-3
+      .section.section-full-page.pl-3.pr-3
         | Third section ...
         v-btn(flat, color="white", href="#home") Next
 
