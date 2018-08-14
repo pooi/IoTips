@@ -27,6 +27,40 @@
   filter: blur(2px);
 }
 
+.box-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate3d(-50%, -50%, 0);
+  transform: translate3d(-50%, -50%, 0);
+  z-index: 99;
+  text-align: center;
+  font-family: Raleway, sans-serif;
+  font-weight: 300;
+  /*text-transform: uppercase;*/
+  /*background-color: rgba(255, 255, 255, 0.75);*/
+  box-shadow: 0 1em 2em -1em rgba(0, 0, 0, 0.5);
+  padding: 1em 2em;
+  line-height: 1.5;
+  border: 1px solid white;
+  color: white;
+}
+.box-title small {
+  display: block;
+  /*text-transform: lowercase;*/
+  font-size: .7em;
+}
+
+.box-title small:first-child {
+  border-bottom: 1px solid white;
+  padding-bottom: .5em;
+}
+.box-title small:last-child {
+  border-top: 1px solid white;
+  padding-top: .5em;
+}
+
+
 
 /* EXTERNAL*/
 

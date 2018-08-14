@@ -7,10 +7,22 @@ function init() {
         data: {
             title: 'IoT Shared Platform',
             options: {
-                afterLoad: this.afterLoad,
+                afterLoad: function(origin, destination, direction){
+                    console.log(origin, destination, direction);
+                    if(vue != null){
+                        var destinationIndex = destination.index;
+                        vue.toolbarItems[destinationIndex].color = "white";
+                        if(origin != null){
+                            var originIndex = origin.index;
+                            vue.toolbarItems[originIndex].color = "grey lighten-1";
+                        }
+                    }
+                },
                 menu: '#menu',
                 navigation: true,
-                anchors: ['home', 'about', 'page3'],
+                loopTop: true,
+                loopBottom: true,
+                anchors: ['home', 'about', 'platform'],
                 sectionsColor: ['#41b883', '#ff5f45', '#0798ec']
             },
             scrollData: {
@@ -23,6 +35,37 @@ function init() {
                 statusBar: true
             },
             statusColor: "#ffaf1d",
+            toolbarItems: [
+                {
+                    title: "Home",
+                    href: "home",
+                    color: "white"
+                },
+                {
+                    title: "About",
+                    href: "about",
+                    color: "grey lighten-1"
+                },
+                {
+                    title: "Platform",
+                    href: "platform",
+                    color: "grey lighten-1"
+                }
+            ],
+            cItems: [
+                {
+                    src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
+                },
+                {
+                    src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
+                },
+                {
+                    src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
+                },
+                {
+                    src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
+                }
+            ]
 
         },
         methods:{
@@ -80,9 +123,9 @@ function init() {
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
             },
-            afterLoad() {
-                console.log('After load');
-            },
+            // afterLoad: function(origin, destination, direction){
+            //     console.log(origin, destination, direction);
+            // }
 
         },
         mounted:[
@@ -90,5 +133,6 @@ function init() {
         ]
     });
     vue.changeStatusBarColorOnNativeApp("orange");
+    // vue.fullpage_api = fullpage_api;
     return vue;
 }

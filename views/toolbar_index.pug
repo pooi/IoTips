@@ -5,11 +5,15 @@ v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: t
         v-btn(slot='activator', dark, icon)
             v-icon more_vert
         v-list.dal-card
-            v-list-tile(href="#home")
-                v-list-tile-title Home
-            v-list-tile(href="#about")
-                v-list-tile-title About
+            v-list-tile(v-for="(toolbar, i) in toolbarItems", :key="i", :href="'#' + toolbar.href")
+                v-list-tile-title {{toolbar.title}}
+            //v-list-tile(href="#home")
+            //    v-list-tile-title Home
+            //v-list-tile(href="#about")
+            //    v-list-tile-title About
     v-toolbar-items(v-else)
-        v-btn(flat, style='height: auto;', color="white", href="#home") Home
-        v-btn(flat, style='height: auto;', color="white", href="#about") About
+        template(v-for="toolbar in toolbarItems")
+            v-btn(flat, style='height: auto;', :color="toolbar.color", :href="'#' + toolbar.href") {{toolbar.title}}
+        //v-btn(flat, style='height: auto;', color="white", href="#home") Home
+        //v-btn(flat, style='height: auto;', color="white", href="#about") About
 
