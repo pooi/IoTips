@@ -1,0 +1,13 @@
+v-dialog.md6(v-model='auth.loginDialog',  scrollable, max-width='500px')
+    v-card
+        v-card-title.title Login
+            //span.headline Login
+        v-divider.py-0.my-0
+        //v-progress-linear.my-0(:indeterminate="true", height="2", color='deep-orange darken-3', v-if='loginData.isProgress')
+        v-card-text.text-xs-center
+            img(src="/images/auth/btn_google_signin.png", height="50px")
+        v-card-text.text-xs-center
+            v-btn(flat) Login with google
+        v-card-actions
+            v-spacer
+            v-btn(color='success', flat, @click.native="auth.loginDialog = false") 닫기

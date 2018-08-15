@@ -52,6 +52,10 @@ function init() {
                     color: "grey lighten-1"
                 }
             ],
+
+            supporter: null,
+            auth: null,
+
             cItems: [
                 {
                     src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
@@ -133,6 +137,9 @@ function init() {
         ]
     });
     vue.changeStatusBarColorOnNativeApp("orange");
-    // vue.fullpage_api = fullpage_api;
+
+    vue.supporter = new Supporter(vue);
+    vue.auth = new Auth(vue);
+
     return vue;
 }

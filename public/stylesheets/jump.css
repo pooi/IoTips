@@ -1,0 +1,62 @@
+/* Animation */
+
+
+@-webkit-keyframes jump {
+    0%{
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    20%{
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    40%{
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+    }
+    50%{
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    60%{
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px);
+    }
+    80%{
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    100%{
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes jump {
+    0%{
+        transform: translateY(0);
+    }
+    20%{
+        transform: translateY(0);
+    }
+    40%{
+        transform: translateY(-15px);
+    }
+    50%{
+        transform: translateY(0);
+    }
+    60%{
+        transform: translateY(-5px);
+    }
+    80%{
+        transform: translateY(0);
+    }
+    100%{
+        transform: translateY(0);
+    }
+}
+
+.jump {
+    -webkit-animation: jump 1.5s ease 0s infinite normal ;
+    animation: jump 1.5s ease 0s infinite normal ;
+}

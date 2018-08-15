@@ -1,7 +1,10 @@
 v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: transparent;")
     v-toolbar-title.ml-2(onclick="window.location.href='/'") IoT Shared Platform
     v-spacer
-    v-menu(bottom, left, v-if="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly")
+    v-btn(flat, dark, icon, v-if="$vuetify.breakpoint.xsOnly", @click="auth.loginDialog = true;")
+        v-icon account_circle
+    v-btn(v-else, flat, dark, @click="auth.loginDialog = true;") Login
+    v-menu(bottom, left, v-if="$vuetify.breakpoint.xsOnly ")
         v-btn(slot='activator', dark, icon)
             v-icon more_vert
         v-list.dal-card
@@ -17,3 +20,4 @@ v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: t
         //v-btn(flat, style='height: auto;', color="white", href="#home") Home
         //v-btn(flat, style='height: auto;', color="white", href="#about") About
 
+include login

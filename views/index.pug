@@ -1,48 +1,50 @@
 extends layout
 
 block content
-  link(href='/stylesheets/kenburn.css', rel='stylesheet')
-  script(src='/scripts/vue-fullpage.min.js')
-  link(rel='stylesheet', type='text/css', href='https://unpkg.com/fullpage.js/dist/fullpage.min.css')
+    link(href='/stylesheets/kenburn.css', rel='stylesheet')
+    link(href='/stylesheets/jump.css', rel='stylesheet')
+    script(src='/scripts/vue-fullpage.min.js')
+    link(rel='stylesheet', type='text/css', href='https://unpkg.com/fullpage.js/dist/fullpage.min.css')
 
-  include toolbar_index
+    include toolbar_index
 
-  div
-    full-page#fullpage(ref='fullpage', :options='options')
-      .section.section-full-page
-        //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/nature/1600x1400')")
-        //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/buildings/1600x1400')")
-        //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/food/1600x1400')")
-        //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/technology/1600x1400')")
-        v-layout(style="height:100%;").slideshow
-          .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
-          .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
-          .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
-          .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
-          #overlay(@click="getActiveSectionIndex()")
-            div.box-title.py-4
-              h1
-                small No.1
-                |  IoT Shared Platform
-                small powered by Team
-          //| First section ...
-          //v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
-      .section.section-full-page(style="z-index: 5;")
-        v-layout.safe-area-inset(style="height: 100%")
-          v-flex.px-5.mx-3(style="margin: auto;")
-            v-carousel(v-if="sectionIndex != 1")
-              v-carousel-item(v-for='(item,i) in cItems', :key='i', :src='item.src')
-            //| Second section ...
-            //v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
-      .section.section-full-page
-        v-layout.safe-area-inset(style="height: 100%")
-          v-flex.px-5.mx-3.text-xs-center(style="margin: auto;")
-            | Third section ...
-            v-btn(flat, color="white", href="#home") Next
+    div
+        full-page#fullpage(ref='fullpage', :options='options')
+            .section.section-full-page
+                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/nature/1600x1400')")
+                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/buildings/1600x1400')")
+                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/food/1600x1400')")
+                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/technology/1600x1400')")
+                v-layout(style="height:100%;").slideshow
+                    .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
+                    .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
+                    .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
+                    .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
+                    #overlay(@click="getActiveSectionIndex()")
+                        div.box-title.py-4
+                            h1
+                                small No.1
+                                |  IoT Shared Platform
+                                small powered by Team
+                    //| First section ...
+                    //v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
+            .section.section-full-page(style="z-index: 5;")
+                v-layout.safe-area-inset(style="height: 100%")
+                    v-flex.px-5.mx-3.text-xs-center(style="margin: auto;")
+                        //v-carousel(v-if="sectionIndex != 1")
+                        //  v-carousel-item(v-for='(item,i) in cItems', :key='i', :src='item.src')
+                        | Second section ...
+                        v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
+            .section.section-full-page
+                v-layout.safe-area-inset(style="height: 100%")
+                    v-flex.px-5.mx-3.text-xs-center(style="margin: auto;")
+                        | Third section ...
+                        v-btn(flat, color="white", href="#home") Next
+
+    v-flex.text-xs-center(xs12, style="width: 100%; position: fixed; bottom: 25px; z-index: 10; background: trasparent;")
+        v-btn.my-0.jump(flat, color='white', outline, round) Get Start
 
 
-
-
-  script(type="text/javascript" src='/javascripts/index-config.js')
-  script.
-      const vue = init();
+    script(type="text/javascript" src='/javascripts/index-config.js')
+    script.
+        const vue = init();

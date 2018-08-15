@@ -89,6 +89,11 @@
   background: #FFF !important;
 }
 
+.v-dialog {
+    border-radius: 20px !important;
+}
+
+
 
 /* DAL STYLE*/
 
