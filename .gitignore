@@ -71,3 +71,7 @@ dump.rdb
 config.json
 package-lock.json
 
+config/*
+config/*.json
+config/db.js
+config/session.js

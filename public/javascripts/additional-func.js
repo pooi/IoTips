@@ -228,13 +228,27 @@ class Supporter {
 }
 
 class Auth {
-    constructor(vue) {
-        this.vue = vue;
-        this.loginData = {
+    constructor() {
+        // this.vue = vue;
+        this.user = {
 
         }
         this.loginDialog = false;
+        this.detailDialog = false;
     }
 
+    loginGoogle(){
+        window.location.href = "/auth/google";
+    }
+
+    logout(){
+        window.location.href = "/auth/logout";
+    }
+
+    parseUserData(init_user){
+        console.log(init_user);
+        this.user = JSON.parse(init_user);
+        console.log(this.user);
+    }
 
 }

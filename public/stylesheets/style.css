@@ -94,6 +94,24 @@
 }
 
 
+.dialog{
+  border-radius: 20px !important;
+}
+.dialog--fullscreen{
+  border-radius: 2px !important;
+  /*padding-bottom: env(safe-area-inset-bottom);*/
+  /*padding-bottom: constant(safe-area-inset-bottom);*/
+}
+
+.bottom-sheet.dialog.bottom-sheet--inset{
+  border-radius: 20px 20px 0px 0px !important;
+  overflow: hidden;
+}
+.snack__wrapper{
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: constant(safe-area-inset-bottom);
+}
+
 
 /* DAL STYLE*/
 

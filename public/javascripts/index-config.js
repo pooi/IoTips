@@ -1,6 +1,6 @@
 
 
-function init() {
+function init(init_user) {
 
     var vue = new Vue({
         el: '#app',
@@ -54,7 +54,7 @@ function init() {
             ],
 
             supporter: null,
-            auth: null,
+            auth: new Auth(),
 
             cItems: [
                 {
@@ -133,13 +133,15 @@ function init() {
 
         },
         mounted:[
-
+            function () {
+                this.auth.parseUserData(init_user);
+            }
         ]
     });
     vue.changeStatusBarColorOnNativeApp("orange");
 
     vue.supporter = new Supporter(vue);
-    vue.auth = new Auth(vue);
+    // vue.auth = new Auth(vue);
 
     return vue;
 }

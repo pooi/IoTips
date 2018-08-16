@@ -5,8 +5,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
 var app = express();
 app.locals.pretty = true;
@@ -30,7 +28,12 @@ app.use('/scripts', express.static(__dirname + '/node_modules/viewerjs/dist'));
 app.use('/styles', express.static(__dirname + '/node_modules/viewerjs/dist'));
 app.use('/scripts', express.static(__dirname + '/node_modules/vue-fullpage.js/dist'));
 
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+var auth = require('./routes/auth')(app);
+
 app.use('/', indexRouter);
+app.use('/auth', auth);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

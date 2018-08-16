@@ -3,11 +3,90 @@ v-dialog.md6(v-model='auth.loginDialog',  scrollable, max-width='500px')
         v-card-title.title Login
             //span.headline Login
         v-divider.py-0.my-0
-        //v-progress-linear.my-0(:indeterminate="true", height="2", color='deep-orange darken-3', v-if='loginData.isProgress')
+        //v-progress-linear.my-0(:indeterminate="true", height="2", color='deep-orange darken-3', v-if='auth.isProgress')
         v-card-text.text-xs-center
-            img(src="/images/auth/btn_google_signin.png", height="50px")
+            img(src="/images/auth/btn_google_signin.png", height="50px", href="/auth/google")
         v-card-text.text-xs-center
-            v-btn(flat) Login with google
+            v-btn(flat, @click="auth.loginGoogle()") Login with google
+        //v-card-text.text-xs-center
+        //    #my-signin2
         v-card-actions
             v-spacer
             v-btn(color='success', flat, @click.native="auth.loginDialog = false") 닫기
+
+
+v-dialog.md6(v-model='auth.detailDialog',  scrollable, max-width='500px')
+    v-card
+        v-card-title.title Information
+            //span.headline Login
+        v-divider.py-0.my-0
+        //v-progress-linear.my-0(:indeterminate="true", height="2", color='deep-orange darken-3', v-if='auth.isProgress')
+        v-card-text.pa-2
+            v-list(two-line='', subheader='', v-if='auth.user !== null')
+                //v-subheader.py-0.pb-1.my-0.brown.lighten-5(style='height: auto;') User Information
+                v-list-tile(avatar='', v-if="auth.user.id != null")
+                    v-list-tile-content
+                        v-list-tile-sub-title ID
+                        v-list-tile-title {{ auth.user.id }}
+
+                v-list-tile(avatar='', v-if="auth.user.displayName != null")
+                    v-list-tile-content
+                        v-list-tile-sub-title Name
+                        v-list-tile-title {{ auth.user.displayName }}
+
+                v-list-tile(avatar='', v-if="auth.user.email != null")
+                    v-list-tile-content
+                        v-list-tile-sub-title Email
+                        v-list-tile-title {{ auth.user.email }}
+
+                v-list-tile(avatar='', v-if="auth.user.provider != null")
+                    v-list-tile-content
+                        v-list-tile-sub-title Provider
+                        v-list-tile-title {{ auth.user.provider }}
+
+                v-list-tile-action.mt-4
+                    v-btn(color='red', flat, @click="auth.logout();", style="margin: auto;") Logout
+            //v-divider(v-if='auth.user !== null')
+            //v-list(one-line='', subheader='', v-if='auth.user !== null')
+            //    v-list-tile-action
+            //        v-btn(color='red', flat, @click="auth.logout();") Logout
+        v-card-actions
+            v-spacer
+            v-btn(color='success', flat, @click.native="auth.detailDialog = false") 닫기
+            
+            
+//v-dialog(v-model='auth.detailDialog', :fullscreen='$vuetify.breakpoint.xsOnly', max-width='600px', transition='dialog-bottom-transition', :overlay='true')
+//    v-card.brown.lighten-5.elevation-10
+//        v-toolbar(dark='', color='deep-orange darken-3',  dense)
+//            v-btn(icon='', @click.native='auth.detailDialog = false', dark)
+//                v-icon close
+//            v-toolbar-title Information
+//            v-spacer
+//            //v-toolbar-items
+//            //    v-btn(dark='', flat='', @click.native='dialog = false') Save
+//        v-list.my-4.mb-5(two-line='', subheader='', v-if='auth.user !== null')
+//            v-subheader.py-0.pb-1.my-0.brown.lighten-5(style='height: auto;') User Information
+//            v-list-tile.pl-2(avatar='')
+//                v-list-tile-content
+//                    v-list-tile-sub-title Name
+//                    v-list-tile-title {{ auth.user.displayName }}
+//
+//            //v-divider.my-0.ml-3.mr-0(inset, style='width:100%;')
+//            v-list-tile.pl-2(avatar='')
+//                v-list-tile-content
+//                    v-list-tile-sub-title ID
+//                    v-list-tile-title {{ auth.user.id }}
+//
+//            //v-divider.my-0.ml-3.mr-0(inset, style='width:100%;')
+//            v-list-tile.pl-2(avatar='')
+//                v-list-tile-content
+//                    v-list-tile-sub-title Email
+//                    v-list-tile-title {{ auth.user.email }}
+//
+//        //v-divider(v-if='auth.user !== null')
+//        v-list.mb-5(one-line='', subheader='', v-if='auth.user !== null')
+//            v-list-tile-action.pt-2.pl-3
+//                v-btn(color='red', flat, @click="auth.logout();") Logout
+//
+//        v-list.brown.lighten-5.bottom-safe-area-padding(three-line='', subheader='')
+
