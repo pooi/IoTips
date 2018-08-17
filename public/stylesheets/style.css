@@ -60,6 +60,25 @@
   padding-top: .5em;
 }
 
+.google-login-btn{
+  background-image: url('/images/auth/btn_google_signin_light_normal_web.png');
+  background-size:     cover;
+  background-repeat:   no-repeat;
+  background-position: center center;
+
+  height: 50px;
+  width: 208px;
+  transition: .5s ease;
+
+  margin: auto;
+}
+
+.google-login-btn:hover{
+  background-image: url('/images/auth/btn_google_signin_light_pressed_web.png');
+  transition: .5s ease;
+}
+
+
 
 
 /* EXTERNAL*/
