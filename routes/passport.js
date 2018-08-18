@@ -1,5 +1,6 @@
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const googleConfig = require("../config/google");
+const dbDAO = require("../util/db-dao");
 
 module.exports = (passport) => {
 
@@ -25,12 +26,24 @@ module.exports = (passport) => {
 
             console.log(socialId, nickname, email, profileImageUrl);
 
-            onLoginSuccess('Google', socialId, nickname, profileImageUrl, done);
-            return done(null, profile);
+            onLoginSuccess('google', socialId, nickname, email, profileImageUrl, function () {
+                return done(null, profile);
+            });
+            // return done(null, profile);
         }
     ));
 
-    function onLoginSuccess(platformName, socialId, nickname, profileImageUrl, done) {
+    function onLoginSuccess(platformName, socialId, nickname, email, profileImageUrl, callback) {
+        // dbDAO.isAlreadyRegisteredUser(socialId, function (isAlreadyRegistered) {
+        //     console.log(isAlreadyRegistered);
+        // });
+        dbDAO.createNewUser(socialId, nickname, email, profileImageUrl, platformName, function (result) {
+            if(result){
+                callback();
+            }else{
+                console.log("Login Failed");
+            }
+        });
         // console.log(platformName, socialId, nickname, profileImageUrl, done);
         // done(null, user);
         // userService.findOrCreate(platformName, socialId, nickname, profileImageUrl)

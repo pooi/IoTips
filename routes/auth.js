@@ -21,7 +21,7 @@ module.exports = function (app) {
     var conn = require('../config/db')();
     var sessionData = require('../config/session')(session);
 
-    var support = require('./support-func');
+    var support = require('../util/support-func');
 
     app.use(session(sessionData));
 
