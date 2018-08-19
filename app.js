@@ -29,12 +29,14 @@ app.use('/styles', express.static(__dirname + '/node_modules/viewerjs/dist'));
 app.use('/scripts', express.static(__dirname + '/node_modules/vue-fullpage.js/dist'));
 
 var indexRouter = require('./routes/index');
+var boardRouter = require('./routes/board');
 var usersRouter = require('./routes/users');
 var auth = require('./routes/auth')(app);
 
 app.use('/', indexRouter);
 app.use('/auth', auth);
 app.use('/users', usersRouter);
+app.use('/board', boardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

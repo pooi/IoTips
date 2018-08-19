@@ -238,11 +238,13 @@ class Auth {
     }
 
     loginGoogle(){
-        window.location.href = "/auth/google";
+        var pathname = window.location.pathname;
+        window.location.href = "/auth/google?redirectTo=" + pathname;
     }
 
     logout(){
-        window.location.href = "/auth/logout";
+        var pathname = window.location.pathname;
+        window.location.href = "/auth/logout?redirectTo=" + pathname;
     }
 
     parseUserData(init_user){
