@@ -1,0 +1,21 @@
+v-card.dal-card-scale(flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="item !== null")
+
+    v-card-media(:src="item.photo", height='300px')
+
+    //code.mx-3.elevation-0.mt-3(v-if="supporter.convertStatus(item.status).length > 0") {{supporter.convertStatus(item.status)}}
+    v-card-title.title.mb-0.py-2(:class="item.status === 'COM' ? '' : 'grey--text text--darken-3'") {{ item.title }}
+    //v-card-text.py-0.subheading.grey--text.text--lighten-1 {{ categoryManager.getCategoryStringFromResult(item.subcategory) }}
+
+    //v-card-text.py-3.grey--text.text--darken-2(v-if="item.description.length > 0") {{ supporter.reduceString(item.description, 100) }}
+    //v-card-text.py-0.text-xs-left.caption.grey--text.text--lighten-1 {{ "습득 : " + supporter.msToDateKo(item.dcv_date) }}
+    //v-card-text.py-0.text-xs-left.caption.grey--text.text--lighten-1 {{ "등록 : " + supporter.msToDateKo(item.rgt_date) }}
+    //v-card-text.py-0.text-xs-left(v-if="item.tags.length > 0 || item.recognition_tags.length > 0")
+    //    span.caption(:class="item.status==='COM' ? '' : 'brown--text' ") {{ supporter.hashTagsToString(item) }}
+    //v-card-actions
+    //    v-btn(flat, small, color='error', dark, v-if="supporter.isAdmin() && item.status === 'WFA' ", @click="supporter.acceptItem(item)") Accept
+    //    v-spacer
+    //    v-btn(flat, small, slot='activator', color='orange', dark, @click="shareSheet=true; shareItem=item;") Share
+    //    v-btn(flat,small, color='orange', :href="'/items/'+item.id") Detail
+
+
+
