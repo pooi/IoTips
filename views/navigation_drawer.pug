@@ -1,0 +1,37 @@
+v-navigation-drawer.white--text(v-model='supporter.drawer', fixed, temporary, dark)
+    v-card-text(v-if="auth.user === null", @click="auth.loginDialog = true;") 로그인해주세요.
+    v-list-group.pa-1(v-else, value="true")
+        v-list-tile(avatar, slot="activator")
+            v-list-tile-avatar
+                img(:src='auth.user.photo')
+            v-list-tile-content
+                v-list-tile-title {{ auth.user.displayName }}
+
+        v-list.pt-0.ml-3(dense='')
+            v-list-tile(@click='auth.detailDialog = true;')
+                v-list-tile-action
+                    v-icon account_circle
+                v-list-tile-content
+                    v-list-tile-title Information
+            v-list-tile(@click='auth.logout();')
+                v-list-tile-action
+                    v-icon
+                v-list-tile-content
+                    v-list-tile-title Logout
+
+
+        //v-list-group(no-action='', sub-group='')
+            //v-list-tile
+            //    v-list-tile-title Admin
+            //v-list-tile(v-for='(admin, i) in [["Management", "people_outline"]]', :key='i', @click='')
+            //    v-list-tile-title(v-text='admin[0]')
+            //    v-list-tile-action
+            //        v-icon(v-text='admin[1]')
+
+    v-list(dense='')
+        v-divider
+        v-list-tile(v-for='item in [{"icon": "edit", "title": "title"}]', :key='item.title', @click='')
+            v-list-tile-action
+                v-icon {{ item.icon }}
+            v-list-tile-content
+                v-list-tile-title {{ item.title }}

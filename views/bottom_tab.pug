@@ -1,0 +1,12 @@
+v-bottom-nav.bottom-tab-height(fixed, :value='true', height="48px", :active.sync="bottomTab", v-if="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly")
+    v-layout.tab-nav(align-center='', justify-center='')
+        v-btn.py-2(flat, color='deep-orange darken-3', value='home', href='/')
+            v-icon.ma-0 home
+        v-btn.py-2(flat='', color='deep-orange darken-3', value='board', href='/board')
+            v-icon.ma-0 list
+        v-btn.py-2.btn--active.dal-small-card(color='deep-orange darken-3', :value='bottomTab', dark, style='background-color: #ff5722!important')
+            v-icon.ma-0 edit
+        v-btn.py-2(flat='', color='deep-orange darken-3', value='lost', href='/')
+            v-icon.ma-0 cloud_upload
+        v-btn.py-2(flat='', color='deep-orange darken-3', value='manage', href='/')
+            v-icon.ma-0 build

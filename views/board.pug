@@ -34,6 +34,13 @@ block content
                                 v-flex(xs12, sm6, md4, lg3 v-for="item in items", :key="item.id", v-model='items', :class="$vuetify.breakpoint.xsOnly ? '' : 'pa-2' ")
                                     include card_item
 
+    include footer
+    include bottom_tab
+
+    v-fab-transition(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
+        v-btn(color='red', v-model='fab', dark, fab, fixed, bottom, right)
+            v-icon edit
+            //v-icon close
 
     script(type="text/javascript" src='/javascripts/board-config.js')
     script.

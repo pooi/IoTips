@@ -16,10 +16,12 @@ function init(init_user) {
                 statusBar: true
             },
             statusColor: "#ffaf1d",
+            bottomTab: "board",
 
             supporter: null,
             auth: new Auth(),
 
+            fab: false,
             items: [
                 {
                     id: "1",
@@ -94,12 +96,12 @@ function init(init_user) {
 
                 if(!this.scrollData.statusBar && this.scrollData.offsetTop < 50){
                     this.scrollData.statusBar = !this.scrollData.statusBar;
-                    this.changeStatusBarColorOnNativeApp("orange");
-                    this.statusColor = this.supporter.getStatusLightOrange();
+                    // this.changeStatusBarColorOnNativeApp("orange");
+                    // this.statusColor = this.supporter.getStatusLightOrange();
                 }else if(this.scrollData.statusBar & this.scrollData.offsetTop >= 50){
                     this.scrollData.statusBar = !this.scrollData.statusBar;
-                    this.changeStatusBarColorOnNativeApp("white");
-                    this.statusColor = "#FFFFFF";
+                    // this.changeStatusBarColorOnNativeApp("white");
+                    // this.statusColor = "#FFFFFF";
                 }
             },
             changeStatusBarColorOnNativeApp(color){

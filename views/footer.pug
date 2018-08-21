@@ -1,0 +1,17 @@
+v-footer.grey.darken-3(dark, height='auto')
+    v-layout.text-xs-center(xs12, justify-center)
+        v-flex(xs11, sm10, md8)
+            v-card-text
+                //v-btn.white--text(icon, href="https://facebook.com")
+                //    v-icon(size="30px") fa-facebook-square
+                v-btn.white--text(icon, href="https://instagram.com")
+                    v-icon(size="30px") fa-instagram
+                v-btn.white--text(icon, href="https://github.com/pooi/IoTSharedPlatform")
+                    v-icon(size="30px") fa-github
+            v-card-text.white--text
+                | Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
+            v-card-text.white--text
+                | © 2018&nbsp;
+                strong
+                    a(style='color: white;', href='https://denl.xyz') DenL.xyz
+            v-flex.bottom-tab-height(v-if="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly")

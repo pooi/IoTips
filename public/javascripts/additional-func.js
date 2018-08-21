@@ -4,6 +4,7 @@ class Supporter {
         this.data = {
             isShowBackBtn: false
         }
+        this.drawer = false;
     }
 
     isWebkit(){

@@ -1,4 +1,5 @@
 v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: transparent;")
+    v-toolbar-side-icon(@click="supporter.drawer = !supporter.drawer")
     v-toolbar-title.ml-2(onclick="window.location.href='/'") IoT Shared Platform
     v-spacer
     template(v-if="auth.user === null")
@@ -25,3 +26,4 @@ v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: t
         //v-btn(flat, style='height: auto;', color="white", href="#about") About
 
 include login
+include navigation_drawer
