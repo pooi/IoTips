@@ -5,6 +5,18 @@ class Supporter {
             isShowBackBtn: false
         }
         this.drawer = false;
+        this.menus = [
+            {
+                "icon": "edit",
+                "title": "New",
+                "href": "/board/regist"
+            },
+            {
+                "icon": "list",
+                "title": "Board",
+                "href": "/board"
+            }
+        ]
     }
 
     isWebkit(){

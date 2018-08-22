@@ -30,7 +30,7 @@ v-navigation-drawer.white--text(v-model='supporter.drawer', fixed, temporary, da
 
     v-list(dense='')
         v-divider
-        v-list-tile(v-for='item in [{"icon": "edit", "title": "title"}]', :key='item.title', @click='')
+        v-list-tile(v-for='item in supporter.menus', :key='item.title', :href="item.href")
             v-list-tile-action
                 v-icon {{ item.icon }}
             v-list-tile-content

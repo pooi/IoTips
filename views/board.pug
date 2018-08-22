@@ -38,7 +38,7 @@ block content
     include bottom_tab
 
     v-fab-transition(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
-        v-btn(color='red', v-model='fab', dark, fab, fixed, bottom, right)
+        v-btn(color='red', v-model='fab', dark, fab, fixed, bottom, right, onclick="window.location.href = '/board/regist'")
             v-icon edit
             //v-icon close
 

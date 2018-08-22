@@ -1,0 +1,33 @@
+extends layout
+
+block content
+
+    include toolbar
+
+
+    v-content.brown.lighten-5(style="padding-top: 50px")
+        //v-container.pa-0(:fluid="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly")
+        v-container.pa-0()
+
+            v-flex(md12='')
+                //v-card.pa-3.safe-area-inset(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ? 'elevation-0 mb-4 pt-4' : 'elevation-10 my-4'")
+                v-card.pa-3.safe-area-inset.elevation-0.mb-4
+
+                    v-card-title.pb-0(style="margin-top: 20px;")
+                        span.display-2(style="font-weight: 800;") 글 작성
+
+                    v-card-text.py-0
+                        v-divider.my-3
+
+                    v-card-text
+                        v-layout
+                            v-flex(xs12)
+                                v-text-field(label='Title', outline, color="grey")
+
+
+    include footer
+    include bottom_tab
+
+    script(type="text/javascript" src='/javascripts/regist-config.js')
+    script.
+        const vue = init('!{user}');

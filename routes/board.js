@@ -8,4 +8,9 @@ router.get('/', function(req, res, next) {
   res.render('board', { user: JSON.stringify(user) });
 });
 
+router.get('/regist', function(req, res, next) {
+    var user = support.ensureAuthenticated(req);
+    res.render('regist', { user: JSON.stringify(user) });
+});
+
 module.exports = router;
