@@ -132,6 +132,14 @@
 }
 
 
+.big-text-field .v-text-field__slot{
+  font-size: 1.5em;
+}
+
+.no-padding-text-field .v-input__slot{
+  padding: 0px !important;
+}
+
 /* DAL STYLE*/
 
 .dal-card {

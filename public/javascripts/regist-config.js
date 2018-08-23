@@ -21,6 +21,8 @@ function init(init_user) {
             supporter: null,
             auth: new Auth(),
 
+            content: null,
+
         },
         methods:{
             onScroll (e) {
