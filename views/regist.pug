@@ -30,12 +30,39 @@ block content
                                         v-divider
                                     v-card-text.py-1.no-padding-text-field
                                         //span.headline.red--text.text--darken-1(style="font-weight: 700;") 내용
-                                        v-textarea(v-model='content', label='Content', full-width, single-line, hide-details)
+                                        v-textarea(v-model='content', label='Content', full-width, single-line, hide-details, auto-grow)
                                     v-card-text.pa-0
                                         v-divider
-                                    v-card-text.py-2.mt-4.hide-detail-field
+                                    v-card-text.py-2.mt-4
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") 설계도
                                         v-card.my-3.elevation-6(height="250px")
+                                    v-card-text.py-2.mt-4
+                                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
+                                        v-layout.mt-2(row, wrap, justify-center)
+                                            //v-layout(xs12, wrap)
+                                                //v-flex(v-for='capability in capabilities', d-inline-flex)
+                                            template(v-for="(capa, index) in capabilities", :key="index")
+                                                v-badge.mr-3.mb-3(overlap='', color='red darken-1')
+                                                    v-icon(slot='badge', dark='', small='', @click="removeCapability(index)") close
+                                                    v-card.elevation-4.dal-small-card(hover, raised, :width="100")
+                                                        v-card-media.white--text(height='100px', :src='"/images/capabilities/" + capa.component + ".png"')
+                                                        v-card-text.py-2.text-xs-center {{ capa.title }} {{ index }}
+
+                                            v-card.mr-3.mb-3.elevation-4.dal-small-card(hover, raised, :width="100", :height="137")
+                                                v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="addCapability()")
+                                                    .display-2(style="font-weight: 100;") +
+
+
+                                    v-card-text.py-2.mt-4
+                                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Products
+                                    v-card-text.py-2.mt-4
+                                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Platforms
+                                    v-card-text.py-2.mt-4
+                                        v-layout(align-center)
+                                            v-flex.text-xs-center
+                                                v-btn(color="grey", dark) 취소
+                                                v-btn(color="red darken-1", dark) 등록
+
 
 
     include footer

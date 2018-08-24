@@ -22,6 +22,16 @@ function init(init_user) {
             auth: new Auth(),
 
             content: null,
+            capabilities: [
+                {
+                    title: "Button",
+                    component: "switch"
+                },
+                {
+                    title: "Button",
+                    component: "switch"
+                },
+            ]
 
         },
         methods:{
@@ -78,6 +88,17 @@ function init(init_user) {
                 $('html, body').animate({
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
+            },
+            addCapability: function () {
+                this.capabilities.push({
+                    title: "Button",
+                    component: "switch"
+                })
+            },
+            removeCapability: function (index) {
+                if(index < this.capabilities.length){
+                    this.capabilities.splice(index, 1);
+                }
             },
 
         },
