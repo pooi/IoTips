@@ -78,6 +78,14 @@
   transition: .5s ease;
 }
 
+.platform-gradient-background{
+  background-image: linear-gradient(to bottom right, rgba(140, 198, 63, 1), rgba(0, 146, 69, 1));
+}
+
+.png-shadow{
+  -webkit-filter: drop-shadow(2px 2px 5px #606060);
+  filter:         drop-shadow(2px 2px 5px #606060);
+}
 
 
 

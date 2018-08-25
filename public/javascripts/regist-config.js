@@ -31,7 +31,15 @@ function init(init_user) {
                     title: "Button",
                     component: "switch"
                 },
-            ]
+            ],
+            platforms: [
+                {
+                    title: "SmartThings",
+                    company: "Samsung",
+                    cost: "Free",
+                    logo: "/images/logo/smartthings.png"
+                }
+            ],
 
         },
         methods:{
@@ -100,6 +108,19 @@ function init(init_user) {
                     this.capabilities.splice(index, 1);
                 }
             },
+            addPlatform: function () {
+                this.platforms.push({
+                    title: "Kasa Smart",
+                    company: "TP-LINK Research America",
+                    cost: "Free",
+                    logo: "/images/logo/tplink.png"
+                })
+            },
+            removePlatform: function (index) {
+                if(index < this.platforms.length){
+                    this.platforms.splice(index, 1);
+                }
+            }
 
         },
         mounted:[
