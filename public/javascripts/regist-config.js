@@ -40,6 +40,12 @@ function init(init_user) {
                     logo: "/images/logo/smartthings.png"
                 }
             ],
+            products: [
+                {
+                    title: "Kasa Smart Plug",
+                    company: "TP-LINK"
+                }
+            ]
 
         },
         methods:{
@@ -119,6 +125,17 @@ function init(init_user) {
             removePlatform: function (index) {
                 if(index < this.platforms.length){
                     this.platforms.splice(index, 1);
+                }
+            },
+            addProduct: function () {
+                this.products.push({
+                    title: "Kasa Smart Plug",
+                    company: "TP-LINK"
+                })
+            },
+            removeProduct: function (index) {
+                if(index < this.products.length){
+                    this.products.splice(index, 1);
                 }
             }
 
