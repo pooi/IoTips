@@ -62,14 +62,14 @@ block content
                                                     v-card.elevation-4.dal-small-card(hover, raised)
                                                         v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;")
                                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
-                                                                //img.png-shadow(:src="platform.logo", style="max-width: 80%; max-height: 80%;")
-                                                            v-flex.pa-2(style="min-width: 210px;")
+                                                                img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                                            v-flex.pa-2(style="width: 180px;")
                                                                 v-card-text.pa-0.title {{product.title}}
-                                                                //v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
-                                                                v-card-text.pa-0.grey--text.text--darken-1 {{product.company}}
+                                                                v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
+                                                                v-card-text.pa-0.light-blue--text.text--darken-3 Detail
 
                                             v-card.mr-3.mb-3.elevation-4.dal-small-card(hover, raised, :width="90", :height="90")
-                                                v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="addProduct()")
+                                                v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetProductForm()")
                                                     .display-2(style="font-weight: 100;") +
 
 
@@ -83,7 +83,7 @@ block content
                                                         v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;")
                                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
                                                                 img.png-shadow(:src="platform.logo", style="max-width: 80%; max-height: 80%;")
-                                                            v-flex.pa-2(style="min-width: 210px;")
+                                                            v-flex.pa-2(style="width: 180px;")
                                                                 v-card-text.pa-0.title {{platform.title}}
                                                                 v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
                                                                 v-card-text.pa-0.grey--text.text--darken-1 {{platform.cost}}
@@ -99,6 +99,70 @@ block content
                                                 v-btn(color="grey", dark) 취소
                                                 v-btn(color="red darken-1", dark) 등록
 
+    v-dialog.md6(v-model='addProductDialog', scrollable, max-width='500px')
+        v-form(ref="product_form", style="width: 100%;")
+            v-card(v-if="tempProduct !== null")
+                v-card-title.title Add Product
+                    //span.headline Login
+                v-divider.py-0.my-0
+                v-card-text.py-2.mt-3
+                    span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
+                    v-text-field(v-model='tempProduct.url', ref="product_url", color="green darken-1", :rules="[supporter.rules.url]", :loading="tempProduct.parsingProgress", :disabled="tempProduct.parsingProgress", append-outer-icon="send", clear-icon='cancel', clearable, label='Product URL', type='url', @click:append-outer='parsingURL()', @click:clear='tempProduct.url=""')
+
+                v-divider.py-0.my-0
+                v-card-text.py-2(v-if="tempProduct.parsingComplete")
+                    v-layout(row, wrap)
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
+                            v-text-field(v-model='tempProduct.title', ref="product_title", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempProduct.parsingProgress", clear-icon='cancel', clearable, label='Product Title', type='text', @click:clear='tempProduct.title=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Description
+                            v-textarea(v-model='tempProduct.description', ref="product_description", color="green darken-1", :disabled="tempProduct.parsingProgress", label='Product Description', rows="1", hide-details, outline, single-line, auto-grow, clear-icon='cancel', clearable, @click:clear='tempProduct.description=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
+                            v-text-field(v-model='tempProduct.company', ref="product_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempProduct.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempProduct.company=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
+                            v-layout(row, wrap, align-center, justify-center)
+                                //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
+                                img(v-if="tempProduct.img !== null", :src="tempProduct.img", style="max-width: 80%; max-height: 200px;")
+                                v-flex.text-xs-center(xs12)
+                                    v-btn(flat, color="green darken-1", @click="chooseProductImageDialog = true;") Select Image
+                                //v-card(flat, tile, v-if="tempProduct.img !== null")
+                                //    v-card-media(:src='tempProduct.img', height='150px')
+
+
+
+
+                v-card-text.py-4.text-xs-center(v-else) Please input product url.
+
+                v-divider.py-0.my-0
+
+                v-card-actions
+                    v-btn(color='error', flat, @click.native="resetProductForm()") Clear
+                    v-spacer
+                    v-btn(color='success', flat, @click.native="addProduct()") 추가
+
+    v-dialog.md6(v-model='chooseProductImageDialog', scrollable, max-width='480px')
+        v-card
+            v-card-title.title Select Image
+                //span.headline Login
+            v-divider.py-0.my-0
+            v-card-text.pa-2.brown.lighten-5(v-if="tempProduct !== null && tempProduct.imgs.length > 0")
+                v-container.pa-0(v-bind='{ ["grid-list-sm"]: true }', fluid)
+                    v-layout(row, wrap)
+                        v-flex(v-for='(img, index) in tempProduct.imgs', :key='index', xs4='', @click="chooseProductImage(index)")
+                            v-card(flat, tile, style="background: transparent;")
+                                v-card-media(:src='img', height='150px')
+            v-card-text.py-4.text-xs-center(v-else) There are no image.
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                v-btn(color='error', flat, @click="chooseProductImageDialog = false;") Close
 
 
     include footer

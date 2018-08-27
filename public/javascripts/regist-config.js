@@ -41,11 +41,17 @@ function init(init_user) {
                 }
             ],
             products: [
-                {
-                    title: "Kasa Smart Plug",
-                    company: "TP-LINK"
-                }
-            ]
+                // {
+                //     title: "Kasa Smart Plug",
+                //     company: "TP-LINK",
+                //     url: "https://www.tp-link.com/us/products/details/cat-5622_HS200.html",
+                //     description: "Wi-Fi Smart Plug"
+                // }
+            ],
+            addProductDialog: false,
+            chooseProductImageDialog: false,
+            tempProduct: null,
+
 
         },
         methods:{
@@ -128,15 +134,75 @@ function init(init_user) {
                 }
             },
             addProduct: function () {
-                this.products.push({
-                    title: "Kasa Smart Plug",
-                    company: "TP-LINK"
-                })
+
+                var form = this.$refs.product_form;
+                if(form.validate()){
+                    this.products.push(this.tempProduct);
+                    this.addProductDialog = false;
+                }
+
+                // this.products.push({
+                //     title: "Kasa Smart Plug",
+                //     company: "TP-LINK",
+                //     url: "https://www.tp-link.com/uk/products/details/cat-5258_HS100.html",
+                //     description: "",
+                // })
             },
             removeProduct: function (index) {
                 if(index < this.products.length){
                     this.products.splice(index, 1);
                 }
+            },
+            resetProductForm: function () {
+                this.tempProduct = {
+                    title: null,
+                    company: null,
+                    url: null,
+                    description: null,
+                    img: null,
+
+                    parsingProgress: false,
+                    parsingComplete: false,
+                    imgs: [],
+                };
+                this.chooseProductImageDialog = false;
+                this.addProductDialog = true;
+                this.$refs["product_url"].reset();
+            },
+            chooseProductImage: function (index) {
+                this.tempProduct.img = this.tempProduct.imgs[index];
+                this.chooseProductImageDialog = false;
+            },
+            parsingURL: function () {
+                var urlField = this.$refs["product_url"];
+
+                if(urlField.valid){
+                    this.tempProduct.parsingProgress = true;
+                    var data = {
+                        url: this.tempProduct.url
+                    };
+
+                    axios.post(
+                        '/parseurl',
+                        data
+                    ).then(function (res) {
+                        var data = res.data;
+                        console.log(data);
+
+                        vue.tempProduct.parsingProgress = false;
+                        vue.tempProduct.parsingComplete = true;
+                        vue.tempProduct.title = data.title;
+                        vue.tempProduct.description = data.description;
+                        vue.tempProduct.company = data.copyright;
+                        vue.tempProduct.imgs = data.imgs;
+                    }).catch(function (error) {
+                        alert(error);
+                    });
+
+                }else{
+                    urlField.validate(true);
+                }
+
             }
 
         },
