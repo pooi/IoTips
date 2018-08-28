@@ -33,13 +33,17 @@ function init(init_user) {
                 },
             ],
             platforms: [
-                {
-                    title: "SmartThings",
-                    company: "Samsung",
-                    cost: "Free",
-                    logo: "/images/logo/smartthings.png"
-                }
+                // {
+                //     title: "SmartThings",
+                //     company: "Samsung",
+                //     cost: "Free",
+                //     logo: "/images/logo/smartthings.png"
+                // }
             ],
+            addPlatformDialog: false,
+            choosePlatformImageDialog: false,
+            tempPlatform: null,
+
             products: [
                 // {
                 //     title: "Kasa Smart Plug",
@@ -120,19 +124,48 @@ function init(init_user) {
                     this.capabilities.splice(index, 1);
                 }
             },
+
             addPlatform: function () {
-                this.platforms.push({
-                    title: "Kasa Smart",
-                    company: "TP-LINK Research America",
-                    cost: "Free",
-                    logo: "/images/logo/tplink.png"
-                })
+
+                var form = this.$refs.platform_form;
+                if(form.validate()){
+                    this.platforms.push(this.tempPlatform);
+                    this.addPlatformDialog = false;
+                }
+
+                // this.platforms.push({
+                //     title: "Kasa Smart",
+                //     company: "TP-LINK Research America",
+                //     cost: "Free",
+                //     logo: "/images/logo/tplink.png"
+                // })
             },
             removePlatform: function (index) {
                 if(index < this.platforms.length){
                     this.platforms.splice(index, 1);
                 }
             },
+            resetPlatformForm: function () {
+                this.tempPlatform = {
+                    title: null,
+                    company: null,
+                    url: null,
+                    description: null,
+                    img: null,
+
+                    parsingProgress: false,
+                    parsingComplete: false,
+                    imgs: [],
+                };
+                this.choosePlatformImageDialog = false;
+                this.addPlatformDialog = true;
+                this.$refs["platform_url"].reset();
+            },
+            choosePlatformImage: function (index) {
+                this.tempPlatform.img = this.tempPlatform.imgs[index];
+                this.choosePlatformImageDialog = false;
+            },
+
             addProduct: function () {
 
                 var form = this.$refs.product_form;
@@ -173,13 +206,22 @@ function init(init_user) {
                 this.tempProduct.img = this.tempProduct.imgs[index];
                 this.chooseProductImageDialog = false;
             },
-            parsingURL: function () {
-                var urlField = this.$refs["product_url"];
+            parsingURL: function (type) {
+                var urlField = null;
+                var tempItem = null;
+                if(type === "product"){
+                    urlField = this.$refs["product_url"];
+                    tempItem = this.tempProduct;
+                }else if(type === "platform"){
+                    urlField = this.$refs["platform_url"];
+                    tempItem = this.tempPlatform;
+                }
+
 
                 if(urlField.valid){
-                    this.tempProduct.parsingProgress = true;
+                    tempItem.parsingProgress = true;
                     var data = {
-                        url: this.tempProduct.url
+                        url: tempItem.url
                     };
 
                     axios.post(
@@ -189,12 +231,12 @@ function init(init_user) {
                         var data = res.data;
                         console.log(data);
 
-                        vue.tempProduct.parsingProgress = false;
-                        vue.tempProduct.parsingComplete = true;
-                        vue.tempProduct.title = data.title;
-                        vue.tempProduct.description = data.description;
-                        vue.tempProduct.company = data.copyright;
-                        vue.tempProduct.imgs = data.imgs;
+                        tempItem.parsingProgress = false;
+                        tempItem.parsingComplete = true;
+                        tempItem.title = data.title;
+                        tempItem.description = data.description;
+                        tempItem.company = data.copyright;
+                        tempItem.imgs = data.imgs;
                     }).catch(function (error) {
                         alert(error);
                     });

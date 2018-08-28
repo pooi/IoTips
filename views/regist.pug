@@ -82,14 +82,16 @@ block content
                                                     v-card.elevation-4.dal-small-card(hover, raised)
                                                         v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;")
                                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
-                                                                img.png-shadow(:src="platform.logo", style="max-width: 80%; max-height: 80%;")
+                                                                img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
                                                             v-flex.pa-2(style="width: 180px;")
+                                                                v-card-text.pa-0.pb-1
+                                                                    code.elevation-0 Free
                                                                 v-card-text.pa-0.title {{platform.title}}
                                                                 v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
-                                                                v-card-text.pa-0.grey--text.text--darken-1 {{platform.cost}}
+                                                                v-card-text.pa-0.light-blue--text.text--darken-3 Detail
 
                                             v-card.mr-3.mb-3.elevation-4.dal-small-card(hover, raised, :width="90", :height="90")
-                                                v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="addPlatform()")
+                                                v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetPlatformForm()")
                                                     .display-2(style="font-weight: 100;") +
 
 
@@ -107,7 +109,7 @@ block content
                 v-divider.py-0.my-0
                 v-card-text.py-2.mt-3
                     span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
-                    v-text-field(v-model='tempProduct.url', ref="product_url", color="green darken-1", :rules="[supporter.rules.url]", :loading="tempProduct.parsingProgress", :disabled="tempProduct.parsingProgress", append-outer-icon="send", clear-icon='cancel', clearable, label='Product URL', type='url', @click:append-outer='parsingURL()', @click:clear='tempProduct.url=""')
+                    v-text-field(v-model='tempProduct.url', ref="product_url", color="green darken-1", :rules="[supporter.rules.url]", :loading="tempProduct.parsingProgress", :disabled="tempProduct.parsingProgress", append-outer-icon="send", clear-icon='cancel', clearable, label='Product URL', type='url', @click:append-outer='parsingURL("product")', @click:clear='tempProduct.url=""')
 
                 v-divider.py-0.my-0
                 v-card-text.py-2(v-if="tempProduct.parsingComplete")
@@ -165,6 +167,74 @@ block content
 
             v-card-actions
                 v-btn(color='error', flat, @click="chooseProductImageDialog = false;") Close
+
+
+    v-dialog.md6(v-model='addPlatformDialog', scrollable, max-width='500px')
+        v-form(ref="platform_form", style="width: 100%;")
+            v-card(v-if="tempPlatform !== null")
+                v-card-title.title Add Platform
+                    //span.headline Login
+                v-divider.py-0.my-0
+                v-card-text.py-2.mt-3
+                    span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
+                    v-text-field(v-model='tempPlatform.url', ref="platform_url", color="green darken-1", :rules="[supporter.rules.url]", :loading="tempPlatform.parsingProgress", :disabled="tempPlatform.parsingProgress", append-outer-icon="send", clear-icon='cancel', clearable, label='Platform URL', type='url', @click:append-outer='parsingURL("platform")', @click:clear='tempPlatform.url=""')
+
+                v-divider.py-0.my-0
+                v-card-text.py-2(v-if="tempPlatform.parsingComplete")
+                    v-layout(row, wrap)
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
+                            v-text-field(v-model='tempPlatform.title', ref="platform_title", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Platform Title', type='text', @click:clear='tempPlatform.title=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Description
+                            v-textarea(v-model='tempPlatform.description', ref="platform_description", color="green darken-1", :disabled="tempPlatform.parsingProgress", label='Platform Description', rows="1", hide-details, outline, single-line, auto-grow, clear-icon='cancel', clearable, @click:clear='tempPlatform.description=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
+                            v-text-field(v-model='tempPlatform.company', ref="platform_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempPlatform.company=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
+                            v-layout(row, wrap, align-center, justify-center)
+                                //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
+                                img(v-if="tempPlatform.img !== null", :src="tempPlatform.img", style="max-width: 80%; max-height: 200px;")
+                                v-flex.text-xs-center(xs12)
+                                    v-btn(flat, color="green darken-1", @click="choosePlatformImageDialog = true;")
+                                        span(v-if="tempPlatform.img === null") Select Image
+                                        span(v-else) Change Image
+                                //v-card(flat, tile, v-if="tempProduct.img !== null")
+                                //    v-card-media(:src='tempProduct.img', height='150px')
+
+
+
+
+                v-card-text.py-4.text-xs-center(v-else) Please input platform url.
+
+                v-divider.py-0.my-0
+
+                v-card-actions
+                    v-btn(color='error', flat, @click.native="resetPlatformForm()") Clear
+                    v-spacer
+                    v-btn(color='success', flat, @click.native="addPlatform()") 추가
+
+    v-dialog.md6(v-model='choosePlatformImageDialog', scrollable, max-width='480px')
+        v-card
+            v-card-title.title Select Image
+                //span.headline Login
+            v-divider.py-0.my-0
+            v-card-text.pa-2.brown.lighten-5(v-if="tempPlatform !== null && tempPlatform.imgs.length > 0")
+                v-container.pa-0(v-bind='{ ["grid-list-sm"]: true }', fluid)
+                    v-layout(row, wrap)
+                        v-flex(v-for='(img, index) in tempPlatform.imgs', :key='index', xs4='', @click="choosePlatformImage(index)")
+                            v-card(flat, tile, style="background: transparent;")
+                                v-card-media(:src='img', height='150px')
+            v-card-text.py-4.text-xs-center(v-else) There are no image.
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                v-btn(color='error', flat, @click="choosePlatformImageDialog = false;") Close
 
 
     include footer
