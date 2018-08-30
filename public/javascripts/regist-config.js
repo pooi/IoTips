@@ -55,6 +55,8 @@ function init(init_user) {
             addProductDialog: false,
             chooseProductImageDialog: false,
             tempProduct: null,
+            detailProductDialog: false,
+            detailProduct: null,
 
 
         },
@@ -206,6 +208,11 @@ function init(init_user) {
                 this.tempProduct.img = this.tempProduct.imgs[index];
                 this.chooseProductImageDialog = false;
             },
+            showDetailProuct: function (item) {
+                this.detailProduct = item;
+                this.detailProductDialog = true;
+            },
+
             parsingURL: function (type) {
                 var urlField = null;
                 var tempItem = null;
