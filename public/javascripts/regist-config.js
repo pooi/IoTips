@@ -20,6 +20,7 @@ function init(init_user) {
 
             supporter: null,
             auth: new Auth(),
+            viewer: null,
 
             content: null,
             capabilities: [
@@ -210,6 +211,18 @@ function init(init_user) {
             },
             showDetailProuct: function (item) {
                 this.detailProduct = item;
+
+                setTimeout(function () {
+                    if(vue.detailProduct.img !== null){
+                        vue.viewer = new Viewer(document.getElementById('detailProductImg'), {
+                            inline: false,
+                            viewed: function() {
+                                viewer.zoomTo(1);
+                            }
+                        });
+                    }
+                }, 500);
+
                 this.detailProductDialog = true;
             },
 
