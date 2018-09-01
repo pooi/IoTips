@@ -2,6 +2,12 @@ extends layout
 
 block content
 
+    link(href='/styles/quill.core.css', rel='stylesheet')
+    link(href='/styles/quill.snow.css', rel='stylesheet')
+    link(href='/styles/quill.bubble.css', rel='stylesheet')
+    script(src='/scripts/quill.min.js')
+    script(src='/scripts/vue-quill-editor.js')
+
     include toolbar
 
 
@@ -26,11 +32,18 @@ block content
                                     v-card-text.py-1.px-0
                                         //span.headline.red--text.text--darken-1(style="font-weight: 700;") 제목
                                         v-text-field(label='Title', hide-details, single-line, full-width)
+                                    //v-card-text.pa-0
+                                    //    v-divider
+                                    //v-card-text.py-1.no-padding-text-field
+                                    //    //span.headline.red--text.text--darken-1(style="font-weight: 700;") 내용
+                                    //    v-textarea(v-model='content', label='Content', full-width, single-line, hide-details, auto-grow)
                                     v-card-text.pa-0
                                         v-divider
-                                    v-card-text.py-1.no-padding-text-field
-                                        //span.headline.red--text.text--darken-1(style="font-weight: 700;") 내용
-                                        v-textarea(v-model='content', label='Content', full-width, single-line, hide-details, auto-grow)
+                                    v-card-text.py-2.px-0
+                                        //span.headline.red--text.text--darken-1(style="font-weight: 700;") Content
+                                        //.quill-editor-example
+                                            // quill-editor
+                                        quill-editor(ref='myTextEditor', v-model='content', :options='editorOption', @blur='onEditorBlur($event)', @focus='onEditorFocus($event)', @ready='onEditorReady($event)')
                                     v-card-text.pa-0
                                         v-divider
                                     v-card-text.py-2.mt-4

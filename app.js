@@ -27,6 +27,9 @@ app.use('/scripts', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/scripts', express.static(__dirname + '/node_modules/viewerjs/dist'));
 app.use('/styles', express.static(__dirname + '/node_modules/viewerjs/dist'));
 app.use('/scripts', express.static(__dirname + '/node_modules/vue-fullpage.js/dist'));
+app.use('/scripts', express.static(__dirname + '/node_modules/quill/dist'));
+app.use('/styles', express.static(__dirname + '/node_modules/quill/dist'));
+app.use('/scripts', express.static(__dirname + '/node_modules/vue-quill-editor/dist'));
 
 var indexRouter = require('./routes/index');
 var boardRouter = require('./routes/board');

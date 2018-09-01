@@ -2,6 +2,8 @@
 
 function init(init_user) {
 
+    Vue.use(window.VueQuillEditor);
+
     var vue = new Vue({
         el: '#app',
         data: {
@@ -21,6 +23,32 @@ function init(init_user) {
             supporter: null,
             auth: new Auth(),
             viewer: null,
+
+            editorOption: {
+                // theme: 'bubble',
+                placeholder: "Insert content here ...",
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['blockquote', 'code-block'],
+                        [{ 'header': 1 }, { 'header': 2 }],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        [{ 'script': 'sub' }, { 'script': 'super' }],
+                        [{ 'indent': '-1' }, { 'indent': '+1' }],
+                        [{ 'direction': 'rtl' }],
+                        [{ 'size': ['small', false, 'large', 'huge'] }],
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        // [{ 'font': [] }],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                        ['clean'],
+                        // ['link', 'image', 'video']
+                    ],
+                    syntax: {
+                        highlight: text => hljs.highlightAuto(text).value
+                    }
+                }
+            },
 
             content: null,
             capabilities: [
@@ -116,6 +144,17 @@ function init(init_user) {
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
             },
+
+            onEditorBlur(editor) {
+                console.log('editor blur!', editor)
+            },
+            onEditorFocus(editor) {
+                console.log('editor focus!', editor)
+            },
+            onEditorReady(editor) {
+                console.log('editor ready!', editor)
+            },
+
             addCapability: function () {
                 this.capabilities.push({
                     title: "Button",
@@ -272,7 +311,15 @@ function init(init_user) {
             function () {
                 this.auth.parseUserData(init_user);
             }
-        ]
+        ],
+        computed: {
+            editor() {
+                return this.$refs.myTextEditor.quill
+            },
+            // contentCode() {
+            //     return hljs.highlightAuto(this.content).value
+            // }
+        },
     });
 
     vue.supporter = new Supporter(vue);
