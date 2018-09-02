@@ -7,6 +7,11 @@ class Supporter {
         this.drawer = false;
         this.menus = [
             {
+                "icon": "home",
+                "title": "Home",
+                "href": "/"
+            },
+            {
                 "icon": "edit",
                 "title": "New",
                 "href": "/board/regist"

@@ -30,7 +30,8 @@ function init(init_user) {
                 modules: {
                     toolbar: [
                         ['bold', 'italic', 'underline', 'strike'],
-                        ['blockquote', 'code-block'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
                         [{ 'header': 1 }, { 'header': 2 }],
                         [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                         [{ 'script': 'sub' }, { 'script': 'super' }],
@@ -39,14 +40,13 @@ function init(init_user) {
                         [{ 'size': ['small', false, 'large', 'huge'] }],
                         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                         // [{ 'font': [] }],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'align': [] }],
-                        ['clean'],
+                        ['blockquote', 'code-block', 'link'],
+                        // ['clean'],
                         // ['link', 'image', 'video']
                     ],
-                    syntax: {
-                        highlight: text => hljs.highlightAuto(text).value
-                    }
+                    // syntax: {
+                    //     highlight: text => hljs.highlightAuto(text).value
+                    // }
                 }
             },
 
@@ -98,11 +98,11 @@ function init(init_user) {
 
                 if(this.scrollData.scrollT > this.scrollData.delta){
                     this.scrollData.isShowFabTop = true;
-                    this.chatManager.hide();
+                    // this.chatManager.hide();
                     this.scrollData.scrollT = 0;
                 }else if (this.scrollData.scrollT < -this.scrollData.delta) {
                     this.scrollData.isShowFabTop = false;
-                    this.chatManager.show();
+                    // this.chatManager.show();
                     this.scrollData.scrollT = 0;
                 }
 

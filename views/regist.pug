@@ -39,11 +39,11 @@ block content
                                     //    v-textarea(v-model='content', label='Content', full-width, single-line, hide-details, auto-grow)
                                     v-card-text.pa-0
                                         v-divider
-                                    v-card-text.py-2.px-0
+                                    v-card-text.px-0.py-0
                                         //span.headline.red--text.text--darken-1(style="font-weight: 700;") Content
                                         //.quill-editor-example
                                             // quill-editor
-                                        quill-editor(ref='myTextEditor', v-model='content', :options='editorOption', @blur='onEditorBlur($event)', @focus='onEditorFocus($event)', @ready='onEditorReady($event)')
+                                        quill-editor.no-border-quill-editor(ref='myTextEditor', v-model='content', :options='editorOption', @blur='onEditorBlur($event)', @focus='onEditorFocus($event)', @ready='onEditorReady($event)')
                                     v-card-text.pa-0
                                         v-divider
                                     v-card-text.py-2.mt-4
@@ -51,7 +51,9 @@ block content
                                         v-card.my-3.elevation-6(height="250px")
                                     v-card-text.py-2.mt-4
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
-                                        v-layout.mt-2(row, wrap, justify-center, align-center)
+                                        v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="capabilities.length === 0")
+                                            v-btn(flat, color="blue darken-3", @click="addCapability()") 사용된 Capability 추가
+                                        v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
                                             //v-layout(xs12, wrap)
                                                 //v-flex(v-for='capability in capabilities', d-inline-flex)
                                             template(v-for="(capa, index) in capabilities", :key="index")
@@ -68,7 +70,9 @@ block content
 
                                     v-card-text.py-2.mt-4
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Products
-                                        v-layout.mt-2(row, wrap, justify-center, align-center)
+                                        v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="products.length === 0")
+                                            v-btn(flat, color="blue darken-3", @click="resetProductForm()") 사용된 제품 추가
+                                        v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
                                             template(v-for="(product, index) in products", :key="index")
                                                 v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
                                                     v-icon(slot='badge', dark='', small='', @click="removeProduct(index)") close
@@ -88,7 +92,9 @@ block content
 
                                     v-card-text.py-2.mt-4
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Platforms
-                                        v-layout.mt-2(row, wrap, justify-center, align-center)
+                                        v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="platforms.length === 0")
+                                            v-btn(flat, color="blue darken-3", @click="resetPlatformForm()") 사용된 플랫폼 추가
+                                        v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
                                             template(v-for="(platform, index) in platforms", :key="index")
                                                 v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
                                                     v-icon(slot='badge', dark='', small='', @click="removePlatform(index)") close
@@ -276,10 +282,10 @@ block content
                             //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
                             img#detailProductImg(:src="detailProduct.img", style="max-width: 80%; max-height: 200px;")
 
-            v-card-text.py-2
-                span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
-                .body-1
-                    a.light-blue--text.text--darken-3(:href="detailProduct.url", target="_blank") {{ detailProduct.url }}
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
+                        .body-1
+                            a.light-blue--text.text--darken-3(:href="detailProduct.url", target="_blank") {{ detailProduct.url }}
 
                 //v-divider(v-if='auth.user !== null')
                 //v-list(one-line='', subheader='', v-if='auth.user !== null')
