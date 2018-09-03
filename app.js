@@ -30,6 +30,8 @@ app.use('/scripts', express.static(__dirname + '/node_modules/vue-fullpage.js/di
 app.use('/scripts', express.static(__dirname + '/node_modules/quill/dist'));
 app.use('/styles', express.static(__dirname + '/node_modules/quill/dist'));
 app.use('/scripts', express.static(__dirname + '/node_modules/vue-quill-editor/dist'));
+app.use('/scripts', express.static(__dirname + '/node_modules/mxgraph/javascript'));
+app.use('/scripts', express.static(__dirname + '/node_modules/gojs/release'));
 
 var indexRouter = require('./routes/index');
 var boardRouter = require('./routes/board');

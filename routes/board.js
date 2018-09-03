@@ -15,4 +15,9 @@ router.get('/regist', function(req, res, next) {
     res.render('regist', { user: JSON.stringify(user) });
 });
 
+router.get('/graph', function(req, res, next) {
+    var user = support.ensureAuthenticated(req);
+    res.render('graph_test', { user: JSON.stringify(user) });
+});
+
 module.exports = router;
