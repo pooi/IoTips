@@ -22,6 +22,7 @@ function init(init_user) {
 
             supporter: null,
             auth: new Auth(),
+            graphManager: new GraphManager("graph"),
             viewer: null,
 
             editorOption: {

@@ -22,7 +22,7 @@ function init(init_user) {
 
             supporter: null,
             auth: new Auth(),
-            graphManager: new GraphManager("myDiagramDiv")
+            graphManager: new GraphManager("graph")
 
 
         },
@@ -94,9 +94,9 @@ function init(init_user) {
 
     vue.supporter = new Supporter(vue);
     // vue.auth = new Auth(vue);
-    $( document ).ready( function () {
-        vue.graphManager.init();
-    } );
+    // $( document ).ready( function () {
+    //     vue.graphManager.main();
+    // } );
 
 
     return vue;

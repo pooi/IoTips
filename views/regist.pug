@@ -7,6 +7,9 @@ block content
     link(href='/styles/quill.bubble.css', rel='stylesheet')
     script(src='/scripts/quill.min.js')
     script(src='/scripts/vue-quill-editor.js')
+    script.
+        mxBasePath = '/scripts/src';
+    script(src='/scripts/mxClient.js')
 
     include toolbar
 
@@ -44,11 +47,16 @@ block content
                                         //.quill-editor-example
                                             // quill-editor
                                         quill-editor.no-border-quill-editor(ref='myTextEditor', v-model='content', :options='editorOption', @blur='onEditorBlur($event)', @focus='onEditorFocus($event)', @ready='onEditorReady($event)')
+
                                     v-card-text.pa-0
                                         v-divider
+
                                     v-card-text.py-2.mt-4
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") 설계도
-                                        v-card.my-3.elevation-6(height="250px")
+                                        v-card.my-3.dal-card-blue(height="250px", hover, raised)
+                                            v-layout(row, wrap, justify-center, align-center, style="width: 100%; height: 100%;")
+                                                div#graph(style="width: 100%; height: 100%; overflow:auto; ")
+
                                     v-card-text.py-2.mt-4
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
                                         v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="capabilities.length === 0")
@@ -59,11 +67,11 @@ block content
                                             template(v-for="(capa, index) in capabilities", :key="index")
                                                 v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
                                                     v-icon(slot='badge', dark='', small='', @click="removeCapability(index)") close
-                                                    v-card.elevation-4.dal-small-card(hover, raised, :width="100")
+                                                    v-card.dal-small-card(hover, raised, :width="100")
                                                         v-card-media.white--text(height='75px', :src='"/images/capabilities/" + capa.component + ".png"')
                                                         v-card-text.py-1.text-xs-center {{ capa.title }} {{ index }}
 
-                                            v-card.mr-3.mb-3.elevation-4.dal-small-card(hover, raised, :width="90", :height="90")
+                                            v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
                                                 v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="addCapability()")
                                                     .display-2(style="font-weight: 100;") +
 
@@ -76,7 +84,7 @@ block content
                                             template(v-for="(product, index) in products", :key="index")
                                                 v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
                                                     v-icon(slot='badge', dark='', small='', @click="removeProduct(index)") close
-                                                    v-card.elevation-4.dal-small-card(hover, raised)
+                                                    v-card.dal-small-card(hover, raised)
                                                         v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product)")
                                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
                                                                 img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
@@ -85,7 +93,7 @@ block content
                                                                 v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
                                                                 v-card-text.pa-0.light-blue--text.text--darken-3 Detail
 
-                                            v-card.mr-3.mb-3.elevation-4.dal-small-card(hover, raised, :width="90", :height="90")
+                                            v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
                                                 v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetProductForm()")
                                                     .display-2(style="font-weight: 100;") +
 
@@ -98,7 +106,7 @@ block content
                                             template(v-for="(platform, index) in platforms", :key="index")
                                                 v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
                                                     v-icon(slot='badge', dark='', small='', @click="removePlatform(index)") close
-                                                    v-card.elevation-4.dal-small-card(hover, raised)
+                                                    v-card.dal-small-card(hover, raised)
                                                         v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;")
                                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
                                                                 img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
@@ -109,7 +117,7 @@ block content
                                                                 v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
                                                                 v-card-text.pa-0.light-blue--text.text--darken-3 Detail
 
-                                            v-card.mr-3.mb-3.elevation-4.dal-small-card(hover, raised, :width="90", :height="90")
+                                            v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
                                                 v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetPlatformForm()")
                                                     .display-2(style="font-weight: 100;") +
 
