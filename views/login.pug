@@ -1,4 +1,4 @@
-v-dialog.md6(v-model='auth.loginDialog',  scrollable, max-width='500px')
+v-dialog.md6(v-model='auth.loginDialog',  scrollable, max-width='500px', :persistent="auth.dialogPersistent")
     v-card
         v-card-title.title Login
             //span.headline Login
@@ -9,7 +9,8 @@ v-dialog.md6(v-model='auth.loginDialog',  scrollable, max-width='500px')
         //    v-btn(flat, @click="auth.loginGoogle()") Login with google
         //v-card-text.text-xs-center
         //    #my-signin2
-        v-card-actions.pt-0
+        v-card-text.text-xs-center(v-if="auth.dialogPersistent") Login required.
+        v-card-actions.pt-0(v-else)
             v-spacer
             v-btn(color='success', flat, @click.native="auth.loginDialog = false") 닫기
 

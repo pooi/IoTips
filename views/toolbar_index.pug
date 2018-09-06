@@ -7,7 +7,7 @@ v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: t
             v-icon account_circle
         v-btn(v-else, flat, dark, @click="auth.loginDialog = true;") Login
     template(v-else)
-        v-avatar.mr-2(:tile='false', size='30px', @click="auth.detailDialog = true;")
+        v-avatar.mr-2(:tile='false', size='30px', @click="auth.toggleDialog();")
             img(:src='auth.user.photo', alt='Avatar')
     v-menu(bottom, left, v-if="$vuetify.breakpoint.xsOnly ")
         v-btn(slot='activator', dark, icon)

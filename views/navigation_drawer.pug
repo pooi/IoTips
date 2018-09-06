@@ -1,4 +1,4 @@
-v-navigation-drawer.white--text(v-model='supporter.drawer', fixed, temporary, dark)
+v-navigation-drawer.white--text(v-model='supporter.drawer', fixed, temporary, dark, style="z-index: 99;")
     v-card-text(v-if="auth.user === null", @click="auth.loginDialog = true;") 로그인해주세요.
     v-list-group.pa-1(v-else, value="true")
         v-list-tile(avatar, slot="activator")

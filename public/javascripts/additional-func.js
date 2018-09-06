@@ -265,6 +265,7 @@ class Auth {
         }
         this.loginDialog = false;
         this.detailDialog = false;
+        this.dialogPersistent = false;
     }
 
     loginGoogle(){
@@ -275,6 +276,22 @@ class Auth {
     logout(){
         var pathname = window.location.pathname;
         window.location.href = "/auth/logout?redirectTo=" + pathname;
+    }
+
+    toggleDialog(){
+        this.loginDialog = true;
+        this.dialogPersistent= false;
+    }
+
+    toggleDialogWithPersistent(){
+        this.loginDialog = true;
+        this.dialogPersistent = true;
+    }
+
+    requireLogin(){
+        if(this.user === null){
+            this.toggleDialogWithPersistent();
+        }
     }
 
     parseUserData(init_user){
