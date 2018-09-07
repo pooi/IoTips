@@ -73,6 +73,8 @@ function init(init_user) {
             addPlatformDialog: false,
             choosePlatformImageDialog: false,
             tempPlatform: null,
+            detailPlatformDialog: false,
+            detailPlatform: null,
 
             products: [
                 // {
@@ -207,6 +209,22 @@ function init(init_user) {
             choosePlatformImage: function (index) {
                 this.tempPlatform.img = this.tempPlatform.imgs[index];
                 this.choosePlatformImageDialog = false;
+            },
+            showDetailPlatform: function (item) {
+                this.detailPlatform = item;
+
+                setTimeout(function () {
+                    if(vue.detailPlatform.img !== null){
+                        vue.viewer = new Viewer(document.getElementById('detailPlatformImg'), {
+                            inline: false,
+                            viewed: function() {
+                                viewer.zoomTo(1);
+                            }
+                        });
+                    }
+                }, 500);
+
+                this.detailPlatformDialog = true;
             },
 
             addProduct: function () {
