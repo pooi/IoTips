@@ -305,6 +305,13 @@ class Auth {
 class GraphManager {
     constructor(id){
         this.containerId = id;
+        this.graph = null;
+        this.container = null;
+
+        this.addOffsetX = 30;
+        this.addOffsetY = 30;
+
+
         this.init();
 
     }
@@ -539,7 +546,10 @@ class GraphManager {
 
     main (){
 
+        var gm = this;
+
         var container = document.getElementById(this.containerId);
+        this.container = container;
 
         // Checks if the browser is supported
         if (!mxClient.isBrowserSupported()) {
@@ -633,6 +643,8 @@ class GraphManager {
                     cellSelected = this.isCellSelected(me.getCell());
                     selectionEmpty = this.isSelectionEmpty();
                     menuShowing = graph.popupMenuHandler.isMenuShowing();
+
+                    console.log(me.getCell());
                 }
 
                 mxGraph.prototype.fireMouseEvent.apply(this, arguments);
@@ -726,10 +738,28 @@ class GraphManager {
 
                 return me;
             };
+
+            this.graph = graph;
         }
 
+    }
 
+    addNode(title){
+        var graph = this.graph;
+        var parent = graph.getDefaultParent();
+        graph.getModel().beginUpdate();
+        try {
+            var v1 = graph.insertVertex(parent, this.addOffsetX + "_" + this.addOffsetY, title, this.addOffsetX, this.addOffsetY, title.length * 8, 30);
 
-
+            this.addOffsetY += 20;
+            if(this.addOffsetY > 300){
+                this.addOffsetY = this.addOffsetY % 300 + 20;
+                this.addOffsetX += 20;
+            }
+        }
+        finally {
+            // Updates the display
+            graph.getModel().endUpdate();
+        }
     }
 }

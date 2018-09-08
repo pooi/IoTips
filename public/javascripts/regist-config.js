@@ -175,6 +175,7 @@ function init(init_user) {
                 var form = this.$refs.platform_form;
                 if(form.validate()){
                     this.platforms.push(this.tempPlatform);
+                    this.graphManager.addNode(this.tempPlatform.title);
                     this.addPlatformDialog = false;
                 }
 
@@ -232,6 +233,7 @@ function init(init_user) {
                 var form = this.$refs.product_form;
                 if(form.validate()){
                     this.products.push(this.tempProduct);
+                    this.graphManager.addNode(this.tempProduct.title);
                     this.addProductDialog = false;
                 }
 
