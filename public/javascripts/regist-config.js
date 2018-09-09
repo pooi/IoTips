@@ -175,7 +175,7 @@ function init(init_user) {
                 var form = this.$refs.platform_form;
                 if(form.validate()){
                     this.platforms.push(this.tempPlatform);
-                    this.graphManager.addNode(this.tempPlatform.title);
+                    this.graphManager.addCircleNode(this.tempPlatform.title);
                     this.addPlatformDialog = false;
                 }
 
