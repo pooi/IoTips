@@ -295,15 +295,18 @@ class Auth {
     }
 
     parseUserData(init_user){
-        console.log(init_user);
+        // console.log(init_user);
         this.user = JSON.parse(init_user);
-        console.log(this.user);
+        // console.log(this.user);
     }
 
 }
 
 class GraphManager {
     constructor(id){
+
+        // this.zoom = 0;
+
         this.containerId = id;
         this.graph = null;
         this.container = null;
@@ -314,6 +317,22 @@ class GraphManager {
 
         this.init();
 
+    }
+
+    zoomIn(){
+        // this.zoom = (this.zoom + 10) || 100;
+        if(this.graph !== null){
+            console.log("zoom in");
+            this.graph.zoomIn();
+        }
+    }
+
+    zoomOut(){
+        // this.zoom = (this.zoom - 10) || 0;
+        if(this.graph !== null){
+            console.log("zoom out");
+            this.graph.zoomOut();
+        }
     }
 
     init (){
@@ -664,7 +683,7 @@ class GraphManager {
                         textInput.parentNode.removeChild(textInput);
                     }
 
-                    if(evt.keyCode == 8){
+                    if(!graph.isEditing() && evt.keyCode == 8){
                         if (graph.isEnabled() && !graph.isSelectionEmpty())
                         {
                             graph.removeCells();
@@ -900,7 +919,33 @@ class GraphManager {
                     var parent = graph.getDefaultParent();
                     graph.getModel().beginUpdate();
                     try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 30);
+                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX - 40, evt.layerY - 15, 80, 30);
+                    }
+                    finally {
+                        // Updates the display
+                        graph.getModel().endUpdate();
+                    }
+                });
+
+                menu.addItem('Add circle node', null, function () {
+                    console.log(menu, cell, evt);
+                    var parent = graph.getDefaultParent();
+                    graph.getModel().beginUpdate();
+                    try {
+                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX - 40, evt.layerY - 20, 80, 40, 'shape=ellipse;perimeter=ellipsePerimeter');
+                    }
+                    finally {
+                        // Updates the display
+                        graph.getModel().endUpdate();
+                    }
+                });
+
+                menu.addItem('Add rhombus node', null, function () {
+                    console.log(menu, cell, evt);
+                    var parent = graph.getDefaultParent();
+                    graph.getModel().beginUpdate();
+                    try {
+                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX - 50, evt.layerY - 20, 100, 40, 'shape=rhombus;perimeter=rhombusPerimeter');
                     }
                     finally {
                         // Updates the display
@@ -945,7 +990,7 @@ class GraphManager {
                     selectionEmpty = this.isSelectionEmpty();
                     menuShowing = graph.popupMenuHandler.isMenuShowing();
 
-                    console.log(me.getCell());
+                    // console.log(me.getCell());
                 }
 
                 mxGraph.prototype.fireMouseEvent.apply(this, arguments);

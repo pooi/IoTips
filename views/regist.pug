@@ -53,9 +53,17 @@ block content
 
                                     v-card-text.py-2.mt-4
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") 설계도
-                                        v-card.my-3.dal-card-blue(height="400px", hover, raised)
-                                            v-layout(row, wrap, justify-center, align-center, style="width: 100%; height: 100%;")
+                                        v-card.my-3.dal-card-blue(hover, raised)
+                                            //v-card-media.pa-0(height="400px")
+                                            v-layout(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
                                                 div#graph(style="width: 100%; height: 100%; overflow:auto; ")
+                                            v-card-actions.pa-1.grey.lighten-5(style="overflow: hidden;")
+                                                v-spacer
+                                                v-btn-toggle.elevation-0(style="background: transparent;")
+                                                    v-btn.mx-0(icon, flat, @click="graphManager.zoomOut();")
+                                                        v-icon zoom_out
+                                                    v-btn.mx-0(icon, flat, @click="graphManager.zoomIn();")
+                                                        v-icon zoom_in
 
                                     v-card-text.py-2.mt-4
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
