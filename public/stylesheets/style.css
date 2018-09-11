@@ -324,7 +324,7 @@ body tr.mxPopupMenuItem {
 }
 
 body td.mxPopupMenuItem {
-    padding: 10px 30px 10px 30px;
+    padding: 7px 30px 7px 30px;
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 10pt;
 }

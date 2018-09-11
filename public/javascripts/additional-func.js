@@ -305,7 +305,7 @@ class Auth {
 class GraphManager {
     constructor(id){
 
-        // this.zoom = 0;
+        this.zoomLevel = 0;
 
         this.containerId = id;
         this.graph = null;
@@ -322,7 +322,8 @@ class GraphManager {
     zoomIn(){
         // this.zoom = (this.zoom + 10) || 100;
         if(this.graph !== null){
-            console.log("zoom in");
+            // console.log("zoom in");
+            this.zoomLevel += 1;
             this.graph.zoomIn();
         }
     }
@@ -330,7 +331,8 @@ class GraphManager {
     zoomOut(){
         // this.zoom = (this.zoom - 10) || 0;
         if(this.graph !== null){
-            console.log("zoom out");
+            // console.log("zoom out");
+            this.zoomLevel -= 1;
             this.graph.zoomOut();
         }
     }
@@ -554,6 +556,35 @@ class GraphManager {
             // Pre-fetches touch connector
             new Image().src = connectorSrc;
         })();
+
+
+        // XML
+        function CustomData(value)
+        {
+            this.value = value;
+        }
+
+        var codec = new mxObjectCodec(new CustomData());
+
+        codec.encode = function(enc, obj)
+        {
+            var node = enc.document.createElement('CustomData');
+            mxUtils.setTextContent(node, JSON.stringify(obj));
+
+            return node;
+        };
+
+        codec.decode = function(dec, node, into)
+        {
+            var obj = JSON.parse(mxUtils.getTextContent(node));
+            obj.constructor = CustomData;
+
+            return obj;
+        };
+
+        mxCodecRegistry.register(codec);
+
+
 
 
         var gm = this;
@@ -916,45 +947,73 @@ class GraphManager {
             graph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
                 menu.addItem('Add node', null, function () {
                     console.log(menu, cell, evt);
+                    // var zl = gm.zoomLevel;
+                    // gm.setZoomLevel(0);
                     var parent = graph.getDefaultParent();
                     graph.getModel().beginUpdate();
                     try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX - 40, evt.layerY - 15, 80, 30);
+                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX , evt.layerY, 80, 30);
                     }
                     finally {
                         // Updates the display
+                        // gm.setZoomLevel(zl);
                         graph.getModel().endUpdate();
                     }
                 });
 
                 menu.addItem('Add circle node', null, function () {
                     console.log(menu, cell, evt);
+                    // var zl = gm.zoomLevel;
+                    // gm.setZoomLevel(0);
                     var parent = graph.getDefaultParent();
                     graph.getModel().beginUpdate();
                     try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX - 40, evt.layerY - 20, 80, 40, 'shape=ellipse;perimeter=ellipsePerimeter');
+                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 40, 'shape=ellipse;perimeter=ellipsePerimeter');
                     }
                     finally {
                         // Updates the display
+                        // gm.setZoomLevel(zl);
                         graph.getModel().endUpdate();
                     }
                 });
 
                 menu.addItem('Add rhombus node', null, function () {
                     console.log(menu, cell, evt);
+                    // var zl = gm.zoomLevel;
+                    // gm.setZoomLevel(0);
                     var parent = graph.getDefaultParent();
                     graph.getModel().beginUpdate();
                     try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX - 50, evt.layerY - 20, 100, 40, 'shape=rhombus;perimeter=rhombusPerimeter');
+                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 100, 40, 'shape=rhombus;perimeter=rhombusPerimeter');
                     }
                     finally {
                         // Updates the display
+                        // gm.setZoomLevel(zl);
                         graph.getModel().endUpdate();
                     }
                 });
 
+                var submenu1 = menu.addItem('More', null, null);
+                menu.addItem('Subitem 1', null, function () {
+                    // alert('Subitem 1');
+                }, submenu1);
+                menu.addItem('Subitem 1', null, function () {
+                    // alert('Subitem 2');
+                }, submenu1);
+
+
+
+
                 if(cell !== null){
                     menu.addSeparator();
+
+                    menu.addItem("Edit", null, function () {
+                        // graph.removeCells([cell]);
+                        if (graph.isEnabled() && !graph.isSelectionEmpty())
+                        {
+                            graph.startEditing();
+                        }
+                    });
 
                     menu.addItem("Delete", null, function () {
                         // graph.removeCells([cell]);
@@ -964,14 +1023,25 @@ class GraphManager {
                         }
                     });
 
-                    // var submenu1 = menu.addItem('Submenu 1', null, null);
-                    //
-                    // menu.addItem('Subitem 1', null, function () {
-                    //     alert('Subitem 1');
-                    // }, submenu1);
-                    // menu.addItem('Subitem 1', null, function () {
-                    //     alert('Subitem 2');
-                    // }, submenu1);
+                    menu.addSeparator();
+
+                    menu.addItem("Cut", null, function () {
+                        // graph.removeCells([cell]);
+                        if (graph.isEnabled() && !graph.isSelectionEmpty())
+                        {
+
+                        }
+                    });
+
+                    menu.addItem("Copy", null, function () {
+                        // graph.removeCells([cell]);
+                        if (graph.isEnabled() && !graph.isSelectionEmpty())
+                        {
+
+                        }
+                    });
+
+
                 }
             };
 
@@ -1040,19 +1110,21 @@ class GraphManager {
 
             // Gets the default parent for inserting new cells. This
             // is normally the first child of the root (ie. layer 0).
-            var parent = graph.getDefaultParent();
 
-            // Adds cells to the model in a single step
-            graph.getModel().beginUpdate();
-            try {
-                var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
-                var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
-                var e1 = graph.insertEdge(parent, null, '', v1, v2);
-            }
-            finally {
-                // Updates the display
-                graph.getModel().endUpdate();
-            }
+
+            // var parent = graph.getDefaultParent();
+            //
+            // // Adds cells to the model in a single step
+            // graph.getModel().beginUpdate();
+            // try {
+            //     var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
+            //     var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
+            //     var e1 = graph.insertEdge(parent, null, '', v1, v2);
+            // }
+            // finally {
+            //     // Updates the display
+            //     graph.getModel().endUpdate();
+            // }
 
             // Disables new connections via "hotspot"
             graph.connectionHandler.marker.isEnabled = function () {
@@ -1086,6 +1158,38 @@ class GraphManager {
             };
 
             this.graph = graph;
+
+
+            this.makeFromXml('<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="2" value="Hello," vertex="1" parent="1"><mxGeometry x="20" y="20" width="80" height="30" as="geometry"/></mxCell><mxCell id="3" value="World!" vertex="1" parent="1"><mxGeometry x="200" y="150" width="80" height="30" as="geometry"/></mxCell><mxCell id="4" value="" edge="1" parent="1" source="2" target="3"><mxGeometry relative="1" as="geometry"/></mxCell></root></mxGraphModel>');
+        }
+
+    }
+
+    makeFromXml(xml){
+        var graph = this.graph;
+
+
+        var xmlDocument = mxUtils.parseXml(xml);
+        if (xmlDocument.documentElement != null && xmlDocument.documentElement.nodeName == 'mxGraphModel'){
+
+            var decoder = new mxCodec(xmlDocument);
+            var node = xmlDocument.documentElement;
+
+            decoder.decode(node, graph.getModel());
+
+        }
+    }
+
+    setZoomLevel(zoomLevel){
+
+        if(this.zoomLevel < zoomLevel){
+            while(this.zoomLevel !== zoomLevel){
+                this.zoomIn();
+            }
+        }else if(this.zoomLevel > zoomLevel){
+            while(this.zoomLevel !== zoomLevel){
+                this.zoomOut();
+            }
         }
 
     }
@@ -1127,4 +1231,17 @@ class GraphManager {
             graph.getModel().endUpdate();
         }
     }
+
+    toXML(){
+        var graph = this.graph;
+        var encoder = new mxCodec();
+        var node = encoder.encode(graph.getModel());
+
+        var xml = mxUtils.getXml(node);
+        console.log(xml);
+        alert(xml);
+        // mxUtils.popup(mxUtils.getXml(node), true);
+    }
+
+
 }

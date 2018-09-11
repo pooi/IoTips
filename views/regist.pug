@@ -7,6 +7,7 @@ block content
     link(href='/styles/quill.bubble.css', rel='stylesheet')
     script(src='/scripts/quill.min.js')
     script(src='/scripts/vue-quill-editor.js')
+    script(src='/scripts/interact.min.js')
     script.
         mxBasePath = '/scripts/src';
     script(src='/scripts/mxClient.js')
@@ -55,15 +56,18 @@ block content
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") 설계도
                                         v-card.my-3.dal-card-blue(hover, raised)
                                             //v-card-media.pa-0(height="400px")
-                                            v-layout(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
-                                                div#graph(style="width: 100%; height: 100%; overflow:auto; ")
-                                            v-card-actions.pa-1.grey.lighten-5(style="overflow: hidden;")
+                                            v-card-actions.py-1.px-2.grey.lighten-5(style="overflow: hidden;")
+                                                v-btn.mx-0(icon, flat, color="grey ", @click="graphManager.toXML();")
+                                                    v-icon code
                                                 v-spacer
                                                 v-btn-toggle.elevation-0(style="background: transparent;")
                                                     v-btn.mx-0(icon, flat, @click="graphManager.zoomOut();")
                                                         v-icon zoom_out
                                                     v-btn.mx-0(icon, flat, @click="graphManager.zoomIn();")
                                                         v-icon zoom_in
+                                            v-layout#graph-container.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
+                                                div#graph(style="width: 100%; height: 100%; overflow:auto; ")
+
 
                                     v-card-text.py-2.mt-4
                                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
@@ -183,6 +187,7 @@ block content
                 v-card-actions
                     v-btn(color='error', flat, @click.native="resetProductForm()") Clear
                     v-spacer
+                    v-btn(color='success', flat, @click.native="addProductDialog = false") 닫기
                     v-btn(color='success', flat, @click.native="addProduct()") 추가
 
     v-dialog.md6(v-model='chooseProductImageDialog', scrollable, max-width='480px')
@@ -251,6 +256,7 @@ block content
                 v-card-actions
                     v-btn(color='error', flat, @click.native="resetPlatformForm()") Clear
                     v-spacer
+                    v-btn(color='success', flat, @click.native="addPlatformDialog = false") 닫기
                     v-btn(color='success', flat, @click.native="addPlatform()") 추가
 
     v-dialog.md6(v-model='choosePlatformImageDialog', scrollable, max-width='480px')
@@ -356,7 +362,8 @@ block content
 
 
     include footer
-    include bottom_tab
+    //include bottom_tab
+
 
     script(type="text/javascript" src='/javascripts/regist-config.js')
     script.
