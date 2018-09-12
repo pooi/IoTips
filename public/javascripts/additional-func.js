@@ -1157,6 +1157,13 @@ class GraphManager {
                 return me;
             };
 
+            var style = [];
+            style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
+            style[mxConstants.STYLE_STROKECOLOR] = '#e43535';
+            style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
+            style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+            graph.getStylesheet().putCellStyle('ellipse_red', style);
+
             this.graph = graph;
 
 
@@ -1218,7 +1225,8 @@ class GraphManager {
         var parent = graph.getDefaultParent();
         graph.getModel().beginUpdate();
         try {
-            var v1 = graph.insertVertex(parent, this.addOffsetX + "_" + this.addOffsetY, title, this.addOffsetX, this.addOffsetY, title.length * 8, 40, 'shape=ellipse;perimeter=ellipsePerimeter');
+            // var v1 = graph.insertVertex(parent, this.addOffsetX + "_" + this.addOffsetY, title, this.addOffsetX, this.addOffsetY, title.length * 8, 40, 'shape=ellipse;perimeter=ellipsePerimeter;color=white');
+            var v1 = graph.insertVertex(parent, this.addOffsetX + "_" + this.addOffsetY, title, this.addOffsetX, this.addOffsetY, title.length * 8, 40, 'ellipse_red');
 
             this.addOffsetY += 20;
             if(this.addOffsetY > 300){
