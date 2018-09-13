@@ -99,7 +99,7 @@ block content
                                                 v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
                                                     v-icon(slot='badge', dark='', small='', @click="removeProduct(index)") close
                                                     v-card.dal-small-card(hover, raised)
-                                                        v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product)")
+                                                        v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
                                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
                                                                 img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
                                                             v-flex.pa-2(style="width: 180px;")
@@ -121,7 +121,7 @@ block content
                                                 v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
                                                     v-icon(slot='badge', dark='', small='', @click="removePlatform(index)") close
                                                     v-card.dal-small-card(hover, raised)
-                                                        v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailPlatform(platform)")
+                                                        v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailPlatform(platform, index)")
                                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
                                                                 img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
                                                             v-flex.pa-2(style="width: 180px;")
@@ -316,6 +316,7 @@ block content
                 //    v-list-tile-action
                 //        v-btn(color='red', flat, @click="auth.logout();") Logout
             v-card-actions
+                v-btn(color='error', flat, @click="removeProductFromDetail()") 삭제
                 v-spacer
                 v-btn(color='success', flat, @click.native="detailProductDialog = false") 닫기
 
@@ -359,6 +360,7 @@ block content
                 //    v-list-tile-action
                 //        v-btn(color='red', flat, @click="auth.logout();") Logout
             v-card-actions
+                v-btn(color='error', flat, @click="removePlatformFromDetail()") 삭제
                 v-spacer
                 v-btn(color='success', flat, @click.native="detailPlatformDialog = false") 닫기
 

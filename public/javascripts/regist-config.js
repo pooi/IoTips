@@ -75,6 +75,7 @@ function init(init_user) {
             tempPlatform: null,
             detailPlatformDialog: false,
             detailPlatform: null,
+            detailPlatformIndex: -1,
 
             products: [
                 // {
@@ -89,6 +90,7 @@ function init(init_user) {
             tempProduct: null,
             detailProductDialog: false,
             detailProduct: null,
+            detailProductIndex: -1,
 
 
         },
@@ -191,6 +193,12 @@ function init(init_user) {
                     this.platforms.splice(index, 1);
                 }
             },
+            removePlatformFromDetail: function(){
+                this.removePlatform(this.detailPlatformIndex);
+                this.detailPlatform = null;
+                this.detailPlatformIndex = -1;
+                this.detailPlatformDialog= false;
+            },
             resetPlatformForm: function () {
                 this.tempPlatform = {
                     title: null,
@@ -211,8 +219,9 @@ function init(init_user) {
                 this.tempPlatform.img = this.tempPlatform.imgs[index];
                 this.choosePlatformImageDialog = false;
             },
-            showDetailPlatform: function (item) {
+            showDetailPlatform: function (item, index) {
                 this.detailPlatform = item;
+                this.detailPlatformIndex = index;
 
                 setTimeout(function () {
                     if(vue.detailPlatform.img !== null){
@@ -249,6 +258,12 @@ function init(init_user) {
                     this.products.splice(index, 1);
                 }
             },
+            removeProductFromDetail: function(){
+                this.removeProduct(this.detailProductIndex);
+                this.detailProduct = null;
+                this.detailProductIndex = -1;
+                this.detailProductDialog= false;
+            },
             resetProductForm: function () {
                 this.tempProduct = {
                     title: null,
@@ -269,8 +284,9 @@ function init(init_user) {
                 this.tempProduct.img = this.tempProduct.imgs[index];
                 this.chooseProductImageDialog = false;
             },
-            showDetailProuct: function (item) {
+            showDetailProuct: function (item, index) {
                 this.detailProduct = item;
+                this.detailProductIndex = index;
 
                 setTimeout(function () {
                     if(vue.detailProduct.img !== null){
