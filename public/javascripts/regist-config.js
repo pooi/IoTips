@@ -25,6 +25,8 @@ function init(init_user) {
             graphManager: new GraphManager("graph"),
             viewer: null,
 
+            editorTitle: null,
+
             editorOption: {
                 // theme: 'bubble',
                 placeholder: "Insert content here ...",
@@ -200,17 +202,7 @@ function init(init_user) {
                 this.detailPlatformDialog= false;
             },
             resetPlatformForm: function () {
-                this.tempPlatform = {
-                    title: null,
-                    company: null,
-                    url: null,
-                    description: null,
-                    img: null,
-
-                    parsingProgress: false,
-                    parsingComplete: false,
-                    imgs: [],
-                };
+                this.tempPlatform = new Platform();
                 this.choosePlatformImageDialog = false;
                 this.addPlatformDialog = true;
                 this.$refs["platform_url"].reset();
@@ -265,17 +257,7 @@ function init(init_user) {
                 this.detailProductDialog= false;
             },
             resetProductForm: function () {
-                this.tempProduct = {
-                    title: null,
-                    company: null,
-                    url: null,
-                    description: null,
-                    img: null,
-
-                    parsingProgress: false,
-                    parsingComplete: false,
-                    imgs: [],
-                };
+                this.tempProduct = new Product();
                 this.chooseProductImageDialog = false;
                 this.addProductDialog = true;
                 this.$refs["product_url"].reset();

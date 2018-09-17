@@ -1,3 +1,40 @@
+
+class Platform{
+    constructor() {
+        this.id = Supporter.getTodayMs() + Supporter.makeid(20);
+
+        this.title = null;
+        this.company = null;
+        this.url = null;
+        this.description = null;
+        this.img = null;
+
+        this.parsingProgress = false;
+        this.parsingComplete = false;
+        this.imgs = [];
+
+        this.selectedProducts = [];
+    }
+}
+
+class Product {
+    constructor() {
+        this.id = Supporter.getTodayMs() + Supporter.makeid(20);
+
+        this.title = null;
+        this.company = null;
+        this.url = null;
+        this.description = null;
+        this.img = null;
+
+        this.parsingProgress = false;
+        this.parsingComplete = false;
+        this.imgs = [];
+
+        this.capabilities = [];
+    }
+}
+
 class Supporter {
     constructor(vue) {
         this.vue = vue;
@@ -254,6 +291,19 @@ class Supporter {
         }
         // console.log(newArray);
         return newArray;
+    }
+
+    static makeid(len) {
+        if(len === null || len <= 0){
+            len = 10;
+        }
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i = 0; i < len; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
     }
 }
 
