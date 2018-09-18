@@ -250,6 +250,21 @@ block content
                                 //    v-card-media(:src='tempProduct.img', height='150px')
 
 
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
+                            v-layout.mt-2(row, wrap, justify-center, align-center)
+                                template(v-for="(product, index) in products", :key="index")
+                                    v-card.dal-small-card.mr-3.mb-3(hover, raised, :dark="tempPlatform.isProductInclude(product)")
+                                        v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="tempPlatform.selectProduct(product)")
+                                            v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                                img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                            v-flex.pa-2(style="width: 180px;")
+                                                v-card-text.pa-0.pb-1(v-if="tempPlatform.isProductInclude(product)")
+                                                    code.elevation-0 Selected
+                                                v-card-text.pa-0.title {{product.title}}
+                                                v-card-text.pt-2.pb-0.px-0.grey--text.text--darken-1 {{product.company}}
+
+
 
 
                 v-card-text.py-4.text-xs-center(v-else) Please input platform url.
@@ -312,10 +327,8 @@ block content
                         .body-1
                             a.light-blue--text.text--darken-3(:href="detailProduct.url", target="_blank") {{ detailProduct.url }}
 
-                //v-divider(v-if='auth.user !== null')
-                //v-list(one-line='', subheader='', v-if='auth.user !== null')
-                //    v-list-tile-action
-                //        v-btn(color='red', flat, @click="auth.logout();") Logout
+            v-divider.py-0.my-0
+
             v-card-actions
                 v-btn(color='error', flat, @click="removeProductFromDetail()") 삭제
                 v-spacer
@@ -356,10 +369,21 @@ block content
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Cost
                         .body-1 Free
 
-                //v-divider(v-if='auth.user !== null')
-                //v-list(one-line='', subheader='', v-if='auth.user !== null')
-                //    v-list-tile-action
-                //        v-btn(color='red', flat, @click="auth.logout();") Logout
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
+                        v-layout.mt-2(row, wrap, justify-center, align-center)
+                            template(v-for="(product, index) in detailPlatform.selectedProducts", :key="index")
+                                v-card.dal-small-card.mr-3.mb-3(hover, raised)
+                                    v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
+                                        v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                            img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                        v-flex.pa-2(style="width: 180px;")
+                                            v-card-text.pa-0.title {{product.title}}
+                                            v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
+                                            v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
+            v-divider.py-0.my-0
+
             v-card-actions
                 v-btn(color='error', flat, @click="removePlatformFromDetail()") 삭제
                 v-spacer

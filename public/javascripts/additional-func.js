@@ -15,6 +15,27 @@ class Platform{
 
         this.selectedProducts = [];
     }
+
+    isProductInclude(product){
+        return this.selectedProducts.includes(product);
+    }
+
+    selectProduct(product){
+        if(!this.selectedProducts.includes(product)){
+            this.selectedProducts.push(product);
+        }else{
+            var index = this.selectedProducts.indexOf(product);
+            this.selectedProducts.splice(index, 1);
+        }
+    }
+
+    deleteProduct(product){
+        var index = this.selectedProducts.indexOf(product);
+        if(index >= 0){
+            this.selectedProducts.splice(index, 1);
+        }
+    }
+
 }
 
 class Product {
