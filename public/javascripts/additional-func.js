@@ -20,6 +20,12 @@ class Platform{
         return this.selectedProducts.includes(product);
     }
 
+    addProduct(product){
+        if(!this.selectedProducts.includes(product)){
+            this.selectedProducts.push(product);
+        }
+    }
+
     selectProduct(product){
         if(!this.selectedProducts.includes(product)){
             this.selectedProducts.push(product);
@@ -52,7 +58,29 @@ class Product {
         this.parsingComplete = false;
         this.imgs = [];
 
+        this.selectedPlatform = [];
         this.capabilities = [];
+    }
+
+    isPlatformInclude(platform){
+        return this.selectedPlatform.includes(platform);
+    }
+
+    selectPlatform(platform){
+        if(!this.selectedPlatform.includes(platform)){
+            this.selectedPlatform.push(platform);
+        }else{
+            var index = this.selectedPlatform.indexOf(platform);
+            this.selectedPlatform.splice(index, 1);
+        }
+    }
+
+    saveSelectedPlatform(){
+        for(var i=0; i<this.selectedPlatform.length; i++){
+            var platform = this.selectedPlatform[i];
+            platform.addProduct(this);
+        }
+        this.selectedPlatform = [];
     }
 }
 

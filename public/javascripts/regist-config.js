@@ -233,17 +233,12 @@ function init(init_user) {
 
                 var form = this.$refs.product_form;
                 if(form.validate()){
+                    this.tempProduct.saveSelectedPlatform();
                     this.products.push(this.tempProduct);
                     this.graphManager.addNode(this.tempProduct.title);
                     this.addProductDialog = false;
                 }
 
-                // this.products.push({
-                //     title: "Kasa Smart Plug",
-                //     company: "TP-LINK",
-                //     url: "https://www.tp-link.com/uk/products/details/cat-5258_HS100.html",
-                //     description: "",
-                // })
             },
             removeProduct: function (index) {
                 if(index < this.products.length){
