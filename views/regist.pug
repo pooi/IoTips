@@ -341,6 +341,21 @@ block content
                         .body-1
                             a.light-blue--text.text--darken-3(:href="detailProduct.url", target="_blank") {{ detailProduct.url }}
 
+                    v-card-text.py-2.mt-3.px-0(v-if="detailProduct.selectedPlatform.length > 0")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
+                        v-layout.mt-2(row, wrap, justify-center, align-center)
+                            template(v-for="(platform, index) in detailProduct.selectedPlatform", :key="index")
+                                v-card.dal-small-card.mr-3.mb-3(hover, raised)
+                                    v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailPlatform(platform, index)")
+                                        v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                            img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                        v-flex.pa-2(style="width: 180px;")
+                                            v-card-text.pa-0.pb-1
+                                                code.elevation-0 Free
+                                            v-card-text.pa-0.title {{platform.title}}
+                                            v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
+                                            v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
 
 
             v-divider.py-0.my-0
@@ -385,7 +400,7 @@ block content
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Cost
                         .body-1 Free
 
-                    v-card-text.py-2.mt-3.px-0
+                    v-card-text.py-2.mt-3.px-0(v-if="detailPlatform.selectedProducts.length > 0")
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
                         v-layout.mt-2(row, wrap, justify-center, align-center)
                             template(v-for="(product, index) in detailPlatform.selectedProducts", :key="index")

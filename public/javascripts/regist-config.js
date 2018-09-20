@@ -242,6 +242,9 @@ function init(init_user) {
             },
             removeProduct: function (index) {
                 if(index < this.products.length){
+                    for(var i=0; i<this.platforms.length; i++){
+                        this.platforms[i].deleteProduct(this.products[index]);
+                    }
                     this.products.splice(index, 1);
                 }
             },
@@ -264,6 +267,13 @@ function init(init_user) {
             showDetailProuct: function (item, index) {
                 this.detailProduct = item;
                 this.detailProductIndex = index;
+
+                this.detailProduct.selectedPlatform = [];
+                for(var i=0; i<this.platforms.length; i++){
+                    if(this.platforms[i].isProductInclude(item)){
+                        this.detailProduct.selectedPlatform.push(this.platforms[i]);
+                    }
+                }
 
                 setTimeout(function () {
                     if(vue.detailProduct.img !== null){
