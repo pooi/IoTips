@@ -127,7 +127,8 @@ block content
                                                                 img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
                                                             v-flex.pa-2(style="width: 180px;")
                                                                 v-card-text.pa-0.pb-1
-                                                                    code.elevation-0 Free
+                                                                    code.elevation-0(v-if="platform.isFree") Free
+                                                                    code.elevation-0(v-else) {{ platform.currency.symbol }}{{ platform.amount }}
                                                                 v-card-text.pa-0.title {{platform.title}}
                                                                 v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
                                                                 v-card-text.pa-0.light-blue--text.text--darken-3 Detail
@@ -184,7 +185,7 @@ block content
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
                             v-layout.mt-2(row, wrap, justify-center, align-center)
                                 template(v-for="(platform, index) in platforms", :key="index")
-                                    v-card.dal-small-card.mr-3.mb-3(hover, raised, :dark="tempProduct.isPlatformInclude(platform)")
+                                    v-card.dal-small-card.mr-3.mb-3(hover, raised, :dark="!tempProduct.isPlatformInclude(platform)")
                                         v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="tempProduct.selectPlatform(platform)")
                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
                                                 img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
@@ -252,12 +253,21 @@ block content
                             v-text-field(v-model='tempPlatform.company', ref="platform_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempPlatform.company=""')
 
                         v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Amount
+                            v-switch(:label='tempPlatform.isFree ? "Free" :"Paid"', v-model='tempPlatform.isFree', color="green darken-1")
+                            v-layout(row, wrap, align-center, justify-center, v-if="!tempPlatform.isFree")
+                                v-flex(xs12)
+                                    v-select(v-model='tempPlatform.currency', :hint='`${tempPlatform.currency.currency}, ${tempPlatform.currency.sign}, ${tempPlatform.currency.symbol}`', :items='tempPlatform.currencies', item-text='currency', item-value='symbol', label='Select', persistent-hint, return-object, single-line)
+                                v-flex(xs12)
+                                    v-text-field(label='Amount', v-model='tempPlatform.amount', :prefix='tempPlatform.currency.symbol', hide-details, single-line)
+
+                        v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
                             v-layout(row, wrap, align-center, justify-center)
                                 //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
                                 img(v-if="tempPlatform.img !== null", :src="tempPlatform.img", style="max-width: 80%; max-height: 200px;")
                                 v-flex.text-xs-center(xs12)
-                                    v-btn(flat, color="green darken-1", @click="choosePlatformImageDialog = true;")
+                                    v-btn(flat, color="green darken-1", @click="choosePlatformImageDialog = true")
                                         span(v-if="tempPlatform.img === null") Select Image
                                         span(v-else) Change Image
                                 //v-card(flat, tile, v-if="tempProduct.img !== null")
@@ -268,7 +278,7 @@ block content
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
                             v-layout.mt-2(row, wrap, justify-center, align-center)
                                 template(v-for="(product, index) in products", :key="index")
-                                    v-card.dal-small-card.mr-3.mb-3(hover, raised, :dark="tempPlatform.isProductInclude(product)")
+                                    v-card.dal-small-card.mr-3.mb-3(hover, raised, :dark="!tempPlatform.isProductInclude(product)")
                                         v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="tempPlatform.selectProduct(product)")
                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
                                                 img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
@@ -397,7 +407,7 @@ block content
                             a.light-blue--text.text--darken-3(:href="detailPlatform.url", target="_blank") {{ detailPlatform.url }}
 
                     v-card-text.py-2.mt-3.px-0
-                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Cost
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Amount
                         .body-1 Free
 
                     v-card-text.py-2.mt-3.px-0(v-if="detailPlatform.selectedProducts.length > 0")

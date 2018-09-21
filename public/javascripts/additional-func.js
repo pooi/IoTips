@@ -1,4 +1,6 @@
 
+const CURRENCIES = [{'symbol': '₩', 'code': '410', 'sign': '남한 원', 'currency': 'KRW'}, {'symbol': '$', 'code': '840', 'sign': 'US 달러', 'currency': 'USD'}, {'symbol': '€', 'code': '978', 'sign': '유로', 'currency': 'EUR'}, {'symbol': '¥', 'code': '156', 'sign': '위안', 'currency': 'CNY'}, {'symbol': '¥', 'code': '392', 'sign': '옌', 'currency': 'JPY'}];
+
 class Platform{
     constructor() {
         this.id = Supporter.getTodayMs() + Supporter.makeid(20);
@@ -8,6 +10,11 @@ class Platform{
         this.url = null;
         this.description = null;
         this.img = null;
+
+        this.isFree = true;
+        this.amount = null;
+        this.currencies = CURRENCIES;
+        this.currency = this.currencies[0];
 
         this.parsingProgress = false;
         this.parsingComplete = false;
@@ -53,6 +60,11 @@ class Product {
         this.url = null;
         this.description = null;
         this.img = null;
+
+        this.isFree = true;
+        this.amount = null;
+        this.currencies = CURRENCIES;
+        this.currency = this.currencies[0];
 
         this.parsingProgress = false;
         this.parsingComplete = false;
