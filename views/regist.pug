@@ -104,6 +104,9 @@ block content
                                                             v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
                                                                 img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
                                                             v-flex.pa-2(style="width: 180px;")
+                                                                v-card-text.pa-0.pb-1
+                                                                    code.elevation-0(v-if="product.isFree") Free
+                                                                    code.elevation-0(v-else) {{ product.currency.symbol }}{{ product.price }}
                                                                 v-card-text.pa-0.title {{product.title}}
                                                                 v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
                                                                 v-card-text.pa-0.light-blue--text.text--darken-3 Detail
@@ -128,7 +131,7 @@ block content
                                                             v-flex.pa-2(style="width: 180px;")
                                                                 v-card-text.pa-0.pb-1
                                                                     code.elevation-0(v-if="platform.isFree") Free
-                                                                    code.elevation-0(v-else) {{ platform.currency.symbol }}{{ platform.amount }}
+                                                                    code.elevation-0(v-else) {{ platform.currency.symbol }}{{ platform.price }}
                                                                 v-card-text.pa-0.title {{platform.title}}
                                                                 v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
                                                                 v-card-text.pa-0.light-blue--text.text--darken-3 Detail
@@ -168,6 +171,15 @@ block content
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
                             v-text-field(v-model='tempProduct.company', ref="product_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempProduct.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempProduct.company=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
+                            v-switch(:label='tempProduct.isFree ? "Free" :"Paid"', v-model='tempProduct.isFree', color="green darken-1")
+                            v-layout(row, wrap, align-center, justify-center, v-if="!tempProduct.isFree")
+                                v-flex(xs12)
+                                    v-select(v-model='tempProduct.currency', :hint='`${tempProduct.currency.currency}, ${tempProduct.currency.sign}, ${tempProduct.currency.symbol}`', :items='tempProduct.currencies', item-text='currency', item-value='symbol', label='Select', persistent-hint, return-object, single-line)
+                                v-flex(xs12)
+                                    v-text-field(label='Price', v-model='tempProduct.price', :prefix='tempProduct.currency.symbol', color="green darken-1", hide-details, single-line)
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
@@ -253,13 +265,13 @@ block content
                             v-text-field(v-model='tempPlatform.company', ref="platform_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempPlatform.company=""')
 
                         v-card-text.py-2.mt-3.px-0
-                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Amount
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
                             v-switch(:label='tempPlatform.isFree ? "Free" :"Paid"', v-model='tempPlatform.isFree', color="green darken-1")
                             v-layout(row, wrap, align-center, justify-center, v-if="!tempPlatform.isFree")
                                 v-flex(xs12)
                                     v-select(v-model='tempPlatform.currency', :hint='`${tempPlatform.currency.currency}, ${tempPlatform.currency.sign}, ${tempPlatform.currency.symbol}`', :items='tempPlatform.currencies', item-text='currency', item-value='symbol', label='Select', persistent-hint, return-object, single-line)
                                 v-flex(xs12)
-                                    v-text-field(label='Amount', v-model='tempPlatform.amount', :prefix='tempPlatform.currency.symbol', hide-details, single-line)
+                                    v-text-field(label='Price', v-model='tempPlatform.price', :prefix='tempPlatform.currency.symbol', color="green darken-1", hide-details, single-line)
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
@@ -340,6 +352,11 @@ block content
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
                         .body-1 {{ detailProduct.company }}
 
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
+                        .body-1(v-if="detailProduct.isFree") Free
+                        .body-1(v-else) {{ detailProduct.currency.symbol }}{{ detailProduct.price }}
+
                     v-card-text.py-2.mt-3.px-0(v-if="detailProduct.img !== null")
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
                         v-layout(row, wrap, align-center, justify-center)
@@ -361,7 +378,8 @@ block content
                                             img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
                                         v-flex.pa-2(style="width: 180px;")
                                             v-card-text.pa-0.pb-1
-                                                code.elevation-0 Free
+                                                code.elevation-0(v-if="platform.isFree") Free
+                                                code.elevation-0(v-else) {{ platform.currency.symbol }}{{ platform.price }}
                                             v-card-text.pa-0.title {{platform.title}}
                                             v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
                                             v-card-text.pa-0.light-blue--text.text--darken-3 Detail
@@ -407,8 +425,9 @@ block content
                             a.light-blue--text.text--darken-3(:href="detailPlatform.url", target="_blank") {{ detailPlatform.url }}
 
                     v-card-text.py-2.mt-3.px-0
-                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Amount
-                        .body-1 Free
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
+                        .body-1(v-if="detailPlatform.isFree") Free
+                        .body-1(v-else) {{ detailPlatform.currency.symbol }}{{ detailPlatform.price }}
 
                     v-card-text.py-2.mt-3.px-0(v-if="detailPlatform.selectedProducts.length > 0")
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
@@ -419,6 +438,9 @@ block content
                                         v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
                                             img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
                                         v-flex.pa-2(style="width: 180px;")
+                                            v-card-text.pa-0.pb-1
+                                                code.elevation-0(v-if="product.isFree") Free
+                                                code.elevation-0(v-else) {{ product.currency.symbol }}{{ product.price }}
                                             v-card-text.pa-0.title {{product.title}}
                                             v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
                                             v-card-text.pa-0.light-blue--text.text--darken-3 Detail

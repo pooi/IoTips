@@ -12,7 +12,7 @@ class Platform{
         this.img = null;
 
         this.isFree = true;
-        this.amount = null;
+        this.price = null;
         this.currencies = CURRENCIES;
         this.currency = this.currencies[0];
 
@@ -62,7 +62,7 @@ class Product {
         this.img = null;
 
         this.isFree = true;
-        this.amount = null;
+        this.price = null;
         this.currencies = CURRENCIES;
         this.currency = this.currencies[0];
 
