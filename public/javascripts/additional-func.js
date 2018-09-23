@@ -1,5 +1,5 @@
 
-const CURRENCIES = [{'symbol': '₩', 'code': '410', 'sign': '남한 원', 'currency': 'KRW'}, {'symbol': '$', 'code': '840', 'sign': 'US 달러', 'currency': 'USD'}, {'symbol': '€', 'code': '978', 'sign': '유로', 'currency': 'EUR'}, {'symbol': '¥', 'code': '156', 'sign': '위안', 'currency': 'CNY'}, {'symbol': '¥', 'code': '392', 'sign': '옌', 'currency': 'JPY'}];
+const CURRENCIES = [{'symbol': '₩', 'code': '410', 'sign': '남한 원', 'currency': 'KRW'}, {'symbol': '$', 'code': '840', 'sign': 'US 달러', 'currency': 'USD'}, {'symbol': '€', 'code': '978', 'sign': '유로', 'currency': 'EUR'}, {'symbol': '¥', 'code': '156', 'sign': '위안', 'currency': 'CNY'}, {'symbol': "¥", 'code': '392', 'sign': '옌', 'currency': 'JPY'}];
 
 class Platform{
     constructor() {
@@ -130,6 +130,10 @@ class Supporter {
             url: value => {
                 var pattern =  /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
                 return pattern.test(value) || "Please enter a valid URL."
+            },
+            price: value => {
+                var pattern =  /^\d+(\.\d{1,2})?$/;
+                return pattern.test(value) || "Please enter a valid price."
             }
         }
     }
@@ -1312,12 +1316,12 @@ class GraphManager {
 
     }
 
-    addNode(title){
+    addNode(title, id){
         var graph = this.graph;
         var parent = graph.getDefaultParent();
         graph.getModel().beginUpdate();
         try {
-            var v1 = graph.insertVertex(parent, this.addOffsetX + "_" + this.addOffsetY, title, this.addOffsetX, this.addOffsetY, title.length * 8, 30);
+            var v1 = graph.insertVertex(parent, id, title, this.addOffsetX, this.addOffsetY, title.length * 8, 30);
 
             this.addOffsetY += 20;
             if(this.addOffsetY > 300){
@@ -1331,13 +1335,13 @@ class GraphManager {
         }
     }
 
-    addCircleNode(title){
+    addCircleNode(title, id){
         var graph = this.graph;
         var parent = graph.getDefaultParent();
         graph.getModel().beginUpdate();
         try {
             // var v1 = graph.insertVertex(parent, this.addOffsetX + "_" + this.addOffsetY, title, this.addOffsetX, this.addOffsetY, title.length * 8, 40, 'shape=ellipse;perimeter=ellipsePerimeter;color=white');
-            var v1 = graph.insertVertex(parent, this.addOffsetX + "_" + this.addOffsetY, title, this.addOffsetX, this.addOffsetY, title.length * 8, 40, 'ellipse_red');
+            var v1 = graph.insertVertex(parent, id, this.addOffsetX, this.addOffsetY, title.length * 8, 40, 'ellipse_red');
 
             this.addOffsetY += 20;
             if(this.addOffsetY > 300){

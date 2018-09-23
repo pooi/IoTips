@@ -179,7 +179,7 @@ function init(init_user) {
                 var form = this.$refs.platform_form;
                 if(form.validate()){
                     this.platforms.push(this.tempPlatform);
-                    this.graphManager.addCircleNode(this.tempPlatform.title);
+                    this.graphManager.addCircleNode(this.tempPlatform.title, this.tempPlatform.id);
                     this.addPlatformDialog = false;
                 }
 
@@ -235,7 +235,7 @@ function init(init_user) {
                 if(form.validate()){
                     this.tempProduct.saveSelectedPlatform();
                     this.products.push(this.tempProduct);
-                    this.graphManager.addNode(this.tempProduct.title);
+                    this.graphManager.addNode(this.tempProduct.title, this.tempProduct.id);
                     this.addProductDialog = false;
                 }
 
