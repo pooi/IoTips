@@ -1341,7 +1341,7 @@ class GraphManager {
         graph.getModel().beginUpdate();
         try {
             // var v1 = graph.insertVertex(parent, this.addOffsetX + "_" + this.addOffsetY, title, this.addOffsetX, this.addOffsetY, title.length * 8, 40, 'shape=ellipse;perimeter=ellipsePerimeter;color=white');
-            var v1 = graph.insertVertex(parent, id, this.addOffsetX, this.addOffsetY, title.length * 8, 40, 'ellipse_red');
+            var v1 = graph.insertVertex(parent, id, title, this.addOffsetX, this.addOffsetY, title.length * 8, 40, 'ellipse_red');
 
             this.addOffsetY += 20;
             if(this.addOffsetY > 300){
