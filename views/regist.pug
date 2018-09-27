@@ -36,7 +36,7 @@ block content
                                 v-card.pa-0.elevation-4
                                     v-card-text.py-1.px-0
                                         //span.headline.red--text.text--darken-1(style="font-weight: 700;") 제목
-                                        v-text-field(v-model='editorTitle', label='Title', hide-details, single-line, full-width)
+                                        v-text-field(v-model='editorTitle', label='Title', :hide-details="editorTitle === null || editorTitle.length <= 20", single-line, full-width, required, :rules="[supporter.rules.counter_20]")
                                     //v-card-text.pa-0
                                     //    v-divider
                                     //v-card-text.py-1.no-padding-text-field
@@ -145,7 +145,7 @@ block content
                                         v-layout(align-center)
                                             v-flex.text-xs-center
                                                 v-btn(color="grey", dark) 취소
-                                                v-btn(color="red darken-1", dark) 등록
+                                                v-btn(color="red darken-1", dark, @click="submit()") 등록
 
     v-dialog.md6(v-model='addProductDialog', scrollable, max-width='500px')
         v-form(ref="product_form", style="width: 100%;")

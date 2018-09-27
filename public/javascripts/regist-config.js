@@ -328,7 +328,11 @@ function init(init_user) {
                     urlField.validate(true);
                 }
 
-            }
+            },
+
+            submit:function () {
+                console.log("Submit");
+            },
 
         },
         mounted:[
