@@ -331,6 +331,15 @@ function init(init_user) {
             },
 
             submit:function () {
+
+                var json = html2json(this.content);
+                console.log(json);
+                console.log(json2html(json));
+
+                // var options = {compact: true, ignoreComment: true, spaces: 4};
+                // var result = json2xml(this.graphManager.toXML(), options);
+                // console.log(result);
+
                 console.log("Submit");
             },
 

@@ -1363,7 +1363,8 @@ class GraphManager {
 
         var xml = mxUtils.getXml(node);
         console.log(xml);
-        alert(xml);
+        // alert(xml);
+        return xml;
         // mxUtils.popup(mxUtils.getXml(node), true);
     }
 

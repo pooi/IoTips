@@ -33,6 +33,9 @@ app.use('/scripts', express.static(__dirname + '/node_modules/vue-quill-editor/d
 app.use('/scripts', express.static(__dirname + '/node_modules/mxgraph/javascript'));
 app.use('/scripts', express.static(__dirname + '/node_modules/gojs/release'));
 app.use('/scripts', express.static(__dirname + '/node_modules/interactjs/dist'));
+app.use('/scripts', express.static(__dirname + '/node_modules/html2json/src'));
+app.use('/scripts', express.static(__dirname + '/node_modules/html2json/lib/Pure-JavaScript-HTML5-Parser'));
+app.use('/scripts', express.static(__dirname + '/node_modules/xml-js/dist'));
 
 var indexRouter = require('./routes/index');
 var boardRouter = require('./routes/board');
