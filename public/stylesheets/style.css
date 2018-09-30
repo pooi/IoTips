@@ -299,6 +299,10 @@
     transition: all 0.3s ease-in-out;
 }
 
+.no-padding-list .v-list__tile{
+    padding: 0px !important;
+}
+
 /* MxGraph Menu Style */
 body div.mxPopupMenu {
     border-radius: 10px !important;

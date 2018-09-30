@@ -105,21 +105,66 @@ class Supporter {
         this.drawer = false;
         this.menus = [
             {
-                "icon": "home",
-                "title": "Home",
-                "href": "/"
+                "title" : "Tips",
+                "href" : "/",
+                "submenu" : [
+                    {
+                        "title" : "구성도",
+                        "href" : "/board"
+                    },
+                    {
+                        "title" : "자유",
+                        "href" : "/"
+                    },
+                    {
+                        "title" : "질문",
+                        "href" : "/"
+                    },
+                    {
+                        "title" : "품평",
+                        "href" : "/"
+                    }
+
+                ]
             },
             {
-                "icon": "edit",
-                "title": "New",
-                "href": "/board/regist"
+                "title" : "Curation",
+                "href" : "/",
+                "submenu" : [
+                    {
+                        "title" : "구성도",
+                        "href" : "/"
+                    },
+                   {
+                        "title" : "제품",
+                        "href" : "/"
+                    }
+
+                ]
             },
             {
-                "icon": "list",
-                "title": "Board",
-                "href": "/board"
+                "title" : "파트너",
+                "href" : "/",
+                "submenu" : []
             }
         ];
+        // this.menus = [
+        //     {
+        //         "icon": "home",
+        //         "title": "Home",
+        //         "href": "/"
+        //     },
+        //     {
+        //         "icon": "edit",
+        //         "title": "New",
+        //         "href": "/board/regist"
+        //     },
+        //     {
+        //         "icon": "list",
+        //         "title": "Board",
+        //         "href": "/board"
+        //     }
+        // ];
         this.rules = {
             required: value => !!value || 'Required.',
             counter: value => value.length <= 20 || 'Max 20 characters',
@@ -370,6 +415,22 @@ class Supporter {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
 
         return text;
+    }
+
+    movePage(href){
+        window.location.href = href;
+    }
+
+    static movePage(href){
+        window.location.href = href;
+    }
+
+    isHomePage(){
+        return window.location.pathname === "/";
+    }
+
+    static isHomePage(){
+        return window.location.pathname === "/";
     }
 }
 
