@@ -17,16 +17,58 @@ function init(init_user) {
             },
             statusColor: "#ffaf1d",
             bottomTab: "board",
-            isDark: false,
 
             supporter: null,
             auth: new Auth(),
 
             fab: false,
-            page : 1,
-            items: [],
-
-            searchText: null,
+            items: [
+                {
+                    id: "1",
+                    title: "Title-1",
+                    photo: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+                },
+                {
+                    id: "2",
+                    title: "Title-2",
+                    photo: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+                },
+                {
+                    id: "3",
+                    title: "Title-3",
+                    photo: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+                },
+                {
+                    id: "4",
+                    title: "Title-4",
+                    photo: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+                },
+                {
+                    id: "5",
+                    title: "Title-5",
+                    photo: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+                },
+                {
+                    id: "6",
+                    title: "Title-6",
+                    photo: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+                },
+                {
+                    id: "7",
+                    title: "Title-7",
+                    photo: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+                },
+                {
+                    id: "8",
+                    title: "Title-8",
+                    photo: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+                },
+                {
+                    id: "9",
+                    title: "Title-9",
+                    photo: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+                }
+            ]
 
         },
         methods:{
@@ -92,41 +134,13 @@ function init(init_user) {
         mounted:[
             function () {
                 this.auth.parseUserData(init_user);
-            },
-            function () {
-
-                var nicks = [
-                    "아름다운별",
-                    "쿠쿠리",
-                    "로엔구리",
-                    "날로먹자",
-                    "벤지",
-                    "원주"
-                ];
-
-                for(var i=0; i<20; i++){
-                    var text = "";
-                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-                    for (var k = 0; k < 20; k++)
-                        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-                    this.items.push({
-                        id: i,
-                        title: "Title - " + text,
-                        numOfLike: parseInt(Math.random()*1000)%10,
-                        numOfComment: parseInt(Math.random()*1000)%10,
-                        nickname: nicks[parseInt(Math.random()*1000)%6],
-                        hit: parseInt(Math.random()*1000),
-                        rgt_date: "2018-09-30 14:57:18"
-                    });
-                }
             }
         ]
     });
     vue.changeStatusBarColorOnNativeApp("orange");
 
     vue.supporter = new Supporter(vue);
+    // vue.auth = new Auth(vue);
 
     return vue;
 }

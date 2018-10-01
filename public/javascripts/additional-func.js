@@ -110,19 +110,19 @@ class Supporter {
                 "submenu" : [
                     {
                         "title" : "구성도",
-                        "href" : "/board"
+                        "href" : "/board/ecosystem"
                     },
                     {
                         "title" : "자유",
-                        "href" : "/"
+                        "href" : "/board/free"
                     },
                     {
                         "title" : "질문",
-                        "href" : "/"
+                        "href" : "/board/question"
                     },
                     {
                         "title" : "품평",
-                        "href" : "/"
+                        "href" : "/board/review"
                     }
 
                 ]
@@ -168,6 +168,7 @@ class Supporter {
         this.rules = {
             required: value => !!value || 'Required.',
             counter: value => value.length <= 20 || 'Max 20 characters',
+            counter_2: value => value.length >= 2 || 'Min 2 characters',
             counter_20: value => value.length <= 20 || 'Max 20 characters',
             email: value => {
                 var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

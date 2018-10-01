@@ -27,9 +27,9 @@ v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: r
         //v-btn(flat, style='height: auto;', color="white", href="#about") About
 
     template(v-if="auth.user === null")
-        v-btn(flat, dark, icon, v-if="$vuetify.breakpoint.xsOnly", @click="auth.toggleDialog()")
-            v-icon account_circle
-        v-btn(v-else, flat, dark, @click="auth.toggleDialog()") Login
+        //v-btn(flat, dark, icon, v-if="$vuetify.breakpoint.xsOnly", @click="auth.toggleDialog()")
+        //    v-icon account_circle
+        v-btn.pa-0.ma-0(flat, dark, style="height: 100%;", @click="auth.toggleDialog()") 로그인
     template(v-else)
         v-btn.ma-0(flat, color="white", style="height: 100%;", @click="auth.detailDialog = true", v-if="!$vuetify.breakpoint.xsOnly ")
             v-avatar.mr-2(:tile='false', size='30px')

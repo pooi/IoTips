@@ -303,6 +303,20 @@
     padding: 0px !important;
 }
 
+.resizeable-row-list .v-list__tile{
+    height: fit-content !important;
+}
+
+.custom-pagination .v-pagination__item{
+    margin: 0px !important;
+    box-shadow: none !important;
+    border-radius: 0px !important;
+}
+
+.custom-pagination .v-pagination__navigation {
+    box-shadow: none !important;
+}
+
 /* MxGraph Menu Style */
 body div.mxPopupMenu {
     border-radius: 10px !important;
