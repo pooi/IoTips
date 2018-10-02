@@ -4,20 +4,19 @@ block content
 
     include toolbar
 
-
     v-content.brown.lighten-5.animation-fade-in(style="padding-top: 50px")
         //v-container.pa-0(:fluid="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly")
         v-container.pa-0(:fluid="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly")
 
             v-flex(md12='')
                 //v-card.pa-3.safe-area-inset(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ? 'elevation-0 mb-4 pt-4' : 'elevation-10 my-4'")
-                v-card.pa-3.safe-area-inset.elevation-0.mb-4.pb-5(:dark="isDark")
+                v-card.safe-area-inset.elevation-0.mb-4.pt-3.pb-5(:dark="isDark" :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'px-0' : 'px-3'")
 
                     v-card-title.pb-0(style="margin-top: 20px;")
                         span.display-2(style="font-weight: 800;") !{title}
                         v-spacer
                         v-menu(bottom, left)
-                            v-btn(slot='activator', icon)
+                            v-btn.ma-0(slot='activator', icon)
                                 v-icon more_vert
                             v-list.dal-card
                                 //v-list-tile(v-for="(toolbar, i) in toolbarItems", :key="i", :href="'#' + toolbar.href")
@@ -47,7 +46,7 @@ block content
                             v-layout.text-xs-center(justify-center, :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'xs12' : 'xs6'")
                                 v-pagination.custom-pagination(v-model='page', :length='5', color="blue darken-1")
                             v-flex.xs3.text-xs-right(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
-                                v-btn.white--text.elevation-0(color='red', @click="")
+                                v-btn.white--text.elevation-0(color='red', @click="goRegist()")
                                     v-icon.mr-2(left, dark) edit
                                     | 글작성
 
@@ -65,10 +64,10 @@ block content
     //include bottom_tab
 
     v-fab-transition
-        v-btn(color='red', v-model='fab', dark, fab, fixed, bottom, right, onclick="window.location.href = '/board/regist'")
+        v-btn(color='red', v-model='fab', dark, fab, fixed, bottom, right, @click="goRegist()")
             v-icon edit
             //v-icon close
 
     script(type="text/javascript" src='/javascripts/board-config.js')
     script.
-        const vue = init('!{user}');
+        const vue = init('!{user}', '!{boardType}');

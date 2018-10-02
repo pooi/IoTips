@@ -1,5 +1,5 @@
 template(v-if="item !== null")
-    v-layout.px-0.py-2(row, wrap, v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)", justify-center, style="font-weight: 300;")
+    v-layout.px-0.py-2(row, wrap, v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)", justify-center, align-center style="font-weight: 300;")
         .text-xs-center.mx-2.body-1(style="width: 30px;", :class="item.numOfLike > 0 ? 'indigo--text text--lighten-2' : (isDark ? 'grey--text text--darken-2' : 'grey--text text--lighten-3')") {{ item.numOfLike }}
         .px-2.body-1(style="width: fit-content; font-weight: 500;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{ item.title }}
         .pr-2.caption.orange--text.text--lighten-2(style="", v-if="item.numOfComment > 0") {{ item.numOfComment }}

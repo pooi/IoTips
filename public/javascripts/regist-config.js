@@ -1,6 +1,6 @@
 
 
-function init(init_user) {
+function init(init_user, BOARD_TYPE) {
 
     Vue.use(window.VueQuillEditor);
 
@@ -22,8 +22,23 @@ function init(init_user) {
 
             supporter: null,
             auth: new Auth(),
-            graphManager: new GraphManager("graph"),
-            viewer: null,
+
+
+            boardType: null,
+            boardTypes: [
+                {
+                    type: "free",
+                    title: "자유"
+                },
+                {
+                    type: "question",
+                    title: "질문"
+                },
+                {
+                    type: "review",
+                    title: "품평"
+                }
+            ],
 
             editorTitle: null,
 
@@ -54,45 +69,6 @@ function init(init_user) {
             },
 
             content: null,
-            capabilities: [
-                {
-                    title: "Button",
-                    component: "switch"
-                },
-                {
-                    title: "Button",
-                    component: "switch"
-                },
-            ],
-            platforms: [
-                // {
-                //     title: "SmartThings",
-                //     company: "Samsung",
-                //     cost: "Free",
-                //     logo: "/images/logo/smartthings.png"
-                // }
-            ],
-            addPlatformDialog: false,
-            choosePlatformImageDialog: false,
-            tempPlatform: null,
-            detailPlatformDialog: false,
-            detailPlatform: null,
-            detailPlatformIndex: -1,
-
-            products: [
-                // {
-                //     title: "Kasa Smart Plug",
-                //     company: "TP-LINK",
-                //     url: "https://www.tp-link.com/us/products/details/cat-5622_HS200.html",
-                //     description: "Wi-Fi Smart Plug"
-                // }
-            ],
-            addProductDialog: false,
-            chooseProductImageDialog: false,
-            tempProduct: null,
-            detailProductDialog: false,
-            detailProduct: null,
-            detailProductIndex: -1,
 
 
         },
@@ -162,173 +138,7 @@ function init(init_user) {
                 console.log('editor ready!');//, editor)
             },
 
-            addCapability: function () {
-                this.capabilities.push({
-                    title: "Button",
-                    component: "switch"
-                })
-            },
-            removeCapability: function (index) {
-                if(index < this.capabilities.length){
-                    this.capabilities.splice(index, 1);
-                }
-            },
 
-            addPlatform: function () {
-
-                var form = this.$refs.platform_form;
-                if(form.validate()){
-                    this.platforms.push(this.tempPlatform);
-                    this.graphManager.addCircleNode(this.tempPlatform.title, this.tempPlatform.id);
-                    this.addPlatformDialog = false;
-                }
-
-                // this.platforms.push({
-                //     title: "Kasa Smart",
-                //     company: "TP-LINK Research America",
-                //     cost: "Free",
-                //     logo: "/images/logo/tplink.png"
-                // })
-            },
-            removePlatform: function (index) {
-                if(index < this.platforms.length){
-                    this.platforms.splice(index, 1);
-                }
-            },
-            removePlatformFromDetail: function(){
-                this.removePlatform(this.detailPlatformIndex);
-                this.detailPlatform = null;
-                this.detailPlatformIndex = -1;
-                this.detailPlatformDialog= false;
-            },
-            resetPlatformForm: function () {
-                this.tempPlatform = new Platform();
-                this.choosePlatformImageDialog = false;
-                this.addPlatformDialog = true;
-                this.$refs["platform_url"].reset();
-            },
-            choosePlatformImage: function (index) {
-                this.tempPlatform.img = this.tempPlatform.imgs[index];
-                this.choosePlatformImageDialog = false;
-            },
-            showDetailPlatform: function (item, index) {
-                this.detailPlatform = item;
-                this.detailPlatformIndex = index;
-
-                setTimeout(function () {
-                    if(vue.detailPlatform.img !== null){
-                        vue.viewer = new Viewer(document.getElementById('detailPlatformImg'), {
-                            inline: false,
-                            viewed: function() {
-                                viewer.zoomTo(1);
-                            }
-                        });
-                    }
-                }, 500);
-
-                this.detailPlatformDialog = true;
-            },
-
-            addProduct: function () {
-
-                var form = this.$refs.product_form;
-                if(form.validate()){
-                    this.tempProduct.saveSelectedPlatform();
-                    this.products.push(this.tempProduct);
-                    this.graphManager.addNode(this.tempProduct.title, this.tempProduct.id);
-                    this.addProductDialog = false;
-                }
-
-            },
-            removeProduct: function (index) {
-                if(index < this.products.length){
-                    for(var i=0; i<this.platforms.length; i++){
-                        this.platforms[i].deleteProduct(this.products[index]);
-                    }
-                    this.products.splice(index, 1);
-                }
-            },
-            removeProductFromDetail: function(){
-                this.removeProduct(this.detailProductIndex);
-                this.detailProduct = null;
-                this.detailProductIndex = -1;
-                this.detailProductDialog= false;
-            },
-            resetProductForm: function () {
-                this.tempProduct = new Product();
-                this.chooseProductImageDialog = false;
-                this.addProductDialog = true;
-                this.$refs["product_url"].reset();
-            },
-            chooseProductImage: function (index) {
-                this.tempProduct.img = this.tempProduct.imgs[index];
-                this.chooseProductImageDialog = false;
-            },
-            showDetailProuct: function (item, index) {
-                this.detailProduct = item;
-                this.detailProductIndex = index;
-
-                this.detailProduct.selectedPlatform = [];
-                for(var i=0; i<this.platforms.length; i++){
-                    if(this.platforms[i].isProductInclude(item)){
-                        this.detailProduct.selectedPlatform.push(this.platforms[i]);
-                    }
-                }
-
-                setTimeout(function () {
-                    if(vue.detailProduct.img !== null){
-                        vue.viewer = new Viewer(document.getElementById('detailProductImg'), {
-                            inline: false,
-                            viewed: function() {
-                                viewer.zoomTo(1);
-                            }
-                        });
-                    }
-                }, 500);
-
-                this.detailProductDialog = true;
-            },
-
-            parsingURL: function (type) {
-                var urlField = null;
-                var tempItem = null;
-                if(type === "product"){
-                    urlField = this.$refs["product_url"];
-                    tempItem = this.tempProduct;
-                }else if(type === "platform"){
-                    urlField = this.$refs["platform_url"];
-                    tempItem = this.tempPlatform;
-                }
-
-
-                if(urlField.valid){
-                    tempItem.parsingProgress = true;
-                    var data = {
-                        url: tempItem.url
-                    };
-
-                    axios.post(
-                        '/parseurl',
-                        data
-                    ).then(function (res) {
-                        var data = res.data;
-                        console.log(data);
-
-                        tempItem.parsingProgress = false;
-                        tempItem.parsingComplete = true;
-                        tempItem.title = data.title;
-                        tempItem.description = data.description;
-                        tempItem.company = data.copyright;
-                        tempItem.imgs = data.imgs;
-                    }).catch(function (error) {
-                        alert(error);
-                    });
-
-                }else{
-                    urlField.validate(true);
-                }
-
-            },
 
             submit:function () {
 
@@ -350,49 +160,22 @@ function init(init_user) {
                 this.auth.requireLogin();
             },
             function () {
-                interact('#graph-container')
-                    .resizable({
-                        // resize from all edges and corners
-                        edges: {left: false, right: false, bottom: true, top: false},
-
-                        // keep the edges inside the parent
-                        restrictEdges: {
-                            outer: 'parent',
-                            endOnly: true,
-                        },
-
-                        // minimum size
-                        restrictSize: {
-                            min: {width: 100, height: 100},
-                        },
-
-                        inertia: true,
-
-                        onmove: function (event) {
-                            // console.log(event);
-                        }
-                    })
-                    .on('resizemove', function (event) {
-                        var target = event.target,
-                            x = (parseFloat(target.getAttribute('data-x')) || 0),
-                            y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-                        // update the element's style
-                        target.style.width = event.rect.width + 'px';
-                        target.style.height = event.rect.height + 'px';
-
-                        // translate when resizing from top or left edges
-                        x += event.deltaRect.left;
-                        y += event.deltaRect.top;
-
-                        target.style.webkitTransform = target.style.transform =
-                            'translate(' + x + 'px,' + y + 'px)';
-
-                        target.setAttribute('data-x', x);
-                        target.setAttribute('data-y', y);
-                        // target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height);
-                    });
+                switch (BOARD_TYPE) {
+                    case "free":
+                        this.boardType = this.boardTypes[0];
+                        break;
+                    case "question":
+                        this.boardType = this.boardTypes[1];
+                        break;
+                    case "review":
+                        this.boardType = this.boardTypes[2];
+                        break;
+                    default:
+                        this.boardType = this.boardTypes[0];
+                        break;
+                }
             }
+
         ],
         computed: {
             editor() {

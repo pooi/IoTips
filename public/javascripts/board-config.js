@@ -1,6 +1,7 @@
 
 
-function init(init_user) {
+function init(init_user, BOARD_TYPE) {
+    console.log(BOARD_TYPE);
 
     var vue = new Vue({
         el: '#app',
@@ -23,6 +24,7 @@ function init(init_user) {
             auth: new Auth(),
 
             fab: false,
+            boardType: BOARD_TYPE,
             page : 1,
             items: [],
 
@@ -84,9 +86,9 @@ function init(init_user) {
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
             },
-            // afterLoad: function(origin, destination, direction){
-            //     console.log(origin, destination, direction);
-            // }
+            goRegist: function () {
+                window.location.href = "/board/regist?boardType=" + this.boardType;
+            }
 
         },
         mounted:[
