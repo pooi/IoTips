@@ -9,6 +9,7 @@ var url = require('url');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  console.log(req);
   var user = support.ensureAuthenticated(req);
   res.render('index', { user: JSON.stringify(user) });
 });

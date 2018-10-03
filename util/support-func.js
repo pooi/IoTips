@@ -55,7 +55,11 @@ exports.ensureAuthenticated = function (req) {
         var user = req.user;
         var userData = {
             id: user.id,
+            db_id: user.db_id,
             displayName: user.displayName,
+            nickname: user.nickname,
+            rgt_date: user.rgt_date,
+            last_login_date: user.last_login_date,
             email: user.emails[0].value,
             photo: user.photos[0].value,
             provider: user.provider

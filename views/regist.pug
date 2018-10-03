@@ -8,6 +8,9 @@ block content
     script(src='/scripts/quill.min.js')
     script(src='/scripts/vue-quill-editor.js')
     script(src='/scripts/interact.min.js')
+    script.
+        mxBasePath = '/scripts/src';
+    script(src='/scripts/mxClient.js')
     script(src='/scripts/htmlparser.js')
     script(src='/scripts/html2json.js')
     script(src='/scripts/xml-js.js')
@@ -20,55 +23,451 @@ block content
         v-container.pa-0()
 
             v-flex(md12='')
-                //v-card.pa-3.safe-area-inset(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ? 'elevation-0 mb-4 pt-4' : 'elevation-10 my-4'")
+
                 v-card.safe-area-inset.elevation-0.mb-4(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ? 'pt-3 pb-0 px-0' : 'pa-3'")
+                    v-form(ref="main_form", style="width: 100%;")
 
-                    v-card-title.pb-0(style="margin-top: 20px;")
-                        span.display-2(style="font-weight: 800;", v-if="editorTitle === null || editorTitle === ''") 글 작성
-                        span.display-2(style="font-weight: 800;", v-else) {{editorTitle}}
+                        v-card-title.pb-0(style="margin-top: 20px;")
+                            span.display-2(style="font-weight: 800;", v-if="editorTitle === null || editorTitle === ''") 글 작성
+                            span.display-2(style="font-weight: 800;", v-else) {{editorTitle}}
 
-                    v-card-text.py-0
-                        v-divider.my-3
+                        v-card-text.py-0
+                            v-divider.mt-3.mb-0
+                            v-progress-linear.my-0(indeterminate, height="2", v-if="loadingProgress")
 
-                    v-card-text.py-0
-                        v-layout(row, wrap, align-center, style="font-weight: 300; width: 100%;")
-                            v-flex.xs4
-                                v-select(v-model='boardType', :items='boardTypes', item-text='title', item-value='type', label='게시판선택', persistent-hint, return-object, single-line, hide-details, full-width, required, style="border-bottom: .4px solid rgba(0,0,0,0.2);")
-
-
-
-                    v-card-text
-                        v-layout
-                            v-flex(xs12)
-                                v-card.pa-0.elevation-4
-
-
-                                    v-card-text.py-1.px-0
-                                        //span.headline.red--text.text--darken-1(style="font-weight: 700;") 제목
-                                        v-text-field(v-model='editorTitle', label='Title', :hide-details="editorTitle === null || editorTitle.length <= 20", single-line, full-width, required, :rules="[supporter.rules.counter_20]")
-                                    //v-card-text.pa-0
-                                    //    v-divider
-                                    //v-card-text.py-1.no-padding-text-field
-                                    //    //span.headline.red--text.text--darken-1(style="font-weight: 700;") 내용
-                                    //    v-textarea(v-model='content', label='Content', full-width, single-line, hide-details, auto-grow)
-                                    v-card-text.pa-0
-                                        v-divider
-                                    v-card-text.px-0.py-0
-                                        //span.headline.red--text.text--darken-1(style="font-weight: 700;") Content
-                                        //.quill-editor-example
-                                            // quill-editor
-                                        quill-editor.no-border-quill-editor(ref='myTextEditor', v-model='content', :options='editorOption', @blur='onEditorBlur($event)', @focus='onEditorFocus($event)', @ready='onEditorReady($event)')
-
-                                    v-card-text.pa-0
-                                        v-divider
+                        v-card-text.py-0
+                            v-layout(row, wrap, align-center, style="font-weight: 300; width: 100%;")
+                                v-flex.xs6.sm4.md3
+                                    v-select(v-model='boardType', :items='boardTypes', item-text='title', item-value='type', label='게시판선택', persistent-hint, return-object, single-line, hide-details, full-width, required, style="border-bottom: .4px solid rgba(0,0,0,0.2);", :disabled="loadingProgress")
 
 
 
-                                    v-card-text.py-2.mt-4
-                                        v-layout(align-center)
-                                            v-flex.text-xs-center
-                                                v-btn(color="grey", dark) 취소
-                                                v-btn(color="red darken-1", dark, @click="submit()") 등록
+                        v-card-text
+                            v-layout
+                                v-flex(xs12)
+                                    v-card.pa-0.elevation-4
+
+
+                                        v-card-text.py-1.px-0
+                                            //span.headline.red--text.text--darken-1(style="font-weight: 700;") 제목
+                                            v-text-field(v-model='editorTitle', ref="main_title", label='Title', :hide-details="false", single-line, full-width, required, :rules="[supporter.rules.counter_20]", :disabled="loadingProgress")
+                                        //v-card-text.pa-0
+                                        //    v-divider
+                                        //v-card-text.py-1.no-padding-text-field
+                                        //    //span.headline.red--text.text--darken-1(style="font-weight: 700;") 내용
+                                        //    v-textarea(v-model='content', label='Content', full-width, single-line, hide-details, auto-grow)
+                                        v-card-text.pa-0
+                                            v-divider
+                                        v-card-text.px-0.py-0
+                                            //span.headline.red--text.text--darken-1(style="font-weight: 700;") Content
+                                            //.quill-editor-example
+                                                // quill-editor
+                                            quill-editor.no-border-quill-editor(ref='myTextEditor', required, v-model='content', :options='editorOption', @blur='onEditorBlur($event)', @focus='onEditorFocus($event)', @ready='onEditorReady($event)', :disabled="loadingProgress")
+
+                                        v-card-text.pa-0
+                                            v-divider
+
+
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") 설계도
+                                            v-card.my-3.dal-card-blue(hover, raised)
+                                                //v-card-media.pa-0(height="400px")
+                                                v-card-actions.py-1.px-2.grey.lighten-5(style="overflow: hidden;")
+                                                    v-btn.mx-0(icon, flat, color="grey ", @click="graphManager.toXML()")
+                                                        v-icon code
+                                                    v-spacer
+                                                    v-btn-toggle.elevation-0(style="background: transparent;")
+                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomOut()")
+                                                            v-icon zoom_out
+                                                        v-btn.mx-0(icon, flat, @click="graphManager.setZoomLevel(0)")
+                                                            v-icon search
+                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomIn()")
+                                                            v-icon zoom_in
+                                                v-layout#graph-container.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
+                                                    div#graph(style="width: 100%; height: 100%; overflow:auto; ")
+
+
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
+                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="capabilities.length === 0")
+                                                v-btn(flat, color="blue darken-3", @click="addCapability()") 사용된 Capability 추가
+                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
+                                                //v-layout(xs12, wrap)
+                                                    //v-flex(v-for='capability in capabilities', d-inline-flex)
+                                                template(v-for="(capa, index) in capabilities", :key="index")
+                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
+                                                        v-icon(slot='badge', dark='', small='', @click="removeCapability(index)") close
+                                                        v-card.dal-small-card(hover, raised, :width="100")
+                                                            v-card-media.white--text(height='75px', :src='"/images/capabilities/" + capa.component + ".png"')
+                                                            v-card-text.py-1.text-xs-center {{ capa.title }} {{ index }}
+
+                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
+                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="addCapability()")
+                                                        .display-2(style="font-weight: 100;") +
+
+
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' || boardType.type === 'review'" )
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Products
+                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="products.length === 0")
+                                                v-btn(flat, color="blue darken-3", @click="resetProductForm()") 사용된 제품 추가
+                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
+                                                template(v-for="(product, index) in products", :key="index")
+                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
+                                                        v-icon(slot='badge', dark='', small='', @click="removeProduct(index)") close
+                                                        v-card.dal-small-card(hover, raised)
+                                                            v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
+                                                                v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                                                    img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                                                v-flex.pa-2(style="width: 180px;")
+                                                                    v-card-text.pa-0.pb-1
+                                                                        code.elevation-0(v-if="product.isFree") Free
+                                                                        code.elevation-0(v-else) {{ product.currency.symbol }}{{ product.price }}
+                                                                    v-card-text.pa-0.title {{product.title}}
+                                                                    v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
+                                                                    v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
+                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
+                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetProductForm()")
+                                                        .display-2(style="font-weight: 100;") +
+
+
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Platforms
+                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="platforms.length === 0")
+                                                v-btn(flat, color="blue darken-3", @click="resetPlatformForm()") 사용된 플랫폼 추가
+                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
+                                                template(v-for="(platform, index) in platforms", :key="index")
+                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
+                                                        v-icon(slot='badge', dark='', small='', @click="removePlatform(index)") close
+                                                        v-card.dal-small-card(hover, raised)
+                                                            v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailPlatform(platform, index)")
+                                                                v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                                                    img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                                                v-flex.pa-2(style="width: 180px;")
+                                                                    v-card-text.pa-0.pb-1
+                                                                        code.elevation-0(v-if="platform.isFree") Free
+                                                                        code.elevation-0(v-else) {{ platform.currency.symbol }}{{ platform.price }}
+                                                                    v-card-text.pa-0.title {{platform.title}}
+                                                                    v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
+                                                                    v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
+                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
+                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetPlatformForm()")
+                                                        .display-2(style="font-weight: 100;") +
+
+
+
+                                        v-card-text.py-2.mt-4
+                                            v-layout(align-center)
+                                                v-flex.text-xs-center
+                                                    v-btn(color="grey", dark) 취소
+                                                    v-btn(color="red darken-1", dark, @click="submit()") 등록
+
+
+    v-dialog.md6(v-model='addProductDialog', scrollable, max-width='500px')
+        v-form(ref="product_form", style="width: 100%;")
+            v-card(v-if="tempProduct !== null")
+                v-card-title.title Add Product
+                    //span.headline Login
+                v-divider.py-0.my-0
+                v-card-text.py-2.mt-3
+                    span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
+                    v-text-field(v-model='tempProduct.url', ref="product_url", color="green darken-1", :rules="[supporter.rules.url]", :loading="tempProduct.parsingProgress", :disabled="tempProduct.parsingProgress", append-outer-icon="send", clear-icon='cancel', clearable, label='Product URL', type='url', @click:append-outer='parsingURL("product")', @click:clear='tempProduct.url=""')
+
+                v-divider.py-0.my-0
+                v-card-text.py-2(v-if="tempProduct.parsingComplete")
+                    v-layout(row, wrap)
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
+                            v-text-field(v-model='tempProduct.title', ref="product_title", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempProduct.parsingProgress", clear-icon='cancel', clearable, label='Product Title', type='text', @click:clear='tempProduct.title=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Description
+                            v-textarea(v-model='tempProduct.description', ref="product_description", color="green darken-1", :disabled="tempProduct.parsingProgress", label='Product Description', rows="1", hide-details, outline, single-line, auto-grow, clear-icon='cancel', clearable, @click:clear='tempProduct.description=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
+                            v-text-field(v-model='tempProduct.company', ref="product_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempProduct.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempProduct.company=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
+                            v-switch(:label='tempProduct.isFree ? "Free" :"Paid"', v-model='tempProduct.isFree', color="green darken-1", :disabled="tempProduct.parsingProgress", hide-details, single-line)
+                            v-layout(row, wrap, align-center, justify-center, v-if="!tempProduct.isFree")
+                                v-flex.pr-2(xs5)
+                                    v-select(v-model='tempProduct.currency', :hint='`${tempProduct.currency.currency}, ${tempProduct.currency.sign}, ${tempProduct.currency.symbol}`', required, :disabled="tempProduct.parsingProgress", :items='tempProduct.currencies', item-text='currency', item-value='symbol', label='Select', color="green darken-1", persistent-hint, return-object, single-line)
+                                v-flex.pl-2(xs7)
+                                    v-text-field(label='Price', ref="product_price", v-model='tempProduct.price', :prefix='tempProduct.currency.symbol', required, :rules="[supporter.rules.price]", :disabled="tempProduct.parsingProgress", color="green darken-1", single-line, clear-icon='cancel', clearable, @click:clear='tempProduct.price=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
+                            v-layout(row, wrap, align-center, justify-center)
+                                //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
+                                img(v-if="tempProduct.img !== null", :src="tempProduct.img", style="max-width: 80%; max-height: 200px;")
+                                v-flex.text-xs-center(xs12)
+                                    v-btn(flat, color="green darken-1", @click="chooseProductImageDialog = true")
+                                        span(v-if="tempProduct.img === null") Select Image
+                                        span(v-else) Change Image
+                                //v-card(flat, tile, v-if="tempProduct.img !== null")
+                                //    v-card-media(:src='tempProduct.img', height='150px')
+
+                        v-card-text.py-2.mt-3.px-0(v-if="platforms.length > 0")
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
+                            v-layout.mt-2(row, wrap, justify-center, align-center)
+                                template(v-for="(platform, index) in platforms", :key="index")
+                                    v-card.dal-small-card.mr-3.mb-3(hover, raised, :dark="!tempProduct.isPlatformInclude(platform)")
+                                        v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="tempProduct.selectPlatform(platform)")
+                                            v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                                img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                            v-flex.pa-2(style="width: 180px;")
+                                                v-card-text.pa-0.pb-1(v-if="tempProduct.isPlatformInclude(platform)")
+                                                    code.elevation-0 Selected
+                                                v-card-text.pa-0.title {{platform.title}}
+                                                v-card-text.pt-2.pb-0.px-0.grey--text.text--darken-1 {{platform.company}}
+
+
+
+
+                v-card-text.py-4.text-xs-center(v-else) Please input product url.
+
+                v-divider.py-0.my-0
+
+                v-card-actions
+                    v-btn(color='error', flat, @click.native="resetProductForm()") Clear
+                    v-spacer
+                    v-btn(color='success', flat, @click.native="addProductDialog = false") 닫기
+                    v-btn(color='success', flat, @click.native="addProduct()") 추가
+
+    v-dialog.md6(v-model='chooseProductImageDialog', scrollable, max-width='480px')
+        v-card
+            v-card-title.title Select Image
+                //span.headline Login
+            v-divider.py-0.my-0
+            v-card-text.pa-2.brown.lighten-5(v-if="tempProduct !== null && tempProduct.imgs.length > 0")
+                v-container.pa-0(v-bind='{ ["grid-list-sm"]: true }', fluid)
+                    v-layout(row, wrap)
+                        v-flex(v-for='(img, index) in tempProduct.imgs', :key='index', xs4='', @click="chooseProductImage(index)")
+                            v-card(flat, tile, style="background: transparent;")
+                                v-card-media(:src='img', height='150px')
+            v-card-text.py-4.text-xs-center(v-else) There are no image.
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                v-btn(color='error', flat, @click="chooseProductImageDialog = false;") Close
+
+
+    v-dialog.md6(v-model='addPlatformDialog', scrollable, max-width='500px')
+        v-form(ref="platform_form", style="width: 100%;")
+            v-card(v-if="tempPlatform !== null")
+                v-card-title.title Add Platform
+                    //span.headline Login
+                v-divider.py-0.my-0
+                v-card-text.py-2.mt-3
+                    span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
+                    v-text-field(v-model='tempPlatform.url', ref="platform_url", color="green darken-1", :rules="[supporter.rules.url]", :loading="tempPlatform.parsingProgress", :disabled="tempPlatform.parsingProgress", append-outer-icon="send", clear-icon='cancel', clearable, label='Platform URL', type='url', @click:append-outer='parsingURL("platform")', @click:clear='tempPlatform.url=""')
+
+                v-divider.py-0.my-0
+                v-card-text.py-2(v-if="tempPlatform.parsingComplete")
+                    v-layout(row, wrap)
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
+                            v-text-field(v-model='tempPlatform.title', ref="platform_title", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Platform Title', type='text', @click:clear='tempPlatform.title=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Description
+                            v-textarea(v-model='tempPlatform.description', ref="platform_description", color="green darken-1", :disabled="tempPlatform.parsingProgress", label='Platform Description', rows="1", hide-details, outline, single-line, auto-grow, clear-icon='cancel', clearable, @click:clear='tempPlatform.description=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
+                            v-text-field(v-model='tempPlatform.company', ref="platform_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempPlatform.company=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
+                            v-switch(:label='tempPlatform.isFree ? "Free" :"Paid"', v-model='tempPlatform.isFree', color="green darken-1", :disabled="tempPlatform.parsingProgress", hide-details, single-line)
+                            v-layout(row, wrap, align-center, justify-center, v-if="!tempPlatform.isFree")
+                                v-flex.pr-2(xs5)
+                                    v-select(v-model='tempPlatform.currency', :hint='`${tempPlatform.currency.currency}, ${tempPlatform.currency.sign}, ${tempPlatform.currency.symbol}`', required, :disabled="tempPlatform.parsingProgress", :items='tempPlatform.currencies', item-text='currency', item-value='symbol', label='Select', color="green darken-1", persistent-hint, return-object, single-line)
+                                v-flex.pl-2(xs7)
+                                    v-text-field(label='Price', ref="platform_price", v-model='tempPlatform.price', :prefix='tempPlatform.currency.symbol', required, :rules="[supporter.rules.price]", :disabled="tempPlatform.parsingProgress", color="green darken-1", single-line, clear-icon='cancel', clearable, @click:clear='tempPlatform.price=""')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
+                            v-layout(row, wrap, align-center, justify-center)
+                                //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
+                                img(v-if="tempPlatform.img !== null", :src="tempPlatform.img", style="max-width: 80%; max-height: 200px;")
+                                v-flex.text-xs-center(xs12)
+                                    v-btn(flat, color="green darken-1", @click="choosePlatformImageDialog = true")
+                                        span(v-if="tempPlatform.img === null") Select Image
+                                        span(v-else) Change Image
+                                //v-card(flat, tile, v-if="tempProduct.img !== null")
+                                //    v-card-media(:src='tempProduct.img', height='150px')
+
+
+                        v-card-text.py-2.mt-3.px-0(v-if="products.length > 0")
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
+                            v-layout.mt-2(row, wrap, justify-center, align-center)
+                                template(v-for="(product, index) in products", :key="index")
+                                    v-card.dal-small-card.mr-3.mb-3(hover, raised, :dark="!tempPlatform.isProductInclude(product)")
+                                        v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="tempPlatform.selectProduct(product)")
+                                            v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                                img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                            v-flex.pa-2(style="width: 180px;")
+                                                v-card-text.pa-0.pb-1(v-if="tempPlatform.isProductInclude(product)")
+                                                    code.elevation-0 Selected
+                                                v-card-text.pa-0.title {{product.title}}
+                                                v-card-text.pt-2.pb-0.px-0.grey--text.text--darken-1 {{product.company}}
+
+
+
+
+                v-card-text.py-4.text-xs-center(v-else) Please input platform url.
+
+                v-divider.py-0.my-0
+
+                v-card-actions
+                    v-btn(color='error', flat, @click.native="resetPlatformForm()") Clear
+                    v-spacer
+                    v-btn(color='success', flat, @click.native="addPlatformDialog = false") 닫기
+                    v-btn(color='success', flat, @click.native="addPlatform()") 추가
+
+    v-dialog.md6(v-model='choosePlatformImageDialog', scrollable, max-width='480px')
+        v-card
+            v-card-title.title Select Image
+                //span.headline Login
+            v-divider.py-0.my-0
+            v-card-text.pa-2.brown.lighten-5(v-if="tempPlatform !== null && tempPlatform.imgs.length > 0")
+                v-container.pa-0(v-bind='{ ["grid-list-sm"]: true }', fluid)
+                    v-layout(row, wrap)
+                        v-flex(v-for='(img, index) in tempPlatform.imgs', :key='index', xs4='', @click="choosePlatformImage(index)")
+                            v-card(flat, tile, style="background: transparent;")
+                                v-card-media(:src='img', height='150px')
+            v-card-text.py-4.text-xs-center(v-else) There are no image.
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                v-btn(color='error', flat, @click="choosePlatformImageDialog = false;") Close
+
+
+    v-dialog.md6(v-model='detailProductDialog',  scrollable, max-width='500px')
+        v-card(v-if="detailProduct !== null")
+            v-card-title.title Product Information
+                //span.headline Login
+            v-divider.py-0.my-0
+
+            v-card-text.py-2
+                v-layout(row, wrap)
+                    v-card-text.py-2.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
+                        .body-1 {{ detailProduct.title }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Description
+                        .body-1 {{ detailProduct.description }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
+                        .body-1 {{ detailProduct.company }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
+                        .body-1(v-if="detailProduct.isFree") Free
+                        .body-1(v-else) {{ detailProduct.currency.symbol }}{{ detailProduct.price }}
+
+                    v-card-text.py-2.mt-3.px-0(v-if="detailProduct.img !== null")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
+                        v-layout(row, wrap, align-center, justify-center)
+                            //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
+                            img#detailProductImg(:src="detailProduct.img", style="max-width: 80%; max-height: 200px;")
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
+                        .body-1
+                            a.light-blue--text.text--darken-3(:href="detailProduct.url", target="_blank") {{ detailProduct.url }}
+
+                    v-card-text.py-2.mt-3.px-0(v-if="detailProduct.selectedPlatform.length > 0")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
+                        v-layout.mt-2(row, wrap, justify-center, align-center)
+                            template(v-for="(platform, index) in detailProduct.selectedPlatform", :key="index")
+                                v-card.dal-small-card.mr-3.mb-3(hover, raised)
+                                    v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailPlatform(platform, index)")
+                                        v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                            img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                        v-flex.pa-2(style="width: 180px;")
+                                            v-card-text.pa-0.pb-1
+                                                code.elevation-0(v-if="platform.isFree") Free
+                                                code.elevation-0(v-else) {{ platform.currency.symbol }}{{ platform.price }}
+                                            v-card-text.pa-0.title {{platform.title}}
+                                            v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
+                                            v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
+
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                v-btn(color='error', flat, @click="removeProductFromDetail()") 삭제
+                v-spacer
+                v-btn(color='success', flat, @click.native="detailProductDialog = false") 닫기
+
+    v-dialog.md6(v-model='detailPlatformDialog',  scrollable, max-width='500px')
+        v-card(v-if="detailPlatform !== null")
+            v-card-title.title Platform Information
+                //span.headline Login
+            v-divider.py-0.my-0
+
+            v-card-text.py-2
+                v-layout(row, wrap)
+                    v-card-text.py-2.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
+                        .body-1 {{ detailPlatform.title }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Description
+                        .body-1 {{ detailPlatform.description }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
+                        .body-1 {{ detailPlatform.company }}
+
+                    v-card-text.py-2.mt-3.px-0(v-if="detailPlatform.img !== null")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
+                        v-layout(row, wrap, align-center, justify-center)
+                            //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
+                            img#detailPlatformImg(:src="detailPlatform.img", style="max-width: 80%; max-height: 200px;")
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
+                        .body-1
+                            a.light-blue--text.text--darken-3(:href="detailPlatform.url", target="_blank") {{ detailPlatform.url }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
+                        .body-1(v-if="detailPlatform.isFree") Free
+                        .body-1(v-else) {{ detailPlatform.currency.symbol }}{{ detailPlatform.price }}
+
+                    v-card-text.py-2.mt-3.px-0(v-if="detailPlatform.selectedProducts.length > 0")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
+                        v-layout.mt-2(row, wrap, justify-center, align-center)
+                            template(v-for="(product, index) in detailPlatform.selectedProducts", :key="index")
+                                v-card.dal-small-card.mr-3.mb-3(hover, raised)
+                                    v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
+                                        v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                            img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                        v-flex.pa-2(style="width: 180px;")
+                                            v-card-text.pa-0.pb-1
+                                                code.elevation-0(v-if="product.isFree") Free
+                                                code.elevation-0(v-else) {{ product.currency.symbol }}{{ product.price }}
+                                            v-card-text.pa-0.title {{product.title}}
+                                            v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
+                                            v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                v-btn(color='error', flat, @click="removePlatformFromDetail()") 삭제
+                v-spacer
+                v-btn(color='success', flat, @click.native="detailPlatformDialog = false") 닫기
 
 
     include footer

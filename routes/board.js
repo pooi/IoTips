@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var support = require('../util/support-func');
-
+const dbDAO = require("../util/db-dao");
 
 
 /* GET home page. */
@@ -10,25 +10,78 @@ router.get('/', function(req, res, next) {
   res.render('board', { user: JSON.stringify(user), title: "Board" });
 });
 
+router.post('/', function (req, res, next) {
+   var data = req.body;
+   var type = "free";
+   var page = 1;
+   if("type" in data){
+       type = data.type;
+   }
+   if("page" in data){
+       page = data.page;
+   }
+
+   dbDAO.getBoardListData(type, page, function (isErr, results) {
+       if(isErr){
+           res.send(null);
+       }else{
+           res.send(results);
+       }
+   })
+
+});
+
 router.get('/free', function(req, res, next) {
+    var boardType = "free";
+    var page = req.query.page;
+    if(page === undefined){
+        page = 1;
+    }
+    if(page < 1)
+        page = 1;
+
     var user = support.ensureAuthenticated(req);
-    res.render('board', { user: JSON.stringify(user), title: "자유 게시판", boardType: "free" });
+    res.render('board', { user: JSON.stringify(user), title: "자유 게시판", boardType: boardType, page: page });
+
 });
 
 router.get('/question', function(req, res, next) {
+    var boardType = "question";
+    var page = req.query.page;
+    if(page === undefined){
+        page = 1;
+    }
+    if(page < 1)
+        page = 1;
+
     var user = support.ensureAuthenticated(req);
-    res.render('board', { user: JSON.stringify(user), title: "질문 게시판", boardType: "question" });
+    res.render('board', { user: JSON.stringify(user), title: "질문 게시판", boardType: boardType, page: page });
 });
 
 router.get('/review', function(req, res, next) {
+    var boardType = "review";
+    var page = req.query.page;
+    if(page === undefined){
+        page = 1;
+    }
+    if(page < 1)
+        page = 1;
+
     var user = support.ensureAuthenticated(req);
-    res.render('board', { user: JSON.stringify(user), title: "품평 게시판", boardType: "review" });
+    res.render('board', { user: JSON.stringify(user), title: "품평 게시판", boardType: boardType, page: page });
 });
 
-
 router.get('/ecosystem', function(req, res, next) {
+    var boardType = "ecosystem";
+    var page = req.query.page;
+    if(page === undefined){
+        page = 1;
+    }
+    if(page < 1)
+        page = 1;
+
     var user = support.ensureAuthenticated(req);
-    res.render('ecosystem_board', { user: JSON.stringify(user) });
+    res.render('ecosystem_board', { user: JSON.stringify(user), boardType: boardType, page: page });
 });
 
 
@@ -40,6 +93,23 @@ router.get('/regist', function(req, res, next) {
     console.log(boardType);
     var user = support.ensureAuthenticated(req);
     res.render('regist', { user: JSON.stringify(user), boardType: boardType });
+});
+
+router.post('/regist', function (req, res, next) {
+
+    var user = support.ensureAuthenticated(req);
+    if(user){
+        var data = req.body;
+        console.log(data);
+        dbDAO.registBoard(user.db_id, data, function(result){
+            if(result){
+                res.send("Success");
+            }else{
+                res.send("Fail");
+            }
+        });
+    }
+
 });
 
 router.get('/ecosystem/regist', function(req, res, next) {

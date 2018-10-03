@@ -34,6 +34,11 @@ v-dialog.md6(v-model='auth.detailDialog',  scrollable, max-width='500px')
                         v-list-tile-sub-title Name
                         v-list-tile-title {{ auth.user.displayName }}
 
+                v-list-tile(avatar='', v-if="auth.user.nickname != null")
+                    v-list-tile-content
+                        v-list-tile-sub-title Nickname
+                        v-list-tile-title {{ auth.user.nickname }}
+
                 v-list-tile(avatar='', v-if="auth.user.email != null")
                     v-list-tile-content
                         v-list-tile-sub-title Email
@@ -43,6 +48,16 @@ v-dialog.md6(v-model='auth.detailDialog',  scrollable, max-width='500px')
                     v-list-tile-content
                         v-list-tile-sub-title Provider
                         v-list-tile-title {{ auth.user.provider }}
+
+                v-list-tile(avatar='', v-if="auth.user.rgt_date != null")
+                    v-list-tile-content
+                        v-list-tile-sub-title 가입일
+                        v-list-tile-title {{ auth.user.rgt_date }}
+
+                v-list-tile(avatar='', v-if="auth.user.last_login_date != null")
+                    v-list-tile-content
+                        v-list-tile-sub-title 마지막 로그인
+                        v-list-tile-title {{ auth.user.last_login_date }}
 
                 v-list-tile-action.mt-4
                     v-btn(color='red', flat, @click="auth.logout();", style="margin: auto;") Logout

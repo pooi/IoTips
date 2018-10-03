@@ -6,7 +6,7 @@ template(v-if="item !== null")
         v-spacer
         .text-xs-center.px-2.body-1(style="width: 100px; font-weight: 500;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{ item.nickname }}
         .text-xs-center.px-2.body-1.grey--text.text--darken-1(style="width: 70px;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{ item.hit }}
-        .text-xs-center.px-2.body-1(style="width: 70px;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") 09-20
+        .text-xs-center.px-2.body-1(style="width: 70px;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{supporter.parseBoardDate(item.rgt_date)}}
 
     v-layout.pa-0.py-2(row, wrap, v-else)
         v-layout.pa-0.xs12(row, wrap, style="width: 100%; font-weight: 300;")
@@ -15,7 +15,7 @@ template(v-if="item !== null")
             v-spacer
             .text-xs-right.pr-2.caption.orange--text.text--lighten-2(style="", v-if="item.numOfComment > 0") {{ item.numOfComment }}
         v-layout.pa-0.xs12.mt-1(row, wrap, style="width: 100%;")
-            .text-xs-center.px-2.caption.grey--text.text--darken-1(style="width: 50px;") 09-20
+            .text-xs-center.px-2.caption.grey--text.text--darken-1(style="width: 50px;") {{supporter.parseBoardDate(item.rgt_date)}}
             .text-xs-left.px-2.caption(style="", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{ item.hit }}
             v-spacer
             .text-xs-right.px-2.caption(style="font-weight: 500;") {{ item.nickname }}

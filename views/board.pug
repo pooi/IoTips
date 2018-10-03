@@ -25,37 +25,47 @@ block content
                     v-card-text.py-0
                         v-divider.my-3
 
-                    v-card-title.pt-0(v-if="items.length > 0")
-                        v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
-                            v-list-tile(v-for='(item, index) in items', :key='index', @click='', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
-                                include board_item
+                    v-card-text.py-5.text-xs-center(v-if="loading")
+                        v-progress-circular(indeterminate='', color='green')
 
-                            v-list-tile(:style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
-                                v-layout.ma-2.pa-2(row, wrap, justify-center, align-center, style="height: 100px;", :class="isDark ? 'grey darken-2' : 'grey lighten-4'")
-                                    .body-1 Ads
+                    template(v-if="!loading")
 
-                    v-card-text.py-0
-                        v-layout.px-0.pb-2(row, wrap, justify-center, style="font-weight: 300;")
-                            v-spacer
-                            v-btn.ma-0(flat, icon, @click="isDark = !isDark")
-                                v-icon invert_colors
+                        v-card-title.pt-0(v-if="items.length > 0")
+                            v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
+                                v-list-tile(v-for='(item, index) in items', :key='index', @click='', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
+                                    include board_item
 
-                    v-card-text.py-0
-                        v-layout(row, wrap, justify-center)
-                            v-flex.xs3(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
-                            v-layout.text-xs-center(justify-center, :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'xs12' : 'xs6'")
-                                v-pagination.custom-pagination(v-model='page', :length='5', color="blue darken-1")
-                            v-flex.xs3.text-xs-right(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
-                                v-btn.white--text.elevation-0(color='red', @click="goRegist()")
-                                    v-icon.mr-2(left, dark) edit
-                                    | 글작성
+                                v-list-tile(:style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
+                                    v-layout.ma-2.pa-2(row, wrap, justify-center, align-center, style="height: 100px;", :class="isDark ? 'grey darken-2' : 'grey lighten-4'")
+                                        .body-1 Ads
 
-                    v-card-text.py-0.mt-3
-                        v-layout(row, wrap, justify-center)
-                            v-flex.xs2(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
-                            v-layout.xs8.text-xs-center(justify-center, :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'xs12' : 'xs8'")
-                                v-text-field(v-model='searchText', label='Search', :hide-details="searchText === null || searchText.length >= 2", single-line, full-width, required, :rules="[supporter.rules.counter_2]", append-icon="search", clear-icon='close', clearable,  @click:append='', @click:clear='searchText=""', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
-                            v-flex.xs2(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
+                        v-card-text.py-5.title.text-xs-center(v-else) 결과가 없습니다.
+                            //v-layout.text-xs-center(row, wrap, style="width: 100%;")
+                            //    .title.text-xs-center 결과가 없습니다.
+
+
+                        v-card-text.py-0
+                            v-layout.px-0.pb-2(row, wrap, justify-center, style="font-weight: 300;")
+                                v-spacer
+                                v-btn.ma-0(flat, icon, @click="isDark = !isDark")
+                                    v-icon invert_colors
+
+                        v-card-text.py-0
+                            v-layout(row, wrap, justify-center)
+                                v-flex.xs3(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
+                                v-layout.text-xs-center(justify-center, :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'xs12' : 'xs6'")
+                                    v-pagination.custom-pagination(v-model='page', :length='10', color="blue darken-1")
+                                v-flex.xs3.text-xs-right(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
+                                    v-btn.white--text.elevation-0(color='red', @click="goRegist()")
+                                        v-icon.mr-2(left, dark) edit
+                                        | 글작성
+
+                        v-card-text.py-0.mt-3
+                            v-layout(row, wrap, justify-center)
+                                v-flex.xs2(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
+                                v-layout.xs8.text-xs-center(justify-center, :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'xs12' : 'xs8'")
+                                    v-text-field(v-model='searchText', label='Search', :hide-details="searchText === null || searchText.length >= 2", single-line, full-width, required, :rules="[supporter.rules.counter_2]", append-icon="search", clear-icon='close', clearable,  @click:append='', @click:clear='searchText=""', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
+                                v-flex.xs2(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
 
 
 
@@ -70,4 +80,4 @@ block content
 
     script(type="text/javascript" src='/javascripts/board-config.js')
     script.
-        const vue = init('!{user}', '!{boardType}');
+        const vue = init('!{user}', '!{boardType}', '!{page}');

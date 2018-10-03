@@ -27,7 +27,14 @@ module.exports = (passport) => {
             console.log(socialId, nickname, email, profileImageUrl);
 
             onLoginSuccess('google', socialId, nickname, email, profileImageUrl, function () {
-                return done(null, profile);
+                dbDAO.getAdditionalUserData(profile.id, function (moreData) {
+                    var keys = Object.keys(moreData);
+                    for(var i=0; i<keys.length; i++){
+                        var key = keys[i];
+                        profile[key] = moreData[key];
+                    }
+                    return done(null, profile);
+                });
             });
             // return done(null, profile);
         }

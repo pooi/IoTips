@@ -169,7 +169,13 @@ class Supporter {
             required: value => !!value || 'Required.',
             counter: value => value.length <= 20 || 'Max 20 characters',
             counter_2: value => value.length >= 2 || 'Min 2 characters',
-            counter_20: value => value.length <= 20 || 'Max 20 characters',
+            counter_20: value => {
+                if(value === null){
+                    return 'Please enter text'
+                } else{
+                    return value.length <= 20 || 'Max 20 characters'
+                }
+            },
             email: value => {
                 var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 return pattern.test(value) || 'Invalid e-mail.'
@@ -432,6 +438,19 @@ class Supporter {
 
     static isHomePage(){
         return window.location.pathname === "/";
+    }
+
+    parseBoardDate(date){
+        var today = new Date();
+        var str = "";
+        if(today.getFullYear() === date.getFullYear() && today.getDay() === date.getDay() && today.getMonth() === date.getMonth()){
+            str = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
+        }else{
+            var month = date.getMonth()+1;
+            var day = date.getDay();
+            str = (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day);
+        }
+        return str;
     }
 }
 
