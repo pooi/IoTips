@@ -8,7 +8,7 @@ template(v-if="comment !== null")
                     v-flex.xs12.pa-0.body-1 {{ comment.nickname }}
                     v-flex.xs12.pa-0.small-caption.grey--text {{comment.rgt_date.toLocaleString()}}
 
-        v-layout.pa-0.xs12.mt-2(row, wrap, style="width: 100%; font-weight: 500; margin-left: 42px;")
+        v-layout.xs12.mt-2(row, wrap, style="width: 100%; font-weight: 500; padding-left: 42px;")
             .body-1 {{comment.content}}
 
         v-layout.pa-0.xs12.mt-2(row, wrap, style="width: 100%; font-weight: 500;")
