@@ -122,22 +122,67 @@ router.get('/graph', function(req, res, next) {
     res.render('graph_test', { user: JSON.stringify(user) });
 });
 
+router.post('/getDetail', function(req, res, next){
+    var data = req.body;
+    if("boardID" in data){
+        dbDAO.getBoardDetailFromID(data.boardID, function (isErr, result) {
+            if(isErr){
+                res.send(404);
+            }else{
+                res.send(result);
+                // var content = result.content;
+                // if(content != null){
+                //     console.log(content);
+                // }
+                // var json = JSON.parse(content);
+                // console.log(json);
+                // delete result.content;
+                // res.render('detail', { user: JSON.stringify(user), result: JSON.stringify(result), content: JSON.stringify(json) });
+            }
+        });
+    }else{
+        res.send(404);
+    }
+});
+
+router.post('/comments', function(req, res, next){
+    var data = req.body;
+    if("boardID" in data){
+        var boardID = req.body.boardID;
+        dbDAO.getBoardComments(boardID, function (isErr, results) {
+            if(isErr){
+                res.send(404);
+            }else{
+                res.send(results);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
+
 
 
 router.get('/:id', function (req, res, next) {
     var user = support.ensureAuthenticated(req);
-    dbDAO.getBoardDetailFromID(req.params.id, function (isErr, result) {
-        if(isErr){
-            res.send(result);
-        }else{
-            var content = result.content;
-            if(content != null){
-                console.log(content);
-            }
-            delete result.content;
-            res.render('detail', { user: JSON.stringify(user), result: JSON.stringify(result), content: content });
-        }
-    });
+    res.render('detail', { user: JSON.stringify(user), boardID: req.params.id });
+    // dbDAO.getBoardDetailFromID(req.params.id, function (isErr, result) {
+    //     if(isErr){
+    //         res.send(result);
+    //     }else{
+    //         var content = result.content;
+    //         if(content != null){
+    //             console.log(content);
+    //         }
+    //         var json = JSON.parse(content);
+    //         console.log(json);
+    //         delete result.content;
+    //         res.render('detail', { user: JSON.stringify(user), result: JSON.stringify(result), content: JSON.stringify(json) });
+    //     }
+    // });
 });
+
+
 
 module.exports = router;

@@ -127,3 +127,21 @@ exports.getBoardDetailFromID = function (boardID, callback) {
         }
     })
 };
+
+exports.getBoardComments = function (boardID, callback) {
+    var sql = "SELECT A.*, B.nickname as nickname, B.photo as user_photo " +
+        "FROM comment as A " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT * FROM user " +
+        "GROUP BY id) as B on(B.id = A.user_id) " +
+        "WHERE A.board_id=?";
+
+    conn.query(sql, [boardID], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            console.log(results);
+            callback(false, results);
+        }
+    })
+};

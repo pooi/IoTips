@@ -1,8 +1,8 @@
 
 
-function init(init_user, init_result, init_content) {
-    console.log(init_result);
-    console.log(init_content);
+function init(init_user, init_boardID) {
+    // console.log(init_result);
+    // console.log(init_content);
 
     Vue.use(window.VueQuillEditor);
 
@@ -27,6 +27,7 @@ function init(init_user, init_result, init_content) {
             graphManager: new GraphManager("graph"),
             viewer: null,
 
+
             result: null,
 
             boardType: null,
@@ -36,8 +37,9 @@ function init(init_user, init_result, init_content) {
 
             editorOption: {
                 // theme: 'bubble',
-                placeholder: "Insert content here ...",
+                placeholder: "내용이 없습니다.",
                 readOnly: true,
+                readonly: true,
                 // theme: 'bubble',
                 modules: {
                     toolbar: false
@@ -64,6 +66,8 @@ function init(init_user, init_result, init_content) {
             },
 
             content: null,
+            comments: null,
+            commentLoading: false,
 
             capabilities: [],
             platforms: [],
@@ -187,6 +191,36 @@ function init(init_user, init_result, init_content) {
                 this.detailProductDialog = true;
             },
 
+            getComments: function () {
+                if("id" in this.result){
+                    this.commentLoading = true;
+                    var boardID = this.result.id;
+
+                    var data = {
+                        boardID: boardID
+                    };
+
+                    setTimeout(function () {
+                        axios.post(
+                            '/board/comments',
+                            data
+                        ).then(function (res) {
+                            var data = res.data;
+                            for(var i=0; i<data.length; i++){
+                                data[i].rgt_date = new Date(data[i].rgt_date);
+                            }
+                            vue.comments = data;
+                            vue.commentLoading = false;
+                        }).catch(function (error) {
+                            alert(error);
+                            vue.commentLoading = false;
+                        });
+                    }, 500);
+
+
+                }
+            }
+
 
         },
         mounted:[
@@ -238,54 +272,115 @@ function init(init_user, init_result, init_content) {
                         // target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height);
                     });
             },
-            function(){
-                this.content = JSON.parse(init_content);
-                if(this.content != null){
-                    this.content = json2html(this.content);
-                }
-            },
             function () {
+                var boardID = init_boardID;
+                var data = {
+                    boardID: boardID
+                };
 
-                var result = JSON.parse(init_result);
+                axios.post(
+                    '/board/getDetail',
+                    data
+                ).then(function (res) {
+                    var result = res.data;
+                    // console.log(result);
 
-                if("type" in result){
-                    switch (result.type) {
-                        case "free":
-                            this.boardType = this.boardTypes[0];
-                            break;
-                        case "question":
-                            this.boardType = this.boardTypes[1];
-                            break;
-                        case "review":
-                            this.boardType = this.boardTypes[2];
-                            break;
-                        case "ecosystem":
-                            this.boardType = this.boardTypes[3];
-                            break;
-                        default:
-                            this.boardType = this.boardTypes[0];
-                            break;
-                    }
-                }else{
-                    this.boardType = this.boardTypes[0];
-                }
-
-                if("rgt_date" in result){
-                    result.rgt_date = new Date(result.rgt_date);
-                }
-
-                if("content" in result){
                     if(result.content != null){
-                        result.content = json2html(result.content);
+                        vue.content = json2html(JSON.parse(result.content));
                     }
-                }
 
-                this.result = result;
+                    if("type" in result){
+                        switch (result.type) {
+                            case "free":
+                                vue.boardType = vue.boardTypes[0];
+                                break;
+                            case "question":
+                                vue.boardType = vue.boardTypes[1];
+                                break;
+                            case "review":
+                                vue.boardType = vue.boardTypes[2];
+                                break;
+                            case "ecosystem":
+                                vue.boardType = vue.boardTypes[3];
+                                break;
+                            default:
+                                vue.boardType = vue.boardTypes[0];
+                                break;
+                        }
+                    }else{
+                        vue.boardType = vue.boardTypes[0];
+                    }
 
-                console.log(this.result);
+                    if("rgt_date" in result){
+                        result.rgt_date = new Date(result.rgt_date);
+                    }
 
+                    if("content" in result){
+                        if(result.content != null){
+                            result.content = json2html(result.content);
+                        }
+                    }
 
-            },
+                    vue.result = result;
+
+                    vue.getComments();
+
+                }).catch(function (error) {
+                    alert(error);
+                    // vue.commentLoading = false;
+                });
+            }
+            // function(){
+            //     this.content = JSON.parse(init_content);
+            //     if(this.content != null){
+            //         this.content = json2html(this.content);
+            //     }
+            // },
+            // function () {
+            //
+            //     var result = JSON.parse(init_result);
+            //
+            //     if("type" in result){
+            //         switch (result.type) {
+            //             case "free":
+            //                 this.boardType = this.boardTypes[0];
+            //                 break;
+            //             case "question":
+            //                 this.boardType = this.boardTypes[1];
+            //                 break;
+            //             case "review":
+            //                 this.boardType = this.boardTypes[2];
+            //                 break;
+            //             case "ecosystem":
+            //                 this.boardType = this.boardTypes[3];
+            //                 break;
+            //             default:
+            //                 this.boardType = this.boardTypes[0];
+            //                 break;
+            //         }
+            //     }else{
+            //         this.boardType = this.boardTypes[0];
+            //     }
+            //
+            //     if("rgt_date" in result){
+            //         result.rgt_date = new Date(result.rgt_date);
+            //     }
+            //
+            //     if("content" in result){
+            //         if(result.content != null){
+            //             result.content = json2html(result.content);
+            //         }
+            //     }
+            //
+            //     this.result = result;
+            //
+            //     console.log(this.result);
+            //
+            //
+            // },
+            // function () {
+            //     this.getComments();
+            // },
 
         ],
         computed: {

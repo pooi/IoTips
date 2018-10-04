@@ -1,0 +1,18 @@
+template(v-if="comment !== null")
+    v-layout.py-2.px-2(column, wrap)
+        v-layout(row, wrap)
+            v-layout(align-center, justify-start)
+                v-avatar.mr-2(:tile='false', size='30px')
+                    img(:src='comment.user_photo', alt='Avatar', style="border-radius: 35% !important;")
+                v-card-text.pa-0.ml-1(style="font-weight: 300;")
+                    v-flex.xs12.pa-0.body-1 {{ comment.nickname }}
+                    v-flex.xs12.pa-0.small-caption.grey--text {{comment.rgt_date.toLocaleString()}}
+
+        v-layout.pa-0.xs12.mt-2(row, wrap, style="width: 100%; font-weight: 500; margin-left: 42px;")
+            .body-1 {{comment.content}}
+
+        v-layout.pa-0.xs12.mt-2(row, wrap, style="width: 100%; font-weight: 500;")
+            v-spacer
+            v-btn.ma-0.pa-0(flat, icon, color='indigo darken-2')
+                v-icon reply
+
