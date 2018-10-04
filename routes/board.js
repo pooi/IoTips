@@ -122,4 +122,22 @@ router.get('/graph', function(req, res, next) {
     res.render('graph_test', { user: JSON.stringify(user) });
 });
 
+
+
+router.get('/:id', function (req, res, next) {
+    var user = support.ensureAuthenticated(req);
+    dbDAO.getBoardDetailFromID(req.params.id, function (isErr, result) {
+        if(isErr){
+            res.send(result);
+        }else{
+            var content = result.content;
+            if(content != null){
+                console.log(content);
+            }
+            delete result.content;
+            res.render('detail', { user: JSON.stringify(user), result: JSON.stringify(result), content: content });
+        }
+    });
+});
+
 module.exports = router;

@@ -1,0 +1,358 @@
+extends layout
+
+block content
+
+    link(href='/styles/quill.core.css', rel='stylesheet')
+    link(href='/styles/quill.snow.css', rel='stylesheet')
+    link(href='/styles/quill.bubble.css', rel='stylesheet')
+    script(src='/scripts/quill.min.js')
+    script(src='/scripts/vue-quill-editor.js')
+    script(src='/scripts/interact.min.js')
+    script.
+        mxBasePath = '/scripts/src';
+    script(src='/scripts/mxClient.js')
+    script(src='/scripts/htmlparser.js')
+    script(src='/scripts/html2json.js')
+    script(src='/scripts/xml-js.js')
+
+    include toolbar
+
+
+    v-content.brown.lighten-5.animation-fade-in(style="padding-top: 50px")
+        //v-container.pa-0(:fluid="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly")
+        v-container.pa-0()
+
+            v-flex(md12='')
+
+                v-card.safe-area-inset.elevation-0.mb-4(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ? 'pt-3 pb-0 px-0' : 'pa-3'")
+                    v-form(ref="main_form", style="width: 100%;")
+
+                        //v-card-text.pb-0.text-xs-right(style="margin-top: 20px;")
+                        //    span.subtitle.grey--text(style="font-weight: 500;",) {{boardType.fullTitle}}
+
+                        //v-card-text.py-0
+                        //    v-divider.mt-1.mb-0
+
+                        v-card-text.pt-3.pb-2.display-1(style="margin-top: 40px; font-weight: 700;") {{result.title}}
+                            //v-text-field(v-model='result.title', ref="main_title", label='Title', :hide-details="true", single-line, full-width, :rules="[supporter.rules.counter_20]", :disabled="true")
+
+                        v-card-text.py-0
+                            v-divider.mt-1.mb-0
+
+
+                        v-card-text.py-0.small-caption
+                            v-layout.px-0.py-2.grey.lighten-4(row, wrap, align-center style="font-weight: 300;")
+                                .text-xs-left.mx-2
+                                    strong {{ result.nickname }}
+                                    | 님
+                                v-spacer
+                                .text-xs-right.px-2
+                                    v-icon.caption.mr-1 visibility
+                                    | {{result.hit}}
+                                .text-xs-right.px-2(style="border-left: .4px solid rgba(0,0,0,0.2);") {{boardType.fullTitle}}
+
+
+                        v-card-text.py-0.small-caption
+                            v-layout.px-0.py-2(row, wrap, align-center style="font-weight: 300;")
+                                .text-xs-left.px-2
+                                    v-icon.caption.mr-1 access_time
+                                    | {{result.rgt_date.toLocaleString()}}
+                                v-spacer
+
+                        v-card-text.py-0
+                            v-divider.my-0
+
+                        v-card-text.pt-0.pb-3
+                            quill-editor.no-border-quill-editor(:content='content', :options='editorOption')
+
+                        v-card-text.text-xs-center.pt-0.pb-3
+                            v-btn.elevation-0.ma-0.mr-1(color="red darken-1", dark, small)
+                                v-icon.pr-1.subheading(dark) error_outline
+                                | 신고
+                            v-btn.elevation-0.ma-0.mr-1(color="indigo lighten-1", dark, small)
+                                v-icon.pr-1.subheading(dark) bookmark
+                                | 스크랩
+                            v-btn.elevation-0.ma-0(color="indigo lighten-1", dark, small)
+                                v-icon.pr-1.subheading(dark) bubble_chart
+                                | 공유
+
+                        v-card-text.py-0
+                            v-divider.my-0
+
+
+                        v-card-text.mt-3
+                            v-layout(row, wrap, :class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-3'")
+                                .headline(style="font-weight: 700;") 1 Comments
+                                v-card-text.pa-0.mt-2
+                                    v-divider.my-0
+
+                            v-layout(row, wrap, justify-center style="width: 100%;", :class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-3'")
+
+
+                                v-flex.xs12.sm10.md8.py-0.mx-3.mt-5(style="border: .4px solid rgba(0,0,0,0.2);")
+                                    v-textarea.ml-2.mr-3.py-0.my-0.no-padding-text-field(hide-details, full-width, placeholder='댓글을 입력해주세요.')
+                                    v-btn.pa-0.ma-0.elevation-0(block, color="indigo lighten-1", small, dark) 등록
+
+                            //v-card-text.pa-0(:class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-3'")
+
+                            //v-card-text.pa-0
+                            //v-card-text.pa-0
+                            //    v-divier.my-0
+
+                            //v-layout(row, wrap, style="width: 100%;", :class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-3'")
+                                v-flex.xs12.pa-0.ma-0
+                                    .headline 1 Comments
+                                v-flex.xs12.pa-0.ma-0
+                                    v-divier.my-0
+
+
+
+                        //v-card-text
+                            v-layout
+                                v-flex(xs12)
+                                    v-card.pa-0.elevation-4
+
+
+                                        //v-card-text.pa-0
+                                        //    v-divider
+                                        //v-card-text.py-1.no-padding-text-field
+                                        //    //span.headline.red--text.text--darken-1(style="font-weight: 700;") 내용
+                                        //    v-textarea(v-model='content', label='Content', full-width, single-line, hide-details, auto-grow)
+                                        v-card-text.pa-0
+                                            v-divider
+                                        v-card-text.px-0.py-0
+                                            //span.headline.red--text.text--darken-1(style="font-weight: 700;") Content
+                                            //.quill-editor-example
+                                                // quill-editor
+                                            quill-editor.no-border-quill-editor(:content='content', :options='editorOption')
+
+                                        v-card-text.pa-0
+                                            v-divider
+
+
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") 설계도
+                                            v-card.my-3.dal-card-blue(hover, raised)
+                                                //v-card-media.pa-0(height="400px")
+                                                v-card-actions.py-1.px-2.grey.lighten-5(style="overflow: hidden;")
+                                                    v-btn.mx-0(icon, flat, color="grey ", @click="graphManager.toXML()")
+                                                        v-icon code
+                                                    v-spacer
+                                                    v-btn-toggle.elevation-0(style="background: transparent;")
+                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomOut()")
+                                                            v-icon zoom_out
+                                                        v-btn.mx-0(icon, flat, @click="graphManager.setZoomLevel(0)")
+                                                            v-icon search
+                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomIn()")
+                                                            v-icon zoom_in
+                                                v-layout#graph-container.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
+                                                    div#graph(style="width: 100%; height: 100%; overflow:auto; ")
+
+
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
+                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="capabilities.length === 0")
+                                                v-btn(flat, color="blue darken-3", @click="addCapability()") 사용된 Capability 추가
+                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
+                                                //v-layout(xs12, wrap)
+                                                    //v-flex(v-for='capability in capabilities', d-inline-flex)
+                                                template(v-for="(capa, index) in capabilities", :key="index")
+                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
+                                                        v-icon(slot='badge', dark='', small='', @click="removeCapability(index)") close
+                                                        v-card.dal-small-card(hover, raised, :width="100")
+                                                            v-card-media.white--text(height='75px', :src='"/images/capabilities/" + capa.component + ".png"')
+                                                            v-card-text.py-1.text-xs-center {{ capa.title }} {{ index }}
+
+                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
+                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="addCapability()")
+                                                        .display-2(style="font-weight: 100;") +
+
+
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' || boardType.type === 'review'" )
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Products
+                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="products.length === 0")
+                                                v-btn(flat, color="blue darken-3", @click="resetProductForm()") 사용된 제품 추가
+                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
+                                                template(v-for="(product, index) in products", :key="index")
+                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
+                                                        v-icon(slot='badge', dark='', small='', @click="removeProduct(index)") close
+                                                        v-card.dal-small-card(hover, raised)
+                                                            v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
+                                                                v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                                                    img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                                                v-flex.pa-2(style="width: 180px;")
+                                                                    v-card-text.pa-0.pb-1
+                                                                        code.elevation-0(v-if="product.isFree") Free
+                                                                        code.elevation-0(v-else) {{ product.currency.symbol }}{{ product.price }}
+                                                                    v-card-text.pa-0.title {{product.title}}
+                                                                    v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
+                                                                    v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
+                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
+                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetProductForm()")
+                                                        .display-2(style="font-weight: 100;") +
+
+
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Platforms
+                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="platforms.length === 0")
+                                                v-btn(flat, color="blue darken-3", @click="resetPlatformForm()") 사용된 플랫폼 추가
+                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
+                                                template(v-for="(platform, index) in platforms", :key="index")
+                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
+                                                        v-icon(slot='badge', dark='', small='', @click="removePlatform(index)") close
+                                                        v-card.dal-small-card(hover, raised)
+                                                            v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailPlatform(platform, index)")
+                                                                v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                                                    img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                                                v-flex.pa-2(style="width: 180px;")
+                                                                    v-card-text.pa-0.pb-1
+                                                                        code.elevation-0(v-if="platform.isFree") Free
+                                                                        code.elevation-0(v-else) {{ platform.currency.symbol }}{{ platform.price }}
+                                                                    v-card-text.pa-0.title {{platform.title}}
+                                                                    v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
+                                                                    v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
+                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
+                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetPlatformForm()")
+                                                        .display-2(style="font-weight: 100;") +
+
+
+
+                                        v-card-text.py-2.mt-4
+                                            v-layout(align-center)
+                                                v-flex.text-xs-center
+                                                    v-btn(color="grey", dark) 취소
+                                                    v-btn(color="red darken-1", dark, @click="submit()") 등록
+
+
+
+
+    v-dialog.md6(v-model='detailProductDialog',  scrollable, max-width='500px')
+        v-card(v-if="detailProduct !== null")
+            v-card-title.title Product Information
+                //span.headline Login
+            v-divider.py-0.my-0
+
+            v-card-text.py-2
+                v-layout(row, wrap)
+                    v-card-text.py-2.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
+                        .body-1 {{ detailProduct.title }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Description
+                        .body-1 {{ detailProduct.description }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
+                        .body-1 {{ detailProduct.company }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
+                        .body-1(v-if="detailProduct.isFree") Free
+                        .body-1(v-else) {{ detailProduct.currency.symbol }}{{ detailProduct.price }}
+
+                    v-card-text.py-2.mt-3.px-0(v-if="detailProduct.img !== null")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
+                        v-layout(row, wrap, align-center, justify-center)
+                            //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
+                            img#detailProductImg(:src="detailProduct.img", style="max-width: 80%; max-height: 200px;")
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
+                        .body-1
+                            a.light-blue--text.text--darken-3(:href="detailProduct.url", target="_blank") {{ detailProduct.url }}
+
+                    v-card-text.py-2.mt-3.px-0(v-if="detailProduct.selectedPlatform.length > 0")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
+                        v-layout.mt-2(row, wrap, justify-center, align-center)
+                            template(v-for="(platform, index) in detailProduct.selectedPlatform", :key="index")
+                                v-card.dal-small-card.mr-3.mb-3(hover, raised)
+                                    v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailPlatform(platform, index)")
+                                        v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                            img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                        v-flex.pa-2(style="width: 180px;")
+                                            v-card-text.pa-0.pb-1
+                                                code.elevation-0(v-if="platform.isFree") Free
+                                                code.elevation-0(v-else) {{ platform.currency.symbol }}{{ platform.price }}
+                                            v-card-text.pa-0.title {{platform.title}}
+                                            v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
+                                            v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
+
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                v-btn(color='error', flat, @click="removeProductFromDetail()") 삭제
+                v-spacer
+                v-btn(color='success', flat, @click.native="detailProductDialog = false") 닫기
+
+    v-dialog.md6(v-model='detailPlatformDialog',  scrollable, max-width='500px')
+        v-card(v-if="detailPlatform !== null")
+            v-card-title.title Platform Information
+                //span.headline Login
+            v-divider.py-0.my-0
+
+            v-card-text.py-2
+                v-layout(row, wrap)
+                    v-card-text.py-2.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
+                        .body-1 {{ detailPlatform.title }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Description
+                        .body-1 {{ detailPlatform.description }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
+                        .body-1 {{ detailPlatform.company }}
+
+                    v-card-text.py-2.mt-3.px-0(v-if="detailPlatform.img !== null")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Image
+                        v-layout(row, wrap, align-center, justify-center)
+                            //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
+                            img#detailPlatformImg(:src="detailPlatform.img", style="max-width: 80%; max-height: 200px;")
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") URL
+                        .body-1
+                            a.light-blue--text.text--darken-3(:href="detailPlatform.url", target="_blank") {{ detailPlatform.url }}
+
+                    v-card-text.py-2.mt-3.px-0
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
+                        .body-1(v-if="detailPlatform.isFree") Free
+                        .body-1(v-else) {{ detailPlatform.currency.symbol }}{{ detailPlatform.price }}
+
+                    v-card-text.py-2.mt-3.px-0(v-if="detailPlatform.selectedProducts.length > 0")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
+                        v-layout.mt-2(row, wrap, justify-center, align-center)
+                            template(v-for="(product, index) in detailPlatform.selectedProducts", :key="index")
+                                v-card.dal-small-card.mr-3.mb-3(hover, raised)
+                                    v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
+                                        v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                            img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                        v-flex.pa-2(style="width: 180px;")
+                                            v-card-text.pa-0.pb-1
+                                                code.elevation-0(v-if="product.isFree") Free
+                                                code.elevation-0(v-else) {{ product.currency.symbol }}{{ product.price }}
+                                            v-card-text.pa-0.title {{product.title}}
+                                            v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
+                                            v-card-text.pa-0.light-blue--text.text--darken-3 Detail
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                v-btn(color='error', flat, @click="removePlatformFromDetail()") 삭제
+                v-spacer
+                v-btn(color='success', flat, @click.native="detailPlatformDialog = false") 닫기
+
+
+    include footer
+    //include bottom_tab
+
+
+    script(type="text/javascript" src='/javascripts/detail-config.js')
+    script.
+        const vue = init('!{user}', '!{result}', '!{content}');

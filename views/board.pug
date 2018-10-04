@@ -32,7 +32,7 @@ block content
 
                         v-card-title.pt-0(v-if="items.length > 0")
                             v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
-                                v-list-tile(v-for='(item, index) in items', :key='index', @click='', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
+                                v-list-tile(v-for='(item, index) in items', :key='index', @click='moveDetail(item)', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
                                     include board_item
 
                                 v-list-tile(:style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")

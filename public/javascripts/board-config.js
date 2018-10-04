@@ -116,6 +116,10 @@ function init(init_user, BOARD_TYPE, init_page) {
                 }, 500);
 
 
+            },
+
+            moveDetail: function(item){
+                window.location.href = "/board/" + item.id;
             }
 
         },

@@ -103,8 +103,27 @@ exports.getBoardListData = function (type, page, callback) {
         if(err){
             callback(true, err);
         }else{
-            console.log(results);
+            // console.log(results);
             callback(false, results);
+        }
+    })
+};
+
+exports.getBoardDetailFromID = function (boardID, callback) {
+    var sql = "UPDATE board SET hit=hit+1 WHERE id=?;" +
+        "SELECT A.*, B.nickname as nickname " +
+        "FROM board as A " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT * FROM user " +
+        "GROUP BY id) as B on(B.id = A.user_id) " +
+        "WHERE A.id=?;";
+
+    conn.query(sql, [boardID, boardID], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            console.log(results[1][0]);
+            callback(false, results[1][0]);
         }
     })
 };

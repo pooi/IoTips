@@ -104,6 +104,10 @@
     min-height: 150px;
 }
 
+.small-caption {
+    font-size: 10px !important;
+}
+
 /* EXTERNAL*/
 
 #overlay {

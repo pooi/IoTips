@@ -452,6 +452,32 @@ class Supporter {
         }
         return str;
     }
+
+    static getBoardTypes() {
+        var boardTypes = [
+            {
+                type: "free",
+                title: "자유",
+                fullTitle: "자유 게시판"
+            },
+            {
+                type: "question",
+                title: "질문",
+                fullTitle: "질문 게시판"
+            },
+            {
+                type: "review",
+                title: "품평",
+                fullTitle: "품평 게시판"
+            },
+            {
+                type: "ecosystem",
+                title: "구성도",
+                fullTitle: "구성도 게시판"
+            }
+        ]
+        return boardTypes;
+    }
 }
 
 class Auth {

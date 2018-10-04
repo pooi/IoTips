@@ -28,24 +28,7 @@ function init(init_user, BOARD_TYPE) {
             loadingProgress: false,
 
             boardType: null,
-            boardTypes: [
-                {
-                    type: "free",
-                    title: "자유"
-                },
-                {
-                    type: "question",
-                    title: "질문"
-                },
-                {
-                    type: "review",
-                    title: "품평"
-                },
-                {
-                    type: "ecosystem",
-                    title: "구성도"
-                }
-            ],
+            boardTypes: Supporter.getBoardTypes(),
 
             editorTitle: null,
 
