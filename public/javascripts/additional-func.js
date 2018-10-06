@@ -183,6 +183,13 @@ class Supporter {
                     return value.length <= 40 || 'Max 40 characters'
                 }
             },
+            counter_200: value => {
+                if(value === null){
+                    return 'Please enter text'
+                } else{
+                    return value.length <= 200 || 'Max 200 characters'
+                }
+            },
             email: value => {
                 var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 return pattern.test(value) || 'Invalid e-mail.'

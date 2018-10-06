@@ -80,6 +80,10 @@ function init(init_user, init_boardID) {
             detailProduct: null,
             detailProductIndex: -1,
 
+            tempComment: null,
+            tempParentComment: null,
+            commentSubmitProgress: false,
+
 
         },
         methods:{
@@ -219,7 +223,45 @@ function init(init_user, init_boardID) {
 
 
                 }
-            }
+            },
+
+            selectParentComment: function(comment){
+                this.tempParentComment = comment;
+                var area = this.$refs.area_comment;
+                area.focus();
+            },
+            submitComment: function(){
+                var commentForm = this.$refs.form_comment;
+                if(commentForm.validate()){
+                    this.commentSubmitProgress = true;
+                    this.commentLoading = true;
+                    var boardID = this.result.id;
+
+                    var data = {
+                        boardID: boardID,
+                        content: this.tempComment,
+                        parentCommentID: this.tempParentComment == null ? null : this.tempParentComment.id
+                    };
+
+                    axios.post(
+                        '/board/registComment',
+                        data
+                    ).then(function (res) {
+                        var data = res.data;
+                        if(data){
+                            vue.commentSubmitProgress = false;
+                            vue.tempComment = null;
+                            vue.tempParentComment = null;
+                            vue.getComments();
+                        }
+                    }).catch(function (error) {
+                        alert(error);
+                        vue.commentSubmitProgress = false;
+                    });
+
+                }
+            },
+
 
 
         },

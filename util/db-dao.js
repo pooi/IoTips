@@ -145,3 +145,24 @@ exports.getBoardComments = function (boardID, callback) {
         }
     })
 };
+
+exports.registComment = function (userID, boardID, content, parentCommentID, callback) {
+    var sql = "";
+    var argument = [userID, boardID, content];
+
+    if(parentCommentID === null){
+        sql = "INSERT INTO comment(user_id, board_id, content) VALUES(?,?,?)";
+    }else{
+        sql = "INSERT INTO comment(user_id, board_id, content, parent, depth) VALUES(?,?,?,?,?)";
+        argument.push(parentCommentID);
+        argument.push(2);
+    }
+
+    conn.query(sql, argument, function(err, results){
+        if(err){
+            callback(false);
+        }else{
+            callback(true);
+        }
+    })
+};
