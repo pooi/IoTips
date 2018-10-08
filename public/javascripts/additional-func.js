@@ -96,6 +96,30 @@ class Product {
     }
 }
 
+class UserInformation {
+    constructor(){
+        this.dialog = false;
+        this.x = 0;
+        this.y = 0;
+    }
+
+    showDialog(){
+        this.dialog = true;
+    }
+
+    show (e) {
+        e.preventDefault();
+        this.dialog = false;
+        this.x = e.clientX;
+        this.y = e.clientY;
+        this.dialog = true;
+    }
+
+    closeDialog(){
+        this.dialog = false;
+    }
+}
+
 class Supporter {
     constructor(vue) {
         this.vue = vue;

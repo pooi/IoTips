@@ -25,8 +25,9 @@ function init(init_user, init_boardID) {
             supporter: null,
             auth: new Auth(),
             graphManager: new GraphManager("graph"),
-            viewer: null,
+            userInfo: new UserInformation(),
 
+            viewer: null,
 
             result: null,
 
@@ -260,6 +261,9 @@ function init(init_user, init_boardID) {
                     });
 
                 }
+            },
+            showUserInfo: function (e) {
+                this.userInfo.show(e);
             },
 
 

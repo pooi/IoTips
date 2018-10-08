@@ -1,0 +1,26 @@
+v-menu(v-model='userInfo.dialog', :close-on-content-click='false', :nudge-width='$vuetify.breakpoint.width < 380 ? $vuetify.breakpoint.width - 20 : 380', offset-x, transition="slide-x-transition", :position-x="userInfo.x", :position-y="userInfo.y", absolute)
+    v-card
+        v-list
+            v-list-tile(avatar='')
+                v-list-tile-avatar
+                    img(src='https://cdn.vuetifyjs.com/images/john.jpg', alt='John')
+                v-list-tile-content
+                    v-list-tile-title John Leider
+                    v-list-tile-sub-title Founder of Vuetify.js
+                //v-list-tile-action
+                //    v-btn(:class="fav ? 'red--text' : ''", icon='', @click='fav = !fav')
+                //        v-icon favorite
+        v-divider
+        //v-list
+        //    v-list-tile
+        //        v-list-tile-action
+        //            v-switch(v-model='message', color='purple')
+        //        v-list-tile-title Enable messages
+        //    v-list-tile
+        //        v-list-tile-action
+        //            v-switch(v-model='hints', color='purple')
+        //        v-list-tile-title Enable hints
+        v-card-actions
+            v-spacer
+            v-btn(flat='', @click='userInfo.closeDialog()') Cancel
+            v-btn(color='primary', flat='', @click='userInfo.closeDialog()') Save

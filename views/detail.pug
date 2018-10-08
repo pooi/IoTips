@@ -119,6 +119,7 @@ block content
                                                     v-spacer
                                                     v-btn(icon, flat, small, color="grey", @click="tempParentComment = null")
                                                         v-icon.subheading close
+
                                         v-textarea.ml-2.mr-3.py-0.my-0.no-padding-text-field(ref="area_comment", :hide-details="tempComment === null || tempComment.length == 0 || (tempComment.length >= 2 && tempComment.length <= 200)", full-width, required, :rules="[supporter.rules.counter_2, supporter.rules.counter_200]" :placeholder='auth.user === null ? "로그인이 필요합니다." : "댓글을 입력해주세요."', v-model="tempComment", :disabled="auth.user === null || commentSubmitProgress")
                                         v-btn.pa-0.ma-0.elevation-0(v-if="!commentSubmitProgress", block, color="indigo lighten-1", small, dark, @click="submitComment()", submit, :disabled="auth.user === null") 등록
 
@@ -378,6 +379,8 @@ block content
                 v-spacer
                 v-btn(color='success', flat, @click.native="detailPlatformDialog = false") 닫기
 
+
+    include user_information_dialog
 
     include footer
     //include bottom_tab
