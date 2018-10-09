@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var support = require('../util/support-func');
+const dbDAO = require("../util/db-dao");
 
 var request = require("request");
 var extractor = require('unfluff');
@@ -47,6 +48,23 @@ router.post('/parseurl', function (req, res, next) {
     res.send(data);
 
   });
+});
+
+router.post('/getUserInfo', function (req, res, next) {
+    var data = req.body;
+
+    if("userID" in data){
+        var userID = data.userID;
+        dbDAO.getUserInformation(userID, function (isErr, result) {
+            if(isErr){
+                res.send(404);
+            }else{
+                res.send(result);
+            }
+        });
+    }else{
+        res.send(404);
+    }
 });
 
 module.exports = router;

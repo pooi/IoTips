@@ -9,10 +9,10 @@ template(v-if="comment !== null")
         //            v-flex.xs12.pa-0.small-caption.grey--text {{comment.rgt_date.toLocaleString()}}
         v-list.pa-0(style="background: none !important;" )
             v-list-tile.pa-0(avatar='')
-                v-list-tile-avatar(@click="showUserInfo")
+                v-list-tile-avatar(@click="userInfo.showDialog($event, comment.user_id)")
                     img(:src='comment.user_photo', alt='Avatar', style="border-radius: 35% !important;")
                 v-list-tile-content
-                    v-list-tile-title.body-1(@click="showUserInfo") {{ comment.nickname }}
+                    v-list-tile-title.body-1(@click="userInfo.showDialog($event, comment.user_id)") {{ comment.nickname }}
                     v-list-tile-sub-title.small-caption.grey--text {{comment.rgt_date.toLocaleString()}}
                 v-list-tile-action
                     v-btn.ma-0.pa-0(flat, icon, color='grey darken-2', small, @click="selectParentComment(comment)")

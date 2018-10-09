@@ -1,16 +1,26 @@
 v-menu(v-model='userInfo.dialog', :close-on-content-click='false', :nudge-width='$vuetify.breakpoint.width < 380 ? $vuetify.breakpoint.width - 20 : 380', offset-x, transition="slide-x-transition", :position-x="userInfo.x", :position-y="userInfo.y", absolute)
-    v-card
+    v-card(v-if="userInfo.user !== null")
         v-list
             v-list-tile(avatar='')
                 v-list-tile-avatar
-                    img(src='https://cdn.vuetifyjs.com/images/john.jpg', alt='John')
+                    img(:src='userInfo.user.photo', style="border-radius: 35% !important;")
                 v-list-tile-content
-                    v-list-tile-title John Leider
-                    v-list-tile-sub-title Founder of Vuetify.js
+                    v-list-tile-title {{userInfo.user.nickname}}
+                    v-list-tile-sub-title {{userInfo.user.email}}
                 //v-list-tile-action
                 //    v-btn(:class="fav ? 'red--text' : ''", icon='', @click='fav = !fav')
                 //        v-icon favorite
-        v-divider
+
+            v-list-tile(avatar='', v-if="userInfo.user.rgt_date != null")
+                v-list-tile-content
+                    v-list-tile-sub-title.small-caption 가입일
+                    v-list-tile-title.caption {{ userInfo.user.rgt_date.toLocaleString() }}
+
+            v-list-tile(avatar='', v-if="userInfo.user.last_login_date != null")
+                v-list-tile-content
+                    v-list-tile-sub-title.small-caption 마지막 로그인
+                    v-list-tile-title.caption {{ userInfo.user.last_login_date.toLocaleString() }}
+        //v-divider
         //v-list
         //    v-list-tile
         //        v-list-tile-action
@@ -20,7 +30,16 @@ v-menu(v-model='userInfo.dialog', :close-on-content-click='false', :nudge-width=
         //        v-list-tile-action
         //            v-switch(v-model='hints', color='purple')
         //        v-list-tile-title Enable hints
-        v-card-actions
-            v-spacer
-            v-btn(flat='', @click='userInfo.closeDialog()') Cancel
-            v-btn(color='primary', flat='', @click='userInfo.closeDialog()') Save
+
+        //v-card-actions
+        //    v-spacer
+        //    v-btn(flat='', @click='userInfo.closeDialog()') Cancel
+        //    v-btn(color='primary', flat='', @click='userInfo.closeDialog()') Save
+    v-card(v-else)
+        v-card-text.py-5.text-xs-center
+            v-progress-circular(indeterminate='', color='green')
+        //v-card-actions
+        //    v-spacer
+        //    v-btn(flat='', @click='userInfo.closeDialog()') Close
+
+

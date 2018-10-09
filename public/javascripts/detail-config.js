@@ -262,8 +262,9 @@ function init(init_user, init_boardID) {
 
                 }
             },
-            showUserInfo: function (e) {
+            showUserInfo: function (e, id) {
                 this.userInfo.show(e);
+                alert(id);
             },
 
 

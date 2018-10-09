@@ -166,3 +166,15 @@ exports.registComment = function (userID, boardID, content, parentCommentID, cal
         }
     })
 };
+
+exports.getUserInformation = function (userID, callback) {
+      var sql = "SELECT * FROM user WHERE id=?";
+
+    conn.query(sql, [userID], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            callback(false, results[0]);
+        }
+    })
+};

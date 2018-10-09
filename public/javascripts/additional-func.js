@@ -101,10 +101,49 @@ class UserInformation {
         this.dialog = false;
         this.x = 0;
         this.y = 0;
+        this.user = null;
     }
 
-    showDialog(){
+    showDialog(e, id){
+        e.preventDefault();
+        this.dialog = false;
+        this.x = e.clientX;
+        this.y = e.clientY;
         this.dialog = true;
+        if(this.user != null){
+            if(this.user.id !== id){
+                this.user = null;
+                this.getUserInformation(id);
+            }
+        }else{
+            this.getUserInformation(id);
+        }
+
+    }
+
+    getUserInformation(userID){
+        var userInfo = this;
+        var data = {
+            userID: userID
+        };
+
+        axios.post(
+            '/getUserInfo',
+            data
+        ).then(function (res) {
+            var data = res.data;
+            if(data){
+                userInfo.user = data;
+                userInfo.user.rgt_date = new Date(data.rgt_date);
+                userInfo.user.last_login_date = new Date(data.last_login_date);
+            }
+        }).catch(function (error) {
+            alert(error);
+        });
+    }
+
+    setUserID(id){
+        this.userID = id;
     }
 
     show (e) {
