@@ -69,8 +69,44 @@ exports.getAdditionalUserData = function(userId, callback){
 };
 
 exports.registBoard = function (id, data, callback) {
-    var sql = "INSERT INTO board (user_id, type, title, content) VALUES(?, ?, ?, ?)";
-    conn.query(sql, [id, data.type, data.title, JSON.stringify(data.content)], function(err, result){
+    // var sql = "INSERT INTO board (user_id, type, title, content) VALUES(?, ?, ?, ?)";
+
+    var argu = [];
+    var values = [];
+
+    argu.push("user_id");
+    values.push(id);
+
+    if("type" in data){
+        argu.push("type");
+        values.push(data.type);
+    }
+
+    if("title" in data){
+        argu.push("title");
+        values.push(data.title);
+    }
+
+    if("content" in data){
+        argu.push("content");
+        values.push(JSON.stringify(data.content));
+    }
+
+    if("graph" in data){
+        argu.push("graph");
+        values.push(data.graph);
+    }
+
+    var sql = "INSERT INTO board (" + argu.join() + ") VALUES(";
+    for(var i=0; i<argu.length; i++){
+        sql += "?";
+        if(i+1 < argu.length){
+            sql += ",";
+        }
+    }
+    sql += ")";
+
+    conn.query(sql, values, function(err, result){
         if(err){
             callback(false);
         }else{

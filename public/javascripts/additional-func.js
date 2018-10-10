@@ -118,7 +118,6 @@ class UserInformation {
         }else{
             this.getUserInformation(id);
         }
-
     }
 
     getUserInformation(userID){

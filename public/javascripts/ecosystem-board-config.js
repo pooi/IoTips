@@ -126,6 +126,9 @@ function init(init_user) {
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
             },
+            goRegist: function () {
+                window.location.href = "/board/regist?boardType=" + "ecosystem";
+            },
             // afterLoad: function(origin, destination, direction){
             //     console.log(origin, destination, direction);
             // }

@@ -337,6 +337,11 @@ function init(init_user, BOARD_TYPE) {
                         content: content,
                         type: this.boardType.type
                     };
+
+                    if(this.boardType.type === "ecosystem" && this.graphManager.graph !== null){
+                        data['graph'] = xml2json(this.graphManager.toXML());
+                    }
+
                     axios.post(
                         '/board/regist',
                         data
