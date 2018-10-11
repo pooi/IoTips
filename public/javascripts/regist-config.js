@@ -338,8 +338,24 @@ function init(init_user, BOARD_TYPE) {
                         type: this.boardType.type
                     };
 
-                    if(this.boardType.type === "ecosystem" && this.graphManager.graph !== null){
+                    if(this.graphManager.graph !== null){
                         data['graph'] = xml2json(this.graphManager.toXML());
+                    }
+
+                    if(this.products.length > 0){
+                        var dic_products = [];
+                        for(var i=0; i<this.products.length; i++){
+                            dic_products.push(this.products[i].toDic());
+                        }
+                        data['products'] = dic_products;
+                    }
+
+                    if(this.platforms.length > 0){
+                        var dic_platforms = [];
+                        for(var i=0; i<this.platforms.length; i++){
+                            dic_platforms.push(this.platforms[i].toDic());
+                        }
+                        data['platforms'] = dic_platforms;
                     }
 
                     axios.post(

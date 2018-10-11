@@ -49,6 +49,20 @@ class Platform{
         }
     }
 
+    toDic(){
+        return {
+            id: this.id,
+            title: this.title,
+            company: this.company,
+            urls: [this.url],
+            description: this.description,
+            image: this.img,
+            price: this.isFree ? 0 : this.price,
+            currency: this.isFree ? undefined : this.currency.currency,
+
+        };
+    }
+
 }
 
 class Product {
@@ -93,6 +107,20 @@ class Product {
             platform.addProduct(this);
         }
         this.selectedPlatform = [];
+    }
+
+    toDic(){
+        return {
+            id: this.id,
+            title: this.title,
+            company: this.company,
+            urls: [this.url],
+            description: this.description,
+            image: this.img,
+            price: this.isFree ? 0 : this.price,
+            currency: this.isFree ? undefined : this.currency.currency,
+
+        };
     }
 }
 

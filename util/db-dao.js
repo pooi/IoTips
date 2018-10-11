@@ -97,6 +97,15 @@ exports.registBoard = function (id, data, callback) {
         values.push(data.graph);
     }
 
+    var products = [];
+    var platforms = [];
+    if("products" in data){
+        products = data.products;
+    }
+    if("platforms" in data){
+        platforms = data.platforms;
+    }
+
     var sql = "INSERT INTO board (" + argu.join() + ") VALUES(";
     for(var i=0; i<argu.length; i++){
         sql += "?";
@@ -111,11 +120,58 @@ exports.registBoard = function (id, data, callback) {
             callback(false);
         }else{
             console.log(result);
-            callback(true);
+            var boardID = result.insertId;
+            if(products.length > 0 || platforms.length > 0){
+                saveProductsAndPlatforms(boardID, products, platforms, callback);
+            }else{
+                callback(true);
+            }
         }
     })
 
 };
+
+function saveProductsAndPlatforms(boardID, products, platforms, callback){
+    var product_sql = "INSERT INTO board_product(id, board_id, title, description, company, currency, price, image, urls) VALUES ?;";
+    var platform_sql = "INSERT INTO board_platform(id, board_id, title, description, company, currency, price, image, urls) VALUES ?;";
+
+    var sql = "";
+    var values = [];
+    if(products.length > 0){
+        sql += product_sql;
+        var product_values = [];
+        for(var i=0; i<products.length; i++){
+            var product = products[i];
+            var value = [];
+            value.push(product.id); value.push(boardID); value.push(product.title); value.push(product.description); value.push(product.company);
+            value.push(product.currency); value.push(product.price); value.push(product.image); value.push(JSON.stringify(product.urls));
+            product_values.push(value);
+        }
+        values.push(product_values);
+    }
+
+    if(platforms.length > 0){
+        sql += platform_sql;
+        var platform_values = [];
+        for(var i=0; i<platforms.length; i++){
+            var platform = platforms[i];
+            var value = [];
+            value.push(platform.id); value.push(boardID); value.push(platform.title); value.push(platform.description); value.push(platform.company);
+            value.push(platform.currency); value.push(platform.price); value.push(platform.image); value.push(JSON.stringify(platform.urls));
+            platform_values.push(value);
+        }
+        values.push(platform_values);
+    }
+
+    conn.query(sql, values, function(err, result){
+        if(err){
+            callback(false);
+        }else{
+            console.log(result);
+            callback(true);
+        }
+    })
+}
 
 exports.getBoardListData = function (type, page, callback) {
     var pageStep = 20;
