@@ -208,14 +208,22 @@ exports.getBoardDetailFromID = function (boardID, callback) {
         "LEFT OUTER JOIN ( " +
         "SELECT * FROM user " +
         "GROUP BY id) as B on(B.id = A.user_id) " +
-        "WHERE A.id=?;";
+        "WHERE A.id=?;" +
+        "select * from board_product where board_id=?;" +
+        "select * from board_platform where board_id=?;";
 
-    conn.query(sql, [boardID, boardID], function(err, results){
+    conn.query(sql, [boardID, boardID, boardID, boardID], function(err, results){
         if(err){
             callback(true, err);
         }else{
-            console.log(results[1][0]);
-            callback(false, results[1][0]);
+            // console.log(results[1][0]);
+            var data = {
+                result: results[1][0],
+                products: results[2],
+                platforms: results[3]
+            };
+            console.log(data);
+            callback(false, data);
         }
     })
 };

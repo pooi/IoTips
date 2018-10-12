@@ -329,7 +329,7 @@ function init(init_user, init_boardID) {
                     '/board/getDetail',
                     data
                 ).then(function (res) {
-                    var result = res.data;
+                    var result = res.data.result;
                     // console.log(result);
 
                     if(result.content != null){
@@ -369,6 +369,21 @@ function init(init_user, init_boardID) {
                     }
 
                     vue.result = result;
+
+                    var platforms = res.data.platforms;
+                    var products = res.data.products;
+
+                    for(var i=0; i<platforms.length; i++){
+                        var platform = new Platform();
+                        platform.fromDic(platforms[i]);
+                        vue.platforms.push(platform);
+                    }
+
+                    for(var i=0; i<products.length; i++){
+                        var product = new Product();
+                        product.fromDic(products[i]);
+                        vue.products.push(product);
+                    }
 
                     vue.getComments();
 
