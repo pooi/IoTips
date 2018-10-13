@@ -22,7 +22,7 @@ function init(init_user, BOARD_TYPE) {
 
             supporter: null,
             auth: new Auth(),
-            graphManager: new GraphManager("graph"),
+            graphManager: new GraphManager("graph", true),
             viewer: null,
 
             loadingProgress: false,

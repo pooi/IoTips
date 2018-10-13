@@ -24,7 +24,7 @@ function init(init_user, init_boardID) {
 
             supporter: null,
             auth: new Auth(),
-            graphManager: new GraphManager("graph"),
+            graphManager: new GraphManager("graph", false),
             userInfo: new UserInformation(),
 
             viewer: null,
@@ -330,7 +330,7 @@ function init(init_user, init_boardID) {
                     data
                 ).then(function (res) {
                     var result = res.data.result;
-                    // console.log(result);
+                    console.log(result);
 
                     if(result.content != null){
                         vue.content = json2html(JSON.parse(result.content));
@@ -386,6 +386,20 @@ function init(init_user, init_boardID) {
                     }
 
                     vue.getComments();
+
+                    if("graph" in result){
+                        if(result.graph != null){
+                            // var graph = JSON.parse(result.graph);
+                            // console.log(json2xml(graph));
+                            // vue.graphManager.makeFromXml(json2xml(graph));
+                            setTimeout(function () {
+                                // vue.graphManager = new GraphManager("graph");
+                                vue.graphManager.main();
+                                var graph = JSON.parse(result.graph);
+                                vue.graphManager.makeFromXml(json2xml(graph));
+                            }, 1000);
+                        }
+                    }
 
                 }).catch(function (error) {
                     alert(error);

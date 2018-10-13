@@ -664,7 +664,7 @@ class Auth {
 }
 
 class GraphManager {
-    constructor(id){
+    constructor(id, setDefault){
 
         this.zoomLevel = 0;
 
@@ -674,6 +674,8 @@ class GraphManager {
 
         this.addOffsetX = 30;
         this.addOffsetY = 30;
+
+        this.setDefault = setDefault;
 
 
         this.init();
@@ -948,10 +950,12 @@ class GraphManager {
 
 
 
-        var gm = this;
-        $( document ).ready( function () {
-            gm.main();
-        } );
+        if(this.setDefault) {
+            var gm = this;
+            $(document).ready(function () {
+                gm.main();
+            });
+        }
 
     }
 
@@ -961,6 +965,7 @@ class GraphManager {
 
         var container = document.getElementById(this.containerId);
         this.container = container;
+        console.log(container);
 
         // Checks if the browser is supported
         if (!mxClient.isBrowserSupported()) {
@@ -1528,7 +1533,10 @@ class GraphManager {
             this.graph = graph;
 
 
-            this.makeFromXml('<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="2" value="Hello," vertex="1" parent="1"><mxGeometry x="20" y="20" width="80" height="30" as="geometry"/></mxCell><mxCell id="3" value="World!" vertex="1" parent="1"><mxGeometry x="200" y="150" width="80" height="30" as="geometry"/></mxCell><mxCell id="4" value="" edge="1" parent="1" source="2" target="3"><mxGeometry relative="1" as="geometry"/></mxCell></root></mxGraphModel>');
+            if(this.setDefault){
+                this.makeFromXml('<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="2" value="Hello," vertex="1" parent="1"><mxGeometry x="20" y="20" width="80" height="30" as="geometry"/></mxCell><mxCell id="3" value="World!" vertex="1" parent="1"><mxGeometry x="200" y="150" width="80" height="30" as="geometry"/></mxCell><mxCell id="4" value="" edge="1" parent="1" source="2" target="3"><mxGeometry relative="1" as="geometry"/></mxCell></root></mxGraphModel>');
+            }
+
         }
 
     }

@@ -81,7 +81,8 @@ router.get('/ecosystem', function(req, res, next) {
         page = 1;
 
     var user = support.ensureAuthenticated(req);
-    res.render('ecosystem_board', { user: JSON.stringify(user), boardType: boardType, page: page });
+    // res.render('ecosystem_board', { user: JSON.stringify(user), boardType: boardType, page: page });
+    res.render('board', { user: JSON.stringify(user), title: "품평 게시판", boardType: boardType, page: page });
 });
 
 
