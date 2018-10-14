@@ -1299,229 +1299,226 @@ class GraphManager {
             }
 
 
+            if(this.setDefault) {
 
-            // Creates rubberband selection
-            var rubberband = new mxRubberband(graph);
+                // Creates rubberband selection
+                var rubberband = new mxRubberband(graph);
 
-            graph.popupMenuHandler.autoExpand = true;
+                graph.popupMenuHandler.autoExpand = true;
 
-            graph.popupMenuHandler.isSelectOnPopup = function (me) {
-                return mxEvent.isMouseEvent(me.getEvent());
-            };
+                graph.popupMenuHandler.isSelectOnPopup = function (me) {
+                    return mxEvent.isMouseEvent(me.getEvent());
+                };
 
-            // Installs context menu
-            graph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
-                menu.addItem('Add node', null, function () {
-                    console.log(menu, cell, evt);
-                    // var zl = gm.zoomLevel;
-                    // gm.setZoomLevel(0);
-                    var parent = graph.getDefaultParent();
-                    graph.getModel().beginUpdate();
-                    try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX , evt.layerY, 80, 30);
+                // Installs context menu
+                graph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
+                    menu.addItem('Add node', null, function () {
+                        console.log(menu, cell, evt);
+                        // var zl = gm.zoomLevel;
+                        // gm.setZoomLevel(0);
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 30);
+                        }
+                        finally {
+                            // Updates the display
+                            // gm.setZoomLevel(zl);
+                            graph.getModel().endUpdate();
+                        }
+                    });
+
+                    menu.addItem('Add circle node', null, function () {
+                        console.log(menu, cell, evt);
+                        // var zl = gm.zoomLevel;
+                        // gm.setZoomLevel(0);
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 40, 'shape=ellipse;perimeter=ellipsePerimeter');
+                        }
+                        finally {
+                            // Updates the display
+                            // gm.setZoomLevel(zl);
+                            graph.getModel().endUpdate();
+                        }
+                    });
+
+                    menu.addItem('Add rhombus node', null, function () {
+                        console.log(menu, cell, evt);
+                        // var zl = gm.zoomLevel;
+                        // gm.setZoomLevel(0);
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 100, 40, 'shape=rhombus;perimeter=rhombusPerimeter');
+                        }
+                        finally {
+                            // Updates the display
+                            // gm.setZoomLevel(zl);
+                            graph.getModel().endUpdate();
+                        }
+                    });
+
+                    var submenu1 = menu.addItem('More', null, null);
+                    menu.addItem('Subitem 1', null, function () {
+                        // alert('Subitem 1');
+                    }, submenu1);
+                    menu.addItem('Subitem 1', null, function () {
+                        // alert('Subitem 2');
+                    }, submenu1);
+
+
+                    if (cell !== null) {
+                        menu.addSeparator();
+
+                        menu.addItem("Edit", null, function () {
+                            // graph.removeCells([cell]);
+                            if (graph.isEnabled() && !graph.isSelectionEmpty()) {
+                                graph.startEditing();
+                            }
+                        });
+
+                        menu.addItem("Delete", null, function () {
+                            // graph.removeCells([cell]);
+                            if (graph.isEnabled() && !graph.isSelectionEmpty()) {
+                                graph.removeCells();
+                            }
+                        });
+
+                        menu.addSeparator();
+
+                        menu.addItem("Cut", null, function () {
+                            // graph.removeCells([cell]);
+                            if (graph.isEnabled() && !graph.isSelectionEmpty()) {
+
+                            }
+                        });
+
+                        menu.addItem("Copy", null, function () {
+                            // graph.removeCells([cell]);
+                            if (graph.isEnabled() && !graph.isSelectionEmpty()) {
+
+                            }
+                        });
+
+
                     }
-                    finally {
-                        // Updates the display
-                        // gm.setZoomLevel(zl);
-                        graph.getModel().endUpdate();
+                };
+
+                // Context menu trigger implementation depending on current selection state
+                // combined with support for normal popup trigger.
+                var cellSelected = false;
+                var selectionEmpty = false;
+                var menuShowing = false;
+
+                graph.fireMouseEvent = function (evtName, me, sender) {
+                    if (evtName == mxEvent.MOUSE_DOWN) {
+                        // For hit detection on edges
+                        me = this.updateMouseEvent(me);
+
+                        cellSelected = this.isCellSelected(me.getCell());
+                        selectionEmpty = this.isSelectionEmpty();
+                        menuShowing = graph.popupMenuHandler.isMenuShowing();
+
+                        // console.log(me.getCell());
+                    }
+
+                    mxGraph.prototype.fireMouseEvent.apply(this, arguments);
+                };
+
+                // Shows popup menu if cell was selected or selection was empty and background was clicked
+                graph.popupMenuHandler.mouseUp = function (sender, me) {
+                    this.popupTrigger = !graph.isEditing() && (this.popupTrigger || (!menuShowing &&
+                        !graph.isEditing() && !mxEvent.isMouseEvent(me.getEvent()) &&
+                        ((selectionEmpty && me.getCell() == null && graph.isSelectionEmpty()) ||
+                            (cellSelected && graph.isCellSelected(me.getCell())))));
+                    mxPopupMenuHandler.prototype.mouseUp.apply(this, arguments);
+                };
+
+                // Tap and hold on background starts rubberband for multiple selected
+                // cells the cell associated with the event is deselected
+                graph.addListener(mxEvent.TAP_AND_HOLD, function (sender, evt) {
+                    if (!mxEvent.isMultiTouchEvent(evt)) {
+                        var me = evt.getProperty('event');
+                        var cell = evt.getProperty('cell');
+
+                        if (cell == null) {
+                            var pt = mxUtils.convertPoint(this.container,
+                                mxEvent.getClientX(me), mxEvent.getClientY(me));
+                            rubberband.start(pt.x, pt.y);
+                        }
+                        else if (graph.getSelectionCount() > 1 && graph.isCellSelected(cell)) {
+                            graph.removeSelectionCell(cell);
+                        }
+
+                        // Blocks further processing of the event
+                        evt.consume();
                     }
                 });
 
-                menu.addItem('Add circle node', null, function () {
-                    console.log(menu, cell, evt);
-                    // var zl = gm.zoomLevel;
-                    // gm.setZoomLevel(0);
-                    var parent = graph.getDefaultParent();
-                    graph.getModel().beginUpdate();
-                    try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 40, 'shape=ellipse;perimeter=ellipsePerimeter');
-                    }
-                    finally {
-                        // Updates the display
-                        // gm.setZoomLevel(zl);
-                        graph.getModel().endUpdate();
-                    }
-                });
+                // Adds mouse wheel handling for zoom
+                // mxEvent.addMouseWheelListener(function (evt, up) {
+                //     if (up) {
+                //         graph.zoomIn();
+                //     }
+                //     else {
+                //         graph.zoomOut();
+                //     }
+                //
+                //     mxEvent.consume(evt);
+                // });
 
-                menu.addItem('Add rhombus node', null, function () {
-                    console.log(menu, cell, evt);
-                    // var zl = gm.zoomLevel;
-                    // gm.setZoomLevel(0);
-                    var parent = graph.getDefaultParent();
-                    graph.getModel().beginUpdate();
-                    try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 100, 40, 'shape=rhombus;perimeter=rhombusPerimeter');
-                    }
-                    finally {
-                        // Updates the display
-                        // gm.setZoomLevel(zl);
-                        graph.getModel().endUpdate();
-                    }
-                });
-
-                var submenu1 = menu.addItem('More', null, null);
-                menu.addItem('Subitem 1', null, function () {
-                    // alert('Subitem 1');
-                }, submenu1);
-                menu.addItem('Subitem 1', null, function () {
-                    // alert('Subitem 2');
-                }, submenu1);
+                // Gets the default parent for inserting new cells. This
+                // is normally the first child of the root (ie. layer 0).
 
 
+                // var parent = graph.getDefaultParent();
+                //
+                // // Adds cells to the model in a single step
+                // graph.getModel().beginUpdate();
+                // try {
+                //     var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
+                //     var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
+                //     var e1 = graph.insertEdge(parent, null, '', v1, v2);
+                // }
+                // finally {
+                //     // Updates the display
+                //     graph.getModel().endUpdate();
+                // }
 
+                // Disables new connections via "hotspot"
+                graph.connectionHandler.marker.isEnabled = function () {
+                    return this.graph.connectionHandler.first != null;
+                };
 
-                if(cell !== null){
-                    menu.addSeparator();
+                // Adds custom hit detection if native hit detection found no cell
+                graph.updateMouseEvent = function (me) {
+                    var me = mxGraph.prototype.updateMouseEvent.apply(this, arguments);
 
-                    menu.addItem("Edit", null, function () {
-                        // graph.removeCells([cell]);
-                        if (graph.isEnabled() && !graph.isSelectionEmpty())
-                        {
-                            graph.startEditing();
+                    if (me.getState() == null) {
+                        var cell = this.getCellAt(me.graphX, me.graphY);
+
+                        if (cell != null && this.isSwimlane(cell) && this.hitsSwimlaneContent(cell, me.graphX, me.graphY)) {
+                            cell = null;
                         }
-                    });
+                        else {
+                            me.state = this.view.getState(cell);
 
-                    menu.addItem("Delete", null, function () {
-                        // graph.removeCells([cell]);
-                        if (graph.isEnabled() && !graph.isSelectionEmpty())
-                        {
-                            graph.removeCells();
-                        }
-                    });
-
-                    menu.addSeparator();
-
-                    menu.addItem("Cut", null, function () {
-                        // graph.removeCells([cell]);
-                        if (graph.isEnabled() && !graph.isSelectionEmpty())
-                        {
-
-                        }
-                    });
-
-                    menu.addItem("Copy", null, function () {
-                        // graph.removeCells([cell]);
-                        if (graph.isEnabled() && !graph.isSelectionEmpty())
-                        {
-
-                        }
-                    });
-
-
-                }
-            };
-
-            // Context menu trigger implementation depending on current selection state
-            // combined with support for normal popup trigger.
-            var cellSelected = false;
-            var selectionEmpty = false;
-            var menuShowing = false;
-
-            graph.fireMouseEvent = function (evtName, me, sender) {
-                if (evtName == mxEvent.MOUSE_DOWN) {
-                    // For hit detection on edges
-                    me = this.updateMouseEvent(me);
-
-                    cellSelected = this.isCellSelected(me.getCell());
-                    selectionEmpty = this.isSelectionEmpty();
-                    menuShowing = graph.popupMenuHandler.isMenuShowing();
-
-                    // console.log(me.getCell());
-                }
-
-                mxGraph.prototype.fireMouseEvent.apply(this, arguments);
-            };
-
-            // Shows popup menu if cell was selected or selection was empty and background was clicked
-            graph.popupMenuHandler.mouseUp = function (sender, me) {
-                this.popupTrigger = !graph.isEditing() && (this.popupTrigger || (!menuShowing &&
-                    !graph.isEditing() && !mxEvent.isMouseEvent(me.getEvent()) &&
-                    ((selectionEmpty && me.getCell() == null && graph.isSelectionEmpty()) ||
-                        (cellSelected && graph.isCellSelected(me.getCell())))));
-                mxPopupMenuHandler.prototype.mouseUp.apply(this, arguments);
-            };
-
-            // Tap and hold on background starts rubberband for multiple selected
-            // cells the cell associated with the event is deselected
-            graph.addListener(mxEvent.TAP_AND_HOLD, function (sender, evt) {
-                if (!mxEvent.isMultiTouchEvent(evt)) {
-                    var me = evt.getProperty('event');
-                    var cell = evt.getProperty('cell');
-
-                    if (cell == null) {
-                        var pt = mxUtils.convertPoint(this.container,
-                            mxEvent.getClientX(me), mxEvent.getClientY(me));
-                        rubberband.start(pt.x, pt.y);
-                    }
-                    else if (graph.getSelectionCount() > 1 && graph.isCellSelected(cell)) {
-                        graph.removeSelectionCell(cell);
-                    }
-
-                    // Blocks further processing of the event
-                    evt.consume();
-                }
-            });
-
-            // Adds mouse wheel handling for zoom
-            // mxEvent.addMouseWheelListener(function (evt, up) {
-            //     if (up) {
-            //         graph.zoomIn();
-            //     }
-            //     else {
-            //         graph.zoomOut();
-            //     }
-            //
-            //     mxEvent.consume(evt);
-            // });
-
-            // Gets the default parent for inserting new cells. This
-            // is normally the first child of the root (ie. layer 0).
-
-
-            // var parent = graph.getDefaultParent();
-            //
-            // // Adds cells to the model in a single step
-            // graph.getModel().beginUpdate();
-            // try {
-            //     var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
-            //     var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
-            //     var e1 = graph.insertEdge(parent, null, '', v1, v2);
-            // }
-            // finally {
-            //     // Updates the display
-            //     graph.getModel().endUpdate();
-            // }
-
-            // Disables new connections via "hotspot"
-            graph.connectionHandler.marker.isEnabled = function () {
-                return this.graph.connectionHandler.first != null;
-            };
-
-            // Adds custom hit detection if native hit detection found no cell
-            graph.updateMouseEvent = function (me) {
-                var me = mxGraph.prototype.updateMouseEvent.apply(this, arguments);
-
-                if (me.getState() == null) {
-                    var cell = this.getCellAt(me.graphX, me.graphY);
-
-                    if (cell != null && this.isSwimlane(cell) && this.hitsSwimlaneContent(cell, me.graphX, me.graphY)) {
-                        cell = null;
-                    }
-                    else {
-                        me.state = this.view.getState(cell);
-
-                        if (me.state != null && me.state.shape != null) {
-                            this.container.style.cursor = me.state.shape.node.style.cursor;
+                            if (me.state != null && me.state.shape != null) {
+                                this.container.style.cursor = me.state.shape.node.style.cursor;
+                            }
                         }
                     }
-                }
 
-                if (me.getState() == null) {
-                    this.container.style.cursor = 'default';
-                }
+                    if (me.getState() == null) {
+                        this.container.style.cursor = 'default';
+                    }
 
-                return me;
-            };
+                    return me;
+                };
+
+            }
 
             var style = [];
             style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
@@ -1535,6 +1532,8 @@ class GraphManager {
 
             if(this.setDefault){
                 this.makeFromXml('<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="2" value="Hello," vertex="1" parent="1"><mxGeometry x="20" y="20" width="80" height="30" as="geometry"/></mxCell><mxCell id="3" value="World!" vertex="1" parent="1"><mxGeometry x="200" y="150" width="80" height="30" as="geometry"/></mxCell><mxCell id="4" value="" edge="1" parent="1" source="2" target="3"><mxGeometry relative="1" as="geometry"/></mxCell></root></mxGraphModel>');
+            }else{
+                this.graph.setEnabled(false);
             }
 
         }

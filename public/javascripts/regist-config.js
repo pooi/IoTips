@@ -59,6 +59,7 @@ function init(init_user, BOARD_TYPE) {
             },
 
             content: null,
+            tags: [],
 
             capabilities: [
                 {

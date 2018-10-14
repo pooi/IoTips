@@ -156,6 +156,12 @@ block content
                                                         .display-2(style="font-weight: 100;") +
 
 
+                                        v-card-text.py-2.mt-4
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Tags
+                                            v-layout.mt-2(row, wrap, justify-center, align-center)
+                                                v-combobox(v-model='tags', placeholder='Please enter tags', multiple, chips, hide-details, single-line)
+
+
 
                                         v-card-text.py-2.mt-4
                                             v-layout(align-center)
