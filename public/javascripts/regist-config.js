@@ -60,6 +60,7 @@ function init(init_user, BOARD_TYPE) {
 
             content: null,
             tags: [],
+            sugTags: ["1인가구", "반려견", "신혼집", "초보자"],
 
             capabilities: [
                 {
@@ -153,6 +154,15 @@ function init(init_user, BOARD_TYPE) {
             },
             onEditorReady(editor) {
                 console.log('editor ready!');//, editor)
+            },
+
+            changeSelectedTags(tag) {
+                if (this.tags.includes(tag) > 0) {
+                    this.tags.splice(this.tags.indexOf(tag), 1);
+                } else {
+                    this.tags.push(tag);
+                }
+                // console.log(this.selectedSuggestTag);
             },
 
             addCapability: function () {
