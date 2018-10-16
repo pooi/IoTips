@@ -369,6 +369,10 @@ function init(init_user, BOARD_TYPE) {
                         data['platforms'] = dic_platforms;
                     }
 
+                    if(this.tags.length > 0){
+                        data['tags'] = this.tags;
+                    }
+
                     axios.post(
                         '/board/regist',
                         data

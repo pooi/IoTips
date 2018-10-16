@@ -368,6 +368,10 @@ function init(init_user, init_boardID) {
                         }
                     }
 
+                    if("tags" in result){
+                        result.tags = JSON.parse(result.tags);
+                    }
+
                     vue.result = result;
 
                     var platforms = res.data.platforms;

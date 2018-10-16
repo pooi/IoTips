@@ -97,6 +97,11 @@ exports.registBoard = function (id, data, callback) {
         values.push(data.graph);
     }
 
+    if("tags" in data){
+        argu.push("tags");
+        values.push(JSON.stringify(data.tags));
+    }
+
     var products = [];
     var platforms = [];
     if("products" in data){
