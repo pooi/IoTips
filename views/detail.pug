@@ -44,7 +44,7 @@ block content
 
                         v-card-text.py-0.small-caption
                             v-layout.px-0.py-2.grey.lighten-4(row, wrap, align-center style="font-weight: 300;")
-                                .text-xs-left.mx-2
+                                .text-xs-left.mx-2(@click="userInfo.showDialog($event, result.user_id)")
                                     strong {{ result.nickname }}
                                     | 님
                                 v-spacer
@@ -55,11 +55,17 @@ block content
 
 
                         v-card-text.py-0.small-caption
-                            v-layout.px-0.py-2(row, wrap, align-center style="font-weight: 300;")
-                                .text-xs-left.px-2
+                            v-layout.px-2.py-2(row, wrap, align-center style="font-weight: 300;")
+                                .text-xs-left.pr-2
                                     v-icon.caption.mr-1 access_time
                                     | {{result.rgt_date.toLocaleString()}}
                                 v-spacer
+                                v-btn.elevation-0.ma-0.small-caption.py-1(color="grey lighten-1", dark, flat, small, icon, style="min-width: 10px !important; height: fit-content;")
+                                    v-icon.caption(dark) thumb_up
+                                .caption 20
+                                v-btn.elevation-0.ma-0.small-caption.py-1(color="grey lighten-1", dark, flat, icon, small, style="min-width: 10px !important; height: fit-content;")
+                                    v-icon.caption(dark) thumb_down
+                                .caption 5
 
                         v-card-text.py-0
                             v-divider.my-0
@@ -70,7 +76,7 @@ block content
 
                         v-card-text.py-2.mt-4(v-show="graphManager.graph !== null")
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") 구성도
-                            v-card.my-3.dal-card-blue(hover, raised)
+                            v-card.my-3.dal-card(hover, raised)
                                 //v-card-media.pa-0(height="400px")
                                 v-card-actions.py-1.px-2.grey.lighten-5(style="overflow: hidden;")
                                     //v-btn.mx-0(icon, flat, color="grey ", @click="graphManager.toXML()")
@@ -121,16 +127,18 @@ block content
 
 
 
-                        v-card-text.text-xs-center.pt-0.pb-3.mt-5
-                            v-btn.elevation-0.ma-0.mr-1(color="red darken-1", dark, small)
-                                v-icon.pr-1.subheading(dark) error_outline
-                                | 신고
-                            v-btn.elevation-0.ma-0.mr-1(color="indigo lighten-1", dark, small)
-                                v-icon.pr-1.subheading(dark) bookmark
+                        v-card-text.pt-0.pb-2.mt-5.text-xs-center
+                            v-btn.elevation-0.ma-0.mt-2(color="red darken-1", dark, small, style="min-width: 10px !important;", v-if="graphManager.graph !== null")
+                                v-icon.pr-1.subheading(dark, v-if="!$vuetify.breakpoint.xsOnly") trending_up
+                                | 구성도 가져오기
+                            v-btn.elevation-0.ma-0.mt-2.logo_blue( dark, small, style="min-width: 10px !important;")
+                                v-icon.pr-1.subheading(dark, v-if="!$vuetify.breakpoint.xsOnly") bookmark
                                 | 스크랩
-                            v-btn.elevation-0.ma-0(color="indigo lighten-1", dark, small)
-                                v-icon.pr-1.subheading(dark) bubble_chart
+                            v-btn.elevation-0.ma-0.mt-2.logo_blue( dark, small, style="min-width: 10px !important;")
+                                v-icon.pr-1.subheading(dark, v-if="!$vuetify.breakpoint.xsOnly") bubble_chart
                                 | 공유
+
+
 
 
 
@@ -138,7 +146,7 @@ block content
                             v-divider.my-0
 
 
-                        v-card-text.mt-3
+                        v-card-text.mt-3.pb-5
                             v-layout(row, wrap, :class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-4'", v-if="comments.length > 0 && !commentLoading")
                                 .headline(style="font-weight: 700;") {{comments.length}} Comment{{ comments.length > 1 ? "s":"" }}
                                 v-card-text.pa-0.mt-2
@@ -175,7 +183,7 @@ block content
                                                         v-icon.subheading close
 
                                         v-textarea.ml-2.mr-3.py-0.my-0.no-padding-text-field(ref="area_comment", :hide-details="tempComment === null || tempComment.length == 0 || (tempComment.length >= 2 && tempComment.length <= 200)", full-width, required, :rules="[supporter.rules.counter_2, supporter.rules.counter_200]" :placeholder='auth.user === null ? "로그인이 필요합니다." : "댓글을 입력해주세요."', v-model="tempComment", :disabled="auth.user === null || commentSubmitProgress")
-                                        v-btn.pa-0.ma-0.elevation-0(v-if="!commentSubmitProgress", block, color="indigo lighten-1", small, dark, @click="submitComment()", submit, :disabled="auth.user === null") 등록
+                                        v-btn.pa-0.ma-0.elevation-0.logo_blue(v-if="!commentSubmitProgress", block, small, dark, @click="submitComment()", submit, :disabled="auth.user === null") 등록
 
                             //v-card-text.pa-0(:class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-3'")
 

@@ -12,6 +12,10 @@
     /*padding-bottom: 48px !important;*/
 }
 
+.logo_blue {
+    background: #2DA5E8 !important;
+}
+
 /* CUSTOM */
 .image-section {
     background-image: url("/images/bg_index.jpg");

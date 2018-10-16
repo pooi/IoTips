@@ -131,7 +131,7 @@ block content
                                                         .display-2(style="font-weight: 100;") +
 
 
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'|| boardType.type === 'review'")
                                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Platforms
                                             v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="platforms.length === 0")
                                                 v-btn(flat, color="blue darken-3", @click="resetPlatformForm()") 사용된 플랫폼 추가

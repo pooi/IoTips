@@ -1,6 +1,7 @@
 v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: rgba(0,0,0,0.3);", height="80")
     v-toolbar-side-icon(@click="supporter.drawer = !supporter.drawer")
-    v-toolbar-title.ml-2(onclick="window.location.href='/'") IoTips
+    //v-toolbar-title.ml-2(onclick="window.location.href='/'", style="cursor: pointer")
+    img(src="/images/logo/iotips_dark.png", height="18px", onclick="window.location.href='/'", style="cursor: pointer")
     v-spacer
 
     //v-menu(bottom, left, v-if="$vuetify.breakpoint.xsOnly ")
