@@ -70,6 +70,14 @@ block content
                         v-card-text.py-0
                             v-divider.my-0
 
+                        v-card-text.pt-2.pb-3(v-if="result.tags !== null && result.tags.length > 0")
+                            v-layout.px-2.grey--text(row, wrap)
+                                template(v-for="(tag, index) in result.tags", :key="index")
+                                    .caption.mr-2 {{"#" + tag}}
+
+                        //v-card-text.py-0
+                        //    v-divider.my-0
+
                         v-card-text.pt-2.pb-3
                             quill-editor.no-border-quill-editor(:content='content', :options='editorOption', readonly, readOnly, disabled)
 
