@@ -5,6 +5,7 @@ v-dialog.md6(v-model='auth.loginDialog',  scrollable, max-width='500px', :persis
         v-divider.py-0.my-0
         v-card-text.text-xs-center
             .google-login-btn(@click="auth.loginGoogle()")
+            .kakao-login-btn.mt-1(@click="auth.loginKakao()")
         //v-card-text.text-xs-center
         //    v-btn(flat, @click="auth.loginGoogle()") Login with google
         //v-card-text.text-xs-center
@@ -39,7 +40,7 @@ v-dialog.md6(v-model='auth.detailDialog',  scrollable, max-width='500px')
                         v-list-tile-sub-title Nickname
                         v-list-tile-title {{ auth.user.nickname }}
 
-                v-list-tile(avatar='', v-if="auth.user.email != null")
+                v-list-tile(avatar='', v-if="auth.user.email != null && auth.user.email !== ''")
                     v-list-tile-content
                         v-list-tile-sub-title Email
                         v-list-tile-title {{ auth.user.email }}
@@ -52,12 +53,12 @@ v-dialog.md6(v-model='auth.detailDialog',  scrollable, max-width='500px')
                 v-list-tile(avatar='', v-if="auth.user.rgt_date != null")
                     v-list-tile-content
                         v-list-tile-sub-title 가입일
-                        v-list-tile-title {{ auth.user.rgt_date }}
+                        v-list-tile-title {{ auth.user.rgt_date.toLocaleString() }}
 
                 v-list-tile(avatar='', v-if="auth.user.last_login_date != null")
                     v-list-tile-content
                         v-list-tile-sub-title 마지막 로그인
-                        v-list-tile-title {{ auth.user.last_login_date }}
+                        v-list-tile-title {{ auth.user.last_login_date.toLocaleString() }}
 
                 v-list-tile-action.mt-4
                     v-btn(color='red', flat, @click="auth.logout();", style="margin: auto;") Logout

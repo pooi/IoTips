@@ -84,6 +84,24 @@
     transition: .5s ease;
 }
 
+.kakao-login-btn {
+    background-image: url('/images/auth/kakao_account_login_btn_medium_narrow.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+
+    height: 50px;
+    width: 208px;
+    transition: .5s ease;
+
+    margin: auto;
+}
+
+.kakao-login-btn:hover {
+    background-image: url('/images/auth/kakao_account_login_btn_medium_narrow_ov.png');
+    transition: .5s ease;
+}
+
 .platform-gradient-background {
     background-image: linear-gradient(to bottom right, rgba(140, 198, 63, 1), rgba(0, 146, 69, 1));
 }

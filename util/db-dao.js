@@ -12,7 +12,7 @@ exports.isAlreadyRegisteredUser = function (userId, callback) {
     });
 };
 
-exports.createNewUser = function (userId, name, email, photo, provider, callback) {
+exports.createNewUser = function (userId, name, nickname, email, photo, provider, callback) {
 
     var sql = "SELECT * FROM user WHERE user_id=?;";
     conn.query(sql, [userId], function(err, results) {
@@ -34,7 +34,10 @@ exports.createNewUser = function (userId, name, email, photo, provider, callback
                 });
             }else{ // new user
                 console.log("New user");
-                var nickname = email.split("@")[0] + "-" + provider[0];
+                if(nickname === null){
+                    nickname = email.split("@")[0] + "-" + provider[0];
+                }
+                // var nickname = email.split("@")[0] + "-" + provider[0];
                 var sql = "INSERT user(user_id, name, nickname, email, photo, provider) VALUES(?, ?, ?, ?, ?, ?);";
                 conn.query(sql, [userId, name, nickname, email, photo, provider], function(err, results) {
                     if (err) {
@@ -61,6 +64,7 @@ exports.getAdditionalUserData = function(userId, callback){
             var result = results[0];
             returnData['db_id'] = result.id;
             returnData['nickname'] = result.nickname;
+            returnData['email'] = result.email;
             returnData['rgt_date'] = result.rgt_date.toJSON();
             returnData['last_login_date'] = result.last_login_date.toJSON();
             callback(returnData);
