@@ -42,15 +42,15 @@ v-layout
 
         v-divider
         v-card-text.pa-0.mt-2
-            v-layout.px-4.py-4(row, wrap, style="border-bottom: .5px solid rgba(255,255,255,.1) !important;", v-if="!supporter.isHomePage()")
-                v-flex.xs5
-                    v-list.no-padding-list.pa-0
-                        v-list-tile
-                            v-list-tile-title.headline.blue--text.text--lighten-1(style="height: fit-content;") Home
-                v-flex.xs7
-                    v-list.no-padding-list.pa-0
-                        v-list-tile(@click='supporter.movePage("/")')
-                            v-list-tile-title.title.pl-2(style="height: fit-content; font-weight:100;") 홈
+            //v-layout.px-4.py-4(row, wrap, style="border-bottom: .5px solid rgba(255,255,255,.1) !important;", v-if="!supporter.isHomePage()")
+            //    v-flex.xs5
+            //        v-list.no-padding-list.pa-0
+            //            v-list-tile
+            //                v-list-tile-title.headline.blue--text.text--lighten-1(style="height: fit-content;") Home
+            //    v-flex.xs7
+            //        v-list.no-padding-list.pa-0
+            //            v-list-tile(@click='supporter.movePage("/")')
+            //                v-list-tile-title.title.pl-2(style="height: fit-content; font-weight:100;") 홈
 
             v-layout.px-4.py-4(row, wrap, v-for='item in supporter.menus', :key='item.title', style="border-bottom: .5px solid rgba(255,255,255,.1) !important;")
                 v-flex.xs5

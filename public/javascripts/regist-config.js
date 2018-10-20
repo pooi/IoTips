@@ -62,6 +62,11 @@ function init(init_user, BOARD_TYPE) {
             tags: [],
             sugTags: ["1인가구", "반려견", "신혼집", "초보자"],
 
+            CAPABILITY: null,
+            capabilityLoading: false,
+            addCapabilityDialog: false,
+            // tempCapabilities: null,
+            totalCapabilities: null,
             capabilities: [
                 {
                     title: "Button",
@@ -72,6 +77,7 @@ function init(init_user, BOARD_TYPE) {
                     component: "switch"
                 },
             ],
+
             platforms: [],
             addPlatformDialog: false,
             choosePlatformImageDialog: false,
@@ -165,11 +171,65 @@ function init(init_user, BOARD_TYPE) {
                 // console.log(this.selectedSuggestTag);
             },
 
-            addCapability: function () {
-                this.capabilities.push({
-                    title: "Button",
-                    component: "switch"
-                })
+            calcTotalCapabilities: function(){
+                if(this.totalCapabilities !== null && this.totalCapabilities.length > 0){
+                    this.totalCapabilities = JSON.parse(JSON.stringify(this.CAPABILITY));
+                    for(var i=0; i<this.totalCapabilities.length; i++){
+                        this.totalCapabilities[i].check = false;
+                    }
+                    for(var i=0; i<this.products.length; i++){
+                        var product = this.products[i];
+                        if(product.capabilities !== null && product.capabilities.length > 0){
+                            for(var j=0; j<product.capabilities.length; j++){
+                                if(product.capabilities.check){
+                                    this.totalCapabilities[i].check = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            resetCapabilityForm: function () {
+                if(this.CAPABILITY === null){
+                    this.getCapabilityList()
+                }else{
+                    // this.tempCapabilities = [];
+                    for(var i=0; i<this.CAPABILITY.length; i++){
+                        this.CAPABILITY[i]['check'] = false;
+                        // var data = this.CAPABILITY[i];
+                        // data['check'] = false;
+                        // this.tempCapabilities.push(data);
+                    }
+                }
+
+                this.addCapabilityDialog = true;
+                // this.capabilities.push({
+                //     title: "Button",
+                //     component: "switch"
+                // })
+            },
+            addProductCapability: function () {
+                // if(this.tempCapabilities !== null && this.tempCapabilities.length >0){
+                //     for(var i=0; i<this.tempCapabilities.length; i++){
+                //         var capability = this.tempCapabilities[i];
+                //         if(capability.check){
+                //             this.capabilities.push({
+                //                 title: capability.capability,
+                //                 component: "switch"
+                //             })
+                //         }
+                //     }
+                // }
+                if(this.tempProduct !== null){
+                    this.tempProduct.capabilities = JSON.parse(JSON.stringify( this.CAPABILITY ));
+                }
+                this.addCapabilityDialog = false;
+                // this.tempCapabilities = null;
+
+                // this.capabilities.push({
+                //     title: "Button",
+                //     component: "switch"
+                // })
             },
             removeCapability: function (index) {
                 if(index < this.capabilities.length){
@@ -240,6 +300,7 @@ function init(init_user, BOARD_TYPE) {
                     this.products.push(this.tempProduct);
                     this.graphManager.addNode(this.tempProduct.title, this.tempProduct.id);
                     this.addProductDialog = false;
+                    this.calcTotalCapabilities();
                 }
 
             },
@@ -249,6 +310,7 @@ function init(init_user, BOARD_TYPE) {
                         this.platforms[i].deleteProduct(this.products[index]);
                     }
                     this.products.splice(index, 1);
+                    this.calcTotalCapabilities();
                 }
             },
             removeProductFromDetail: function(){
@@ -290,6 +352,36 @@ function init(init_user, BOARD_TYPE) {
                 }, 500);
 
                 this.detailProductDialog = true;
+            },
+
+            getCapabilityList: function(){
+                this.capabilityLoading = true;
+
+                var data = {};
+                axios.post(
+                    '/getCapabilities',
+                    data
+                ).then(function (res) {
+                    var data = res.data;
+                    // console.log(data);
+
+                    vue.CAPABILITY = data;
+                    for(var i=0; i<vue.CAPABILITY.length; i++){
+                        vue.CAPABILITY[i]['check'] = false;
+                    }
+                    vue.totalCapabilities = JSON.parse(JSON.stringify( vue.CAPABILITY ));
+                    vue.capabilityLoading = false;
+
+                    // vue.tempCapabilities = [];
+                    // for(var i=0; i<vue.CAPABILITY.length; i++){
+                    //     var data = vue.CAPABILITY[i];
+                    //     data['check'] = false;
+                    //     vue.tempCapabilities.push(data);
+                    // }
+
+                }).catch(function (error) {
+                    alert(error);
+                });
             },
 
             parsingURL: function (type) {

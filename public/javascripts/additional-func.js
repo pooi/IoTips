@@ -256,7 +256,7 @@ class Supporter {
                 "href" : "/",
                 "submenu" : [
                     {
-                        "title" : "구성도",
+                        "title" : "구성",
                         "href" : "/"
                     },
                    {

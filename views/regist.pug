@@ -89,21 +89,26 @@ block content
 
                                         v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
                                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
-                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="capabilities.length === 0")
-                                                v-btn(flat, color="blue darken-3", @click="addCapability()") 사용된 Capability 추가
-                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
+                                            //v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="capabilities.length === 0")
+                                            //    v-btn(flat, color="blue darken-3", @click="resetCapabilityForm()") 사용된 Capability 추가
+                                            //v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
                                                 //v-layout(xs12, wrap)
                                                     //v-flex(v-for='capability in capabilities', d-inline-flex)
-                                                template(v-for="(capa, index) in capabilities", :key="index")
-                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
-                                                        v-icon(slot='badge', dark='', small='', @click="removeCapability(index)") close
-                                                        v-card.dal-small-card(hover, raised, :width="100")
-                                                            v-card-media.white--text(height='75px', :src='"/images/capabilities/" + capa.component + ".png"')
-                                                            v-card-text.py-1.text-xs-center {{ capa.title }} {{ index }}
+                                                //template(v-for="(capa, index) in capabilities", :key="index")
+                                                //    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
+                                                //        v-icon(slot='badge', dark='', small='', @click="removeCapability(index)") close
+                                                //        v-card.dal-small-card(hover, raised, :width="100")
+                                                //            v-card-media.white--text(height='75px', :src='"/images/capabilities/" + capa.component + ".png"')
+                                                //            v-card-text.py-1.text-xs-center {{ capa.title }} {{ index }}
+                                            v-layout.mt-2(row, wrap, justify-center, align-top)
+                                                template(v-for="(capa, index) in totalCapabilities", :key="index" v-if="capa.check")
+                                                    v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;")
+                                                        v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
+                                                        v-card-text.py-1.text-xs-center {{ capa.capability }}
 
-                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
-                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="addCapability()")
-                                                        .display-2(style="font-weight: 100;") +
+                                                //v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
+                                                //    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetCapabilityForm()")
+                                                //        .display-2(style="font-weight: 100;") +
 
 
                                         v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' || boardType.type === 'review'" )
@@ -176,6 +181,33 @@ block content
                                                     v-btn(color="red darken-1", dark, @click="submit()") 등록
 
 
+    v-dialog.md6(v-model='addCapabilityDialog', scrollable, max-width='500px')
+        v-card
+            v-card-title.title Select Capability
+            v-divider.py-0.my-0
+
+            v-card-text.py-2(v-if="CAPABILITY !== null && CAPABILITY.length > 0")
+                v-list.px-0(subheader, two-line)
+                    v-list-tile(v-for="(capability, index) in CAPABILITY", :key="index", @click='')
+                        v-list-tile-action
+                            v-checkbox(v-model='capability.check', color="green darken-1")
+                        v-list-tile-content(@click='capability.check = !capability.check')
+                            v-list-tile-title {{capability.capability}}
+                            v-list-tile-sub-title {{capability.description}}
+
+            v-card-text.py-2(v-else)
+                v-progress-circular(indeterminate='', color='green')
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                //v-btn(color='error', flat, @click="addCapability()") Clear
+                v-spacer
+                v-btn(color='success', flat, @click.native="addCapabilityDialog = false") 닫기
+                v-btn(color='success', flat, @click="addProductCapability()") 추가
+
+
+
     v-dialog.md6(v-model='addProductDialog', scrollable, max-width='500px')
         v-form(ref="product_form", style="width: 100%;")
             v-card(v-if="tempProduct !== null")
@@ -221,6 +253,22 @@ block content
                                         span(v-else) Change Image
                                 //v-card(flat, tile, v-if="tempProduct.img !== null")
                                 //    v-card-media(:src='tempProduct.img', height='150px')
+
+                        v-card-text.py-2.mt-3.px-0
+                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
+                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="tempProduct.capabilities.length === 0")
+                                v-btn(flat, color="green darken-1", @click="resetCapabilityForm()") Capability 선택
+                            v-layout.mt-2(row, wrap, justify-center, align-top, v-else)
+                                template(v-for="(capa, index) in tempProduct.capabilities", :key="index" v-if="capa.check")
+                                    v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;")
+                                        v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
+                                        v-card-text.py-1.text-xs-center {{ capa.capability }}
+                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="tempProduct.capabilities.length !== 0")
+                                v-btn(flat, color="blue darken-3", @click="addCapabilityDialog = true") Capability 편집
+
+                                //v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
+                                //    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetCapabilityForm()")
+                                //        .display-2(style="font-weight: 100;") +
 
                         v-card-text.py-2.mt-3.px-0(v-if="platforms.length > 0")
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Work with
@@ -391,6 +439,14 @@ block content
                         v-layout(row, wrap, align-center, justify-center)
                             //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
                             img#detailProductImg(:src="detailProduct.img", style="max-width: 80%; max-height: 200px;")
+
+                    v-card-text.py-2.mt-3.px-0(v-if="detailProduct.capabilities.length > 0")
+                        span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
+                        v-layout.mt-2(row, wrap, justify-center, align-top)
+                            template(v-for="(capa, index) in detailProduct.capabilities", :key="index" v-if="capa.check")
+                                v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;")
+                                    v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
+                                    v-card-text.py-1.text-xs-center {{ capa.capability }}
 
                     v-card-text.py-2.mt-3.px-0
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") URL

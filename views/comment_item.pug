@@ -10,7 +10,7 @@ template(v-if="comment !== null")
         v-list.pa-0(style="background: none !important;" )
             v-list-tile.pa-0(avatar='')
                 v-list-tile-avatar(@click="userInfo.showDialog($event, comment.user_id)")
-                    img(:src='comment.user_photo', alt='Avatar', style="border-radius: 35% !important;")
+                    img(:src='comment.user_photo', alt='Avatar', style="border-radius: 35% !important; object-fit: cover;")
                 v-list-tile-content
                     v-list-tile-title.body-1(@click="userInfo.showDialog($event, comment.user_id)") {{ comment.nickname }}
                     v-list-tile-sub-title.small-caption.grey--text {{comment.rgt_date.toLocaleString()}}

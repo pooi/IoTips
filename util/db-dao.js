@@ -287,3 +287,15 @@ exports.getUserInformation = function (userID, callback) {
         }
     })
 };
+
+exports.getCapabilities = function (callback) {
+    var sql = "SELECT * FROM capability";
+
+    conn.query(sql, [], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            callback(false, results);
+        }
+    })
+};
