@@ -66,7 +66,7 @@ function init(init_user, BOARD_TYPE) {
             capabilityLoading: false,
             addCapabilityDialog: false,
             // tempCapabilities: null,
-            totalCapabilities: null,
+            // totalCapabilities: null,
             capabilities: [
                 {
                     title: "Button",
@@ -172,22 +172,40 @@ function init(init_user, BOARD_TYPE) {
             },
 
             calcTotalCapabilities: function(){
-                if(this.totalCapabilities !== null && this.totalCapabilities.length > 0){
-                    this.totalCapabilities = JSON.parse(JSON.stringify(this.CAPABILITY));
-                    for(var i=0; i<this.totalCapabilities.length; i++){
-                        this.totalCapabilities[i].check = false;
-                    }
-                    for(var i=0; i<this.products.length; i++){
-                        var product = this.products[i];
-                        if(product.capabilities !== null && product.capabilities.length > 0){
-                            for(var j=0; j<product.capabilities.length; j++){
-                                if(product.capabilities.check){
-                                    this.totalCapabilities[i].check = true;
-                                }
-                            }
-                        }
-                    }
-                }
+                // if(this.totalCapabilities !== null && this.totalCapabilities.length > 0){
+                //     this.totalCapabilities = JSON.parse(JSON.stringify(this.CAPABILITY));
+                //     for(var i=0; i<this.totalCapabilities.length; i++){
+                //         this.totalCapabilities[i].check = false;
+                //     }
+                //     for(var i=0; i<this.products.length; i++){
+                //         var product = this.products[i];
+                //         if(product.capabilities !== null && product.capabilities.length > 0){
+                //             for(var j=0; j<product.capabilities.length; j++){
+                //                 if(product.capabilities.check){
+                //                     this.totalCapabilities[i].check = true;
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+                // var capabilities = null;
+                // if(this.CAPABILITY !== null){
+                //     capabilities = JSON.parse(JSON.stringify(this.CAPABILITY));
+                //     for(var i=0; i<capabilities.length; i++){
+                //         capabilities[i].check = false;
+                //     }
+                //     for(var i=0; i<this.products.length; i++){
+                //         var product = this.products[i];
+                //         if(product.capabilities !== null && product.capabilities.length > 0){
+                //             for(var j=0; j<product.capabilities.length; j++){
+                //                 if(product.capabilities[j].check){
+                //                     capabilities[j].check = true;
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+                // this.totalCapabilities = capabilities;
             },
             resetCapabilityForm: function () {
                 if(this.CAPABILITY === null){
@@ -300,7 +318,7 @@ function init(init_user, BOARD_TYPE) {
                     this.products.push(this.tempProduct);
                     this.graphManager.addNode(this.tempProduct.title, this.tempProduct.id);
                     this.addProductDialog = false;
-                    this.calcTotalCapabilities();
+                    // this.calcTotalCapabilities();
                 }
 
             },
@@ -310,7 +328,7 @@ function init(init_user, BOARD_TYPE) {
                         this.platforms[i].deleteProduct(this.products[index]);
                     }
                     this.products.splice(index, 1);
-                    this.calcTotalCapabilities();
+                    // this.calcTotalCapabilities();
                 }
             },
             removeProductFromDetail: function(){
@@ -564,6 +582,34 @@ function init(init_user, BOARD_TYPE) {
             editor() {
                 return this.$refs.myTextEditor.quill
             },
+            totalCapabilities: function () {
+                var capabilities = null;
+                if(this.CAPABILITY !== null){
+                    capabilities = JSON.parse(JSON.stringify(this.CAPABILITY));
+                    for(var i=0; i<capabilities.length; i++){
+                        capabilities[i].check = false;
+                    }
+
+                    var haveCapa = false;
+                    for(var i=0; i<this.products.length; i++){
+                        var product = this.products[i];
+                        if(product.capabilities !== null && product.capabilities.length > 0){
+                            for(var j=0; j<product.capabilities.length; j++){
+                                if(product.capabilities[j].check){
+                                    haveCapa = true;
+                                    capabilities[j].check = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if(!haveCapa){
+                        capabilities = null;
+                    }
+                }
+
+                return capabilities
+            }
             // contentCode() {
             //     return hljs.highlightAuto(this.content).value
             // }

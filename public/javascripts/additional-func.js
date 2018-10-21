@@ -92,7 +92,7 @@ class Product {
         this.description = null;
         this.img = null;
 
-        this.isFree = true;
+        this.isFree = false;
         this.price = null;
         this.currencies = CURRENCIES;
         this.currency = this.currencies[0];
