@@ -189,7 +189,7 @@ block content
 
             v-card-text.py-2.px-0(v-if="CAPABILITY !== null && CAPABILITY.length > 0")
                 v-list.px-0(subheader, two-line)
-                    v-list-tile(v-for="(capability, index) in CAPABILITY", :key="index", avatar)
+                    v-list-tile(v-for="(capability, index) in CAPABILITY", :key="index", avatar, @click='')
                         v-list-tile-action
                             v-checkbox(v-model='capability.check', color="green darken-1")
                         v-list-tile-content(@click='capability.check = !capability.check')
