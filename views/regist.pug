@@ -102,9 +102,10 @@ block content
                                                 //            v-card-text.py-1.text-xs-center {{ capa.title }} {{ index }}
                                             v-layout.mt-2(row, wrap, justify-center, align-top)
                                                 template(v-for="(capa, index) in totalCapabilities", :key="index" v-if="capa.check")
-                                                    v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;")
-                                                        v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
-                                                        v-card-text.py-1.text-xs-center {{ capa.capability }}
+                                                    v-hover
+                                                        v-card.dal-small-card.mr-3.mb-3.animation-fade-in(slot-scope="{ hover }", hover, raised, :width="150", style="height: fit-content;")
+                                                            v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
+                                                            v-card-text.py-1.text-xs-center {{ capa.capability }}
 
                                                 //v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
                                                 //    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetCapabilityForm()")
@@ -186,14 +187,16 @@ block content
             v-card-title.title Select Capability
             v-divider.py-0.my-0
 
-            v-card-text.py-2(v-if="CAPABILITY !== null && CAPABILITY.length > 0")
+            v-card-text.py-2.px-0(v-if="CAPABILITY !== null && CAPABILITY.length > 0")
                 v-list.px-0(subheader, two-line)
-                    v-list-tile(v-for="(capability, index) in CAPABILITY", :key="index", @click='')
+                    v-list-tile(v-for="(capability, index) in CAPABILITY", :key="index", avatar)
                         v-list-tile-action
                             v-checkbox(v-model='capability.check', color="green darken-1")
                         v-list-tile-content(@click='capability.check = !capability.check')
                             v-list-tile-title {{capability.capability}}
                             v-list-tile-sub-title {{capability.description}}
+                        v-list-tile-avatar
+                            img(height='75px', :src='"/images/capabilities/switch.png"')
 
             v-card-text.py-2(v-else)
                 v-progress-circular(indeterminate='', color='green')
