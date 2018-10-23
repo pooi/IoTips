@@ -103,7 +103,7 @@
 }
 
 .naver-login-btn {
-    background-image: url('/images/auth/Log in with NAVER_Official_Green.png');
+    background-image: url('/images/auth/Log_in_with_NAVER_Official_Green.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
@@ -116,7 +116,7 @@
 }
 
 .naver-login-btn:hover {
-    background-image: url('/images/auth/Log in with NAVER_Official_White.png');
+    background-image: url('/images/auth/Log_in_with_NAVER_Official_White.png');
     transition: .5s ease;
 }
 
