@@ -58,11 +58,12 @@ exports.getAdditionalUserData = function(userId, callback){
     var sql = "SELECT * FROM user WHERE user_id=?;";
     conn.query(sql, [userId], function(err, results) {
         if(err){
-            consoole.log(err);
+            console.log(err);
             callback(null);
         }else{
             var result = results[0];
             returnData['db_id'] = result.id;
+            returnData['name'] = result.name;
             returnData['nickname'] = result.nickname;
             returnData['email'] = result.email;
             returnData['rgt_date'] = result.rgt_date.toJSON();

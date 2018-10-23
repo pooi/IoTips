@@ -639,6 +639,11 @@ class Auth {
         window.location.href = "/auth/kakao?redirectTo=" + pathname;
     }
 
+    loginNaver(){
+        var pathname = window.location.pathname;
+        window.location.href = "/auth/naver?redirectTo=" + pathname;
+    }
+
     logout(){
         var pathname = window.location.pathname;
         window.location.href = "/auth/logout?redirectTo=" + pathname;
@@ -661,10 +666,11 @@ class Auth {
     }
 
     parseUserData(init_user){
-        // console.log(init_user);
         this.user = JSON.parse(init_user);
-        this.user.rgt_date = new Date(this.user.rgt_date);
-        this.user.last_login_date = new Date(this.user.last_login_date);
+        if(this.user !==  null){
+            this.user.rgt_date = new Date(this.user.rgt_date);
+            this.user.last_login_date = new Date(this.user.last_login_date);
+        }
         // console.log(this.user);
     }
 

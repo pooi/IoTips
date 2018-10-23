@@ -1,7 +1,9 @@
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const KakaoStrategy = require('passport-kakao').Strategy;
+const NaverStrategy = require('passport-naver').Strategy;
 const googleConfig = require("../config/google");
 const kakaoConfig = require("../config/kakao");
+const naverConfig = require("../config/naver");
 const dbDAO = require("../util/db-dao");
 
 module.exports = (passport) => {
@@ -74,6 +76,55 @@ module.exports = (passport) => {
             // User.findOrCreate(..., function(err, user) {
             //     if (err) { return done(err); }
             //     done(null, user);
+            // });
+        }
+    ));
+
+    passport.use(new NaverStrategy({
+            clientID: naverConfig.client_ID,
+            clientSecret: naverConfig.client_Secret,
+            callbackURL: naverConfig.callbackURL
+        },
+        function(accessToken, refreshToken, profile, done) {
+            console.log(profile);
+            const socialId = profile.id;
+            const email = profile.emails[0].value;
+            const name = email.split("@")[0];
+            // if("kaccount_email" in profile._json){
+            //     email = profile._json.kaccount_email;
+            // }
+            const profileImageUrl = profile._json.profile_image;
+
+            console.log(socialId, name, email, profileImageUrl);
+
+            onLoginSuccess('naver', socialId, name, null, email, profileImageUrl, function () {
+                dbDAO.getAdditionalUserData(profile.id, function (moreData) {
+                    var keys = Object.keys(moreData);
+                    for(var i=0; i<keys.length; i++){
+                        var key = keys[i];
+                        profile[key] = moreData[key];
+                    }
+                    return done(null, profile);
+                });
+            });
+            // User.findOne({
+            //     'naver.id': profile.id
+            // }, function(err, user) {
+            //     if (!user) {
+            //         user = new User({
+            //             name: profile.displayName,
+            //             email: profile.emails[0].value,
+            //             username: profile.displayName,
+            //             provider: 'naver',
+            //             naver: profile._json
+            //         });
+            //         user.save(function(err) {
+            //             if (err) console.log(err);
+            //             return done(err, user);
+            //         });
+            //     } else {
+            //         return done(err, user);
+            //     }
             // });
         }
     ));

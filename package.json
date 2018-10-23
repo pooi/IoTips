@@ -26,6 +26,7 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "passport-kakao": "0.0.5",
+    "passport-naver": "^1.0.6",
     "pug": "2.0.0-beta11",
     "quill": "^1.3.6",
     "request": "^2.88.0",
