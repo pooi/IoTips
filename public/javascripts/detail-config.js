@@ -70,6 +70,7 @@ function init(init_user, init_boardID) {
             comments: null,
             commentLoading: false,
 
+            CAPABILITY: null,
             capabilities: [],
             platforms: [],
             detailPlatformDialog: false,
@@ -194,6 +195,36 @@ function init(init_user, init_boardID) {
                 }, 500);
 
                 this.detailProductDialog = true;
+            },
+
+            getCapabilityList: function(){
+                this.capabilityLoading = true;
+
+                var data = {};
+                axios.post(
+                    '/getCapabilities',
+                    data
+                ).then(function (res) {
+                    var data = res.data;
+                    // console.log(data);
+
+                    vue.CAPABILITY = data;
+                    for(var i=0; i<vue.CAPABILITY.length; i++){
+                        vue.CAPABILITY[i]['check'] = false;
+                    }
+                    vue.totalCapabilities = JSON.parse(JSON.stringify( vue.CAPABILITY ));
+                    vue.capabilityLoading = false;
+
+                    // vue.tempCapabilities = [];
+                    // for(var i=0; i<vue.CAPABILITY.length; i++){
+                    //     var data = vue.CAPABILITY[i];
+                    //     data['check'] = false;
+                    //     vue.tempCapabilities.push(data);
+                    // }
+
+                }).catch(function (error) {
+                    alert(error);
+                });
             },
 
             getComments: function () {
@@ -389,6 +420,10 @@ function init(init_user, init_boardID) {
                         vue.products.push(product);
                     }
 
+                    if(products.length > 0){
+                        vue.getCapabilityList();
+                    }
+
                     vue.getComments();
 
                     if("graph" in result){
@@ -467,6 +502,34 @@ function init(init_user, init_boardID) {
             editor() {
                 return this.$refs.myTextEditor.quill
             },
+            totalCapabilities: function () {
+                var capabilities = null;
+                if(this.CAPABILITY !== null){
+                    capabilities = JSON.parse(JSON.stringify(this.CAPABILITY));
+                    for(var i=0; i<capabilities.length; i++){
+                        capabilities[i].check = false;
+                    }
+
+                    var haveCapa = false;
+                    for(var i=0; i<this.products.length; i++){
+                        var product = this.products[i];
+                        if(product.capabilities !== null && product.capabilities.length > 0){
+                            for(var j=0; j<product.capabilities.length; j++){
+                                if(product.capabilities[j].check){
+                                    haveCapa = true;
+                                    capabilities[j].check = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if(!haveCapa){
+                        capabilities = null;
+                    }
+                }
+
+                return capabilities
+            }
             // contentCode() {
             //     return hljs.highlightAuto(this.content).value
             // }

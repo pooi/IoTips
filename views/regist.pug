@@ -443,7 +443,7 @@ block content
                             //v-flex(xs12, v-if="tempProduct.img !== null", justify-center, d-inline-flex)
                             img#detailProductImg(:src="detailProduct.img", style="max-width: 80%; max-height: 200px;")
 
-                    v-card-text.py-2.mt-3.px-0(v-if="detailProduct.capabilities.length > 0")
+                    v-card-text.py-2.mt-3.px-0(v-if="detailProduct.capabilities !== null && detailProduct.capabilities.length > 0")
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
                         v-layout.mt-2(row, wrap, justify-center, align-top)
                             template(v-for="(capa, index) in detailProduct.capabilities", :key="index" v-if="capa.check")

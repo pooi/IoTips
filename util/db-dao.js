@@ -142,7 +142,7 @@ exports.registBoard = function (id, data, callback) {
 };
 
 function saveProductsAndPlatforms(boardID, products, platforms, callback){
-    var product_sql = "INSERT INTO board_product(id, board_id, title, description, company, currency, price, image, urls) VALUES ?;";
+    var product_sql = "INSERT INTO board_product(id, board_id, title, description, company, currency, price, image, urls, capability) VALUES ?;";
     var platform_sql = "INSERT INTO board_platform(id, board_id, title, description, company, currency, price, image, urls) VALUES ?;";
 
     var sql = "";
@@ -155,6 +155,7 @@ function saveProductsAndPlatforms(boardID, products, platforms, callback){
             var value = [];
             value.push(product.id); value.push(boardID); value.push(product.title); value.push(product.description); value.push(product.company);
             value.push(product.currency); value.push(product.price); value.push(product.image); value.push(JSON.stringify(product.urls));
+            value.push(JSON.stringify(product.capability));
             product_values.push(value);
         }
         values.push(product_values);

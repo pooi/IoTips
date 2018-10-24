@@ -127,6 +127,18 @@ class Product {
     }
 
     toDic(){
+        var capabilityJSON = null;
+        if(this.capabilities !== null && this.capabilities.length > 0){
+            // var capabilities = [];
+            // for(var i=0; i<this.capabilities.length; i++){
+            //     var capability = this.capabilities[i];
+            //     if(capability.check){
+            //         capabilities.push(capability);
+            //     }
+            // }
+            capabilityJSON = this.capabilities;
+        }
+
         return {
             id: this.id,
             title: this.title,
@@ -136,7 +148,7 @@ class Product {
             image: this.img,
             price: this.isFree ? 0 : this.price,
             currency: this.isFree ? undefined : this.currency.currency,
-
+            capability: capabilityJSON === null ? undefined : capabilityJSON
         };
     }
 
@@ -155,6 +167,7 @@ class Product {
                 break;
             }
         }
+        this.capabilities = JSON.parse(data.capability);
     }
 }
 
@@ -581,11 +594,11 @@ class Supporter {
     parseBoardDate(date){
         var today = new Date();
         var str = "";
-        if(today.getFullYear() === date.getFullYear() && today.getDay() === date.getDay() && today.getMonth() === date.getMonth()){
+        if(today.getFullYear() === date.getFullYear() && today.getDate() === date.getDate() && today.getMonth() === date.getMonth()){
             str = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
         }else{
             var month = date.getMonth()+1;
-            var day = date.getDay();
+            var day = date.getDate();
             str = (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day);
         }
         return str;
@@ -615,6 +628,25 @@ class Supporter {
             }
         ]
         return boardTypes;
+    }
+
+    convertTitle(title){
+        var breakpoint = this.vue.__proto__.$vuetify.breakpoint;
+        if(breakpoint.xs || breakpoint.xl){
+            var stringByteLength = (function(s,b,i,c){
+                for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
+                return b
+            })(title);
+            console.log(stringByteLength);
+            if(stringByteLength < 50){
+                return title;
+            }else{
+                var newTitle = title.substring(0, 20) + "...";
+                return newTitle;
+            }
+        }else{
+            return title;
+        }
     }
 }
 
