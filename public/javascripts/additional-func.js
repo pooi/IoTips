@@ -626,8 +626,44 @@ class Supporter {
                 title: "구성도",
                 fullTitle: "구성도 게시판"
             }
-        ]
+        ];
         return boardTypes;
+    }
+
+    getBoardTypes() {
+        var boardTypes = [
+            {
+                type: "free",
+                title: "자유",
+                fullTitle: "자유 게시판"
+            },
+            {
+                type: "question",
+                title: "질문",
+                fullTitle: "질문 게시판"
+            },
+            {
+                type: "review",
+                title: "품평",
+                fullTitle: "품평 게시판"
+            },
+            {
+                type: "ecosystem",
+                title: "구성도",
+                fullTitle: "구성도 게시판"
+            }
+        ];
+        return boardTypes;
+    }
+
+    getBoardTitleFromType(type){
+        var boardTypes = this.getBoardTypes();
+        for(var i=0; i<boardTypes.length; i++){
+            if(boardTypes[i].type === type){
+                return boardTypes[i].title;
+            }
+        }
+        return "";
     }
 
     convertTitle(title){
@@ -637,7 +673,7 @@ class Supporter {
                 for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
                 return b
             })(title);
-            console.log(stringByteLength);
+            // console.log(stringByteLength);
             if(stringByteLength < 50){
                 return title;
             }else{
@@ -678,6 +714,11 @@ class Auth {
 
     logout(){
         var pathname = window.location.pathname;
+        window.location.href = "/auth/logout?redirectTo=" + pathname;
+    }
+
+    logoutToIndex(){
+        var pathname = "/";
         window.location.href = "/auth/logout?redirectTo=" + pathname;
     }
 

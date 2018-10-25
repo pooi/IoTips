@@ -1,0 +1,124 @@
+extends layout
+
+block content
+
+    include toolbar
+
+    v-content.brown.lighten-5.animation-fade-in(style="padding-top: 50px")
+        //v-container.pa-0(:fluid="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly")
+        v-container.pa-0(:fluid="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly")
+
+            v-flex(md12='')
+                //v-card.pa-3.safe-area-inset(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ? 'elevation-0 mb-4 pt-4' : 'elevation-10 my-4'")
+                v-card.safe-area-inset.elevation-0.mb-4.pt-3.pb-5(:dark="isDark" :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'px-0' : 'px-3'")
+
+                    v-card-title.pb-0.logo_blue_text(style="margin-top: 20px;")
+                        span.display-2(style="font-weight: 800;") 나의 정보
+
+                    v-card-text.py-0
+                        v-divider.my-3
+
+                    v-card-title.pt-0(v-if='auth.user !== null')
+                        v-list.no-padding-list.resizeable-row-list.py-0(two-line='', subheader='', style="width: 100%;")
+                            //v-subheader.py-0.pb-1.my-0.brown.lighten-5(style='height: auto;') User Information
+                            v-list-tile(avatar='', v-if="auth.user.id != null", @click='')
+                                v-list-tile-content.px-2.py-3
+                                    v-list-tile-sub-title ID
+                                    v-list-tile-title {{ auth.user.id }}
+
+                            v-list-tile(avatar='', v-if="auth.user.displayName != null", @click='')
+                                v-list-tile-content.px-2.py-3
+                                    v-list-tile-sub-title Name
+                                    v-list-tile-title {{ auth.user.displayName }}
+                                v-list-tile-action
+                                    v-btn.px-2.mr-2(flat, small, color="green darken-1", style="min-width: 10px !important;") 편집
+
+                            v-list-tile(avatar='', v-if="auth.user.nickname != null", @click='')
+                                v-list-tile-content.px-2.py-3
+                                    v-list-tile-sub-title Nickname
+                                    v-list-tile-title {{ auth.user.nickname }}
+                                v-list-tile-action
+                                    v-btn.px-2.mr-2(flat, small, color="green darken-1", style="min-width: 10px !important;") 편집
+
+                            v-list-tile(avatar='', v-if="auth.user.email != null && auth.user.email !== ''", @click='')
+                                v-list-tile-content.px-2.py-3
+                                    v-list-tile-sub-title Email
+                                    v-list-tile-title {{ auth.user.email }}
+                                v-list-tile-action
+                                    v-btn.px-2.mr-2(flat, small, color="green darken-1", style="min-width: 10px !important;") 편집
+
+                            v-list-tile(avatar='', v-if="auth.user.provider != null", @click='')
+                                v-list-tile-content.px-2.py-3
+                                    v-list-tile-sub-title Provider
+                                    v-list-tile-title {{ auth.user.provider }}
+
+                            v-list-tile(avatar='', v-if="auth.user.rgt_date != null", @click='')
+                                v-list-tile-content.px-2.py-3
+                                    v-list-tile-sub-title 가입일
+                                    v-list-tile-title {{ auth.user.rgt_date.toLocaleString() }}
+
+                            v-list-tile(avatar='', v-if="auth.user.last_login_date != null", @click='')
+                                v-list-tile-content.px-2.py-3
+                                    v-list-tile-sub-title 마지막 로그인
+                                    v-list-tile-title {{ auth.user.last_login_date.toLocaleString() }}
+
+                            v-list-tile-action.pt-3
+                                v-btn(color='red', flat, @click="auth.logoutToIndex()", style="margin: auto;") Logout
+
+
+                    v-card-title.pb-0.align-end.logo_blue_text(style="margin-top: 20px;")
+                        span.display-2(style="font-weight: 800;") 내 글
+                        v-spacer
+                        v-btn.my-0(flat, small, color="green darken-1", style="min-width: 10px !important;", v-if="myItems.length >= 10") 더보기
+
+                    v-card-text.py-0
+                        v-divider.my-3
+
+                    v-card-text.py-5.text-xs-center(v-if="loadingMyItem")
+                        v-progress-circular(indeterminate='', color='green')
+
+                    template(v-if="!loadingMyItem")
+
+                        v-card-title.pt-0(v-if="myItems.length > 0")
+                            v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
+                                v-list-tile(v-for='(item, index) in myItems', :key='index', @click='moveDetail(item)', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
+                                    include board_item_notype
+
+                        v-card-text.py-5.title.text-xs-center(v-else) 데이터가 없습니다.
+
+
+                    v-card-title.pb-0.align-end.logo_blue_text(style="margin-top: 20px;")
+                        span.display-2(style="font-weight: 800;") 스크랩
+                        v-spacer
+                        v-btn.my-0(flat, small, color="green darken-1", style="min-width: 10px !important;", v-if="scraps.length >= 10") 더보기
+
+                    v-card-text.py-0
+                        v-divider.my-3
+
+                    v-card-text.py-5.text-xs-center(v-if="loadingScrap")
+                        v-progress-circular(indeterminate='', color='green')
+
+                    template(v-if="!loadingScrap")
+
+                        v-card-title.pt-0(v-if="scraps.length > 0")
+                            v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
+                                v-list-tile(v-for='(item, index) in scraps', :key='index', @click='moveDetail(item)', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
+                                    include board_item_notype
+
+                        v-card-text.py-5.title.text-xs-center(v-else) 데이터가 없습니다.
+
+
+
+
+
+    include footer
+    //include bottom_tab
+
+    //v-fab-transition
+    //    v-btn(color='red', v-model='fab', dark, fab, fixed, bottom, right, @click="goRegist()")
+    //        v-icon edit
+    //        //v-icon close
+
+    script(type="text/javascript" src='/javascripts/mypage-config.js')
+    script.
+        const vue = init('!{user}');

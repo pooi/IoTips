@@ -31,6 +31,36 @@ router.post('/', function (req, res, next) {
 
 });
 
+router.post('/user', function (req, res, next) {
+    var body = req.body;
+    if("userID" in body){
+        dbDAO.getUserBoardListData(body.userID, function (isErr, results) {
+            if(isErr){
+                res.send(null);
+            }else{
+                res.send(results);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
+router.post('/user/scrap', function (req, res, next) {
+    var body = req.body;
+    if("userID" in body){
+        dbDAO.getUserScrapBoardListData(body.userID, function (isErr, results) {
+            if(isErr){
+                res.send(null);
+            }else{
+                res.send(results);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
 router.get('/free', function(req, res, next) {
     var boardType = "free";
     var page = req.query.page;

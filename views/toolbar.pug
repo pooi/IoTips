@@ -8,8 +8,14 @@ v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background-co
             v-icon account_circle
         v-btn(v-else, flat, dark, @click="auth.toggleDialog()") Login
     template(v-else)
-        v-avatar.mr-2(:tile='false', size='30px', @click="auth.detailDialog = true")
-            img(:src='auth.user.photo', alt='Avatar', style="border-radius: 35% !important; object-fit: cover; cursor: pointer;")
+        //v-avatar.mr-2(:tile='false', size='30px', onclick="window.location.href='/mypage'")
+        //    img(:src='auth.user.photo', alt='Avatar', style="border-radius: 35% !important; object-fit: cover; cursor: pointer;")
+        v-btn.ma-0(flat, color="white", style="height: 100%;", onclick="window.location.href='/mypage'", v-if="!$vuetify.breakpoint.xsOnly ")
+            v-avatar.mr-2(:tile='false', size='30px')
+                img(:src='auth.user.photo', alt='Avatar', style="border-radius: 35% !important;")
+            | My Tips
+        v-avatar(:tile='false', size='30px', onclick="window.location.href='/mypage'", v-else)
+            img(:src='auth.user.photo', alt='Avatar', style="border-radius: 35% !important; object-fit: cover;")
 
 
 
