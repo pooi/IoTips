@@ -28,6 +28,10 @@ function init(init_user, init_boardID) {
             userInfo: new UserInformation(),
 
             viewer: null,
+            shareSheet: false,
+            shares: [
+                { img: 'kakao.png', title: 'Kakao' },
+            ],
 
             result: null,
 
@@ -153,6 +157,83 @@ function init(init_user, init_boardID) {
             onEditorReady(editor) {
                 console.log('editor ready!');//, editor)
             },
+            shareTo: function (title) {
+
+                var url = window.location.href;
+                var origin = window.location.origin;
+                var pathname = window.location.pathname;
+
+                var shareItem = this.result;
+                if(title === "Kakao"){
+
+                    var tags = "";
+                    var tagList = this.result.tags;
+                    if(tagList !== null){
+                        for(var i=0; i<Math.min(tagList.length, 5); i++){
+                            var tag = tagList[i];
+                            if(tag !== ""){
+                                tags += "#" + tag + " ";
+                            }
+                        }
+                        if(tagList.length > 5)
+                            tags += "...";
+                    }
+
+                    var templateArgs = {
+                        title: 'IoTips' + " - " + shareItem.title,
+                        content: tags,
+                        button1_title: '확인하기',
+                        button1_link: pathname.substring(1),
+                        viewCount: shareItem.hit,
+                        likeCount: 20,
+                        commentCount: vue.comments === null ? 0 : vue.comments.length
+                    };
+
+                    if(this.products !== null && this.products.length > 0){
+                        var img_count = Math.min(this.products.length,3);
+                        for(var i=0; i<img_count; i++){
+                            var key = 'img_' + (i+1);
+                            templateArgs[key] = this.products[i].img;
+                        }
+                        templateArgs['img_count'] = img_count;
+                    }
+
+                    Kakao.Link.sendCustom({
+                        templateId: 12946,
+                        templateArgs: templateArgs
+                    });
+
+                    // Kakao.Link.sendDefault({
+                    //     objectType: 'feed',
+                    //     content: {
+                    //         title: 'IoTips' + " - " + shareItem.title,
+                    //         description: tags,
+                    //         imageUrl: origin + "/images/logo/iotips_light.png",
+                    //         link: {
+                    //             mobileWebUrl: url,
+                    //             webUrl: url
+                    //         }
+                    //     },
+                    //     buttons: [
+                    //         {
+                    //             title: '확인하기',
+                    //             link: {
+                    //                 mobileWebUrl: url,
+                    //                 webUrl: url
+                    //             }
+                    //         }
+                    //     ],
+                    //     social: {
+                    //         likeCount: 20,
+                    //         viewCount: shareItem.hit,
+                    //         commentCount: vue.comments === null ? 0 : vue.comments.length
+                    //     }
+                    // });
+                }
+                // this.sheet = false;
+                this.shareSheet = false;
+
+            },
 
             showDetailPlatform: function (item, index) {
                 this.detailPlatform = item;
@@ -245,7 +326,28 @@ function init(init_user, init_boardID) {
                             for(var i=0; i<data.length; i++){
                                 data[i].rgt_date = new Date(data[i].rgt_date);
                             }
-                            vue.comments = data;
+
+                            vue.comments = [];
+                            for(var i=0; i<data.length; i++){
+                                if(data[i].parent < 0){
+                                    vue.comments.push(data[i]);
+                                }else{
+                                    var parentID = data[i].parent;
+                                    var check = false;
+                                    for(var j=0; j<vue.comments.length; j++){
+                                        if(vue.comments[j].id === parentID){
+                                            vue.comments.splice(j+1, 0, data[i]);
+                                            check = true;
+                                            break;
+                                        }
+                                    }
+                                    if(!check){
+                                        vue.comments.push(data[i]);
+                                    }
+                                }
+                            }
+
+                            // vue.comments = data;
                             vue.commentLoading = false;
                         }).catch(function (error) {
                             alert(error);

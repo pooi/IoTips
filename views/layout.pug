@@ -7,11 +7,10 @@ html(lang='en')
     //meta(name='viewport', content='initial-scale=1, viewport-fit=cover')
     meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover')
 
-    //meta(property='og:title', content='Discovery and Lost')
-    //meta(property='og:url', content='https://beta.denl.xyz/')
-    //meta(property='og:image', content='/images/logo/bg_og.png')
-    //meta(property='og:description', content='IoT 공유 플랫폼')
-
+    meta(property='og:title', content='IoTips')
+    meta(property='og:url', content='https://iotips.xyz/')
+    meta(property='og:image', content='/images/logo/bg_og.png')
+    meta(property='og:description', content='IoT 구성 및 제품 공유 플랫폼')
 
 
     link(href='https://fonts.googleapis.com/css?family=Lato', rel='stylesheet', type='text/css')
@@ -41,7 +40,13 @@ html(lang='en')
 
     meta(name='google-signin-client_id', content='6471659892-75jmoir11tndi76ob7fnoun8aoj6u2ga.apps.googleusercontent.com')
 
+    script(src='//developers.kakao.com/sdk/js/kakao.min.js')
 
+    script(type='text/javascript').
+        //<![CDATA[
+        // 사용할 앱의 JavaScript 키를 설정해 주세요.
+        Kakao.init('8b245cbea14cab54f41c4934c74dbff9');
+        //]]>
 
 
   body

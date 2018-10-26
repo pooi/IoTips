@@ -193,7 +193,7 @@
     /*padding-bottom: constant(safe-area-inset-bottom);*/
 }
 
-.bottom-sheet.dialog.bottom-sheet--inset {
+.v-bottom-sheet.v-dialog.v-bottom-sheet--inset {
     border-radius: 20px 20px 0px 0px !important;
     overflow: hidden;
 }

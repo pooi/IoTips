@@ -154,7 +154,7 @@ block content
                             v-btn.elevation-0.ma-0.mt-2.logo_blue( dark, small, style="min-width: 10px !important;")
                                 v-icon.pr-1.subheading(dark, v-if="!$vuetify.breakpoint.xsOnly") bookmark
                                 | 스크랩
-                            v-btn.elevation-0.ma-0.mt-2.logo_blue( dark, small, style="min-width: 10px !important;")
+                            v-btn.elevation-0.ma-0.mt-2.logo_blue( dark, small, style="min-width: 10px !important;", @click="shareSheet=true")
                                 v-icon.pr-1.subheading(dark, v-if="!$vuetify.breakpoint.xsOnly") bubble_chart
                                 | 공유
 
@@ -181,7 +181,7 @@ block content
 
                                 v-card-text.pa-0.ma-0(v-else-if="comments.length > 0")
                                     v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
-                                        v-list-tile(v-for='(comment, index) in comments', :key='index', @click='', style="border-bottom: .4px solid rgba(0,0,0,0.2) !important;" :style="comment.depth > 1 ? 'margin-left: 20px;' : ''")
+                                        v-list-tile(v-for='(comment, index) in comments', :key='index', @click='', style="border-bottom: .4px solid rgba(0,0,0,0.2) !important;" :style="comment.depth > 1 ? ('margin-left: ' + ((comment.depth-1) * 20) + 'px;') : ''")
                                             include comment_item
 
                                         v-list-tile(@click='getComments()', style="border-bottom: .4px solid rgba(0,0,0,0.2) !important;")
@@ -472,6 +472,15 @@ block content
                 v-spacer
                 v-btn(color='success', flat, @click.native="detailPlatformDialog = false") 닫기
 
+
+    v-bottom-sheet(v-model='shareSheet', inset, max-width='500px')
+        v-list
+            v-subheader 공유하기
+            v-list-tile(v-for='tile in shares', :key='tile', @click='shareTo(tile.title)')
+                v-list-tile-avatar
+                    v-avatar(size='32px', tile='')
+                        img(:src="'/images/' + tile.img")
+                v-list-tile-title {{ tile.title }}
 
     include user_information_dialog
 
