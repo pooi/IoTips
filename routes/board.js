@@ -61,6 +61,21 @@ router.post('/user/scrap', function (req, res, next) {
     }
 });
 
+router.post('/user/scrap/save', function (req, res, next) {
+    var body = req.body;
+    if("userID" in body && "boardID" in body){
+        dbDAO.saveScrap(body.boardID, body.userID, function (isErr, scraped, results) {
+            if(isErr){
+                res.send(404);
+            }else{
+                res.send(!scraped);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
 router.get('/free', function(req, res, next) {
     var boardType = "free";
     var page = req.query.page;

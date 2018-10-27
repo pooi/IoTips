@@ -355,3 +355,25 @@ exports.getCapabilities = function (callback) {
         }
     })
 };
+
+exports.saveScrap = function (boardID, userID, callback) {
+    var sql = "SELECT * FROM scrap WHERE user_id=? and board_id=?";
+    conn.query(sql, [userID, boardID], function(err, results){
+        if(err){
+            callback(true, false, err);
+        }else{
+            if(results.length > 0){
+                callback(false, true, err);
+            }else{
+                var insertSql = "INSERT INTO scrap(user_id, board_id) VALUES(?,?)";
+                conn.query(insertSql, [userID, boardID], function(err, results){
+                    if(err){
+                        callback(true, false, err);
+                    }else{
+                        callback(false, false, results);
+                    }
+                })
+            }
+        }
+    })
+};

@@ -1,5 +1,5 @@
 v-menu(v-model='userInfo.dialog', :close-on-content-click='false', :nudge-width='$vuetify.breakpoint.width < 380 ? $vuetify.breakpoint.width - 20 : 380', offset-x, transition="slide-x-transition", :position-x="userInfo.x", :position-y="userInfo.y", absolute)
-    v-card(v-if="userInfo.user !== null")
+    v-card(v-if="userInfo.user !== null", dark)
         v-list
             v-list-tile(avatar='')
                 v-list-tile-avatar

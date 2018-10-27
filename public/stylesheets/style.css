@@ -152,6 +152,10 @@
     font-size: 10px !important;
 }
 
+.mouse-over {
+    cursor: pointer;
+}
+
 /* EXTERNAL*/
 
 #overlay {

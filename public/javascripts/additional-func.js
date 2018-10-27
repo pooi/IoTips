@@ -695,6 +695,7 @@ class Auth {
         this.loginDialog = false;
         this.detailDialog = false;
         this.dialogPersistent = false;
+        this.requireLoginDialog = false;
     }
 
     loginGoogle(){
@@ -730,6 +731,10 @@ class Auth {
     toggleDialogWithPersistent(){
         this.loginDialog = true;
         this.dialogPersistent = true;
+    }
+
+    toggleLoginRequire(){
+        this.requireLoginDialog = true;
     }
 
     requireLogin(){

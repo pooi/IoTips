@@ -90,6 +90,8 @@ function init(init_user, init_boardID) {
             tempParentComment: null,
             commentSubmitProgress: false,
 
+            scrapSuccessDialog: false,
+            scrapFailDialog: false,
 
         },
         methods:{
@@ -156,6 +158,36 @@ function init(init_user, init_boardID) {
             },
             onEditorReady(editor) {
                 console.log('editor ready!');//, editor)
+            },
+            scrap: function(){
+                if(this.auth.user === null){
+                    this.auth.toggleDialog();
+                    return;
+                }
+
+
+
+                var data = {
+                    boardID: this.result.id,
+                    userID: this.auth.user.db_id
+                };
+
+                axios.post(
+                    '/board/user/scrap/save',
+                    data
+                ).then(function (res) {
+                    var result = res.data;
+
+                    if(result){
+                        vue.scrapSuccessDialog = true;
+                    }else{
+                        vue.scrapFailDialog = true;
+                    }
+
+                }).catch(function (error) {
+                    alert(error);
+                });
+
             },
             shareTo: function (title) {
 

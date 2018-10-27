@@ -44,7 +44,7 @@ block content
 
                         v-card-text.py-0.small-caption
                             v-layout.px-0.py-2.grey.lighten-4(row, wrap, align-center style="font-weight: 300;")
-                                .text-xs-left.mx-2(@click="userInfo.showDialog($event, result.user_id)")
+                                .text-xs-left.mx-2.mouse-over(@click="userInfo.showDialog($event, result.user_id)")
                                     strong {{ result.nickname }}
                                     | 님
                                 v-spacer
@@ -151,7 +151,7 @@ block content
                             //v-btn.elevation-0.ma-0.mt-2(color="red darken-1", dark, small, style="min-width: 10px !important;", v-if="graphManager.graph !== null")
                             //    v-icon.pr-1.subheading(dark, v-if="!$vuetify.breakpoint.xsOnly") trending_up
                             //    | 구성도 가져오기
-                            v-btn.elevation-0.ma-0.mt-2.logo_blue( dark, small, style="min-width: 10px !important;")
+                            v-btn.elevation-0.ma-0.mt-2.logo_blue( dark, small, style="min-width: 10px !important;", @click="scrap()")
                                 v-icon.pr-1.subheading(dark, v-if="!$vuetify.breakpoint.xsOnly") bookmark
                                 | 스크랩
                             v-btn.elevation-0.ma-0.mt-2.logo_blue( dark, small, style="min-width: 10px !important;", @click="shareSheet=true")
@@ -208,140 +208,9 @@ block content
                                         v-textarea.ml-2.mr-3.py-0.my-0.no-padding-text-field(ref="area_comment", :hide-details="tempComment === null || tempComment.length == 0 || (tempComment.length >= 2 && tempComment.length <= 200)", full-width, required, :rules="[supporter.rules.counter_2, supporter.rules.counter_200]" :placeholder='auth.user === null ? "로그인이 필요합니다." : "댓글을 입력해주세요."', v-model="tempComment", :disabled="auth.user === null || commentSubmitProgress")
                                         v-btn.pa-0.ma-0.elevation-0.logo_blue(v-if="!commentSubmitProgress", block, small, dark, @click="submitComment()", submit, :disabled="auth.user === null") 등록
 
-                            //v-card-text.pa-0(:class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-3'")
-
-                            //v-card-text.pa-0
-                            //v-card-text.pa-0
-                            //    v-divier.my-0
-
-                            //v-layout(row, wrap, style="width: 100%;", :class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-3'")
-                                v-flex.xs12.pa-0.ma-0
-                                    .headline 1 Comments
-                                v-flex.xs12.pa-0.ma-0
-                                    v-divier.my-0
 
                     v-card-text.text-xs-center.py-5(v-else)
                         v-progress-circular(indeterminate='', color='green')
-
-                        //v-card-text
-                            v-layout
-                                v-flex(xs12)
-                                    v-card.pa-0.elevation-4
-
-
-                                        //v-card-text.pa-0
-                                        //    v-divider
-                                        //v-card-text.py-1.no-padding-text-field
-                                        //    //span.headline.red--text.text--darken-1(style="font-weight: 700;") 내용
-                                        //    v-textarea(v-model='content', label='Content', full-width, single-line, hide-details, auto-grow)
-                                        v-card-text.pa-0
-                                            v-divider
-                                        v-card-text.px-0.py-0
-                                            //span.headline.red--text.text--darken-1(style="font-weight: 700;") Content
-                                            //.quill-editor-example
-                                                // quill-editor
-                                            quill-editor.no-border-quill-editor(:content='content', :options='editorOption')
-
-                                        v-card-text.pa-0
-                                            v-divider
-
-
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
-                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") 설계도
-                                            v-card.my-3.dal-card-blue(hover, raised)
-                                                //v-card-media.pa-0(height="400px")
-                                                v-card-actions.py-1.px-2.grey.lighten-5(style="overflow: hidden;")
-                                                    v-btn.mx-0(icon, flat, color="grey ", @click="graphManager.toXML()")
-                                                        v-icon code
-                                                    v-spacer
-                                                    v-btn-toggle.elevation-0(style="background: transparent;")
-                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomOut()")
-                                                            v-icon zoom_out
-                                                        v-btn.mx-0(icon, flat, @click="graphManager.setZoomLevel(0)")
-                                                            v-icon search
-                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomIn()")
-                                                            v-icon zoom_in
-                                                v-layout#graph-container.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
-                                                    div#graph(style="width: 100%; height: 100%; overflow:auto; ")
-
-
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
-                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
-                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="capabilities.length === 0")
-                                                v-btn(flat, color="blue darken-3", @click="addCapability()") 사용된 Capability 추가
-                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
-                                                //v-layout(xs12, wrap)
-                                                    //v-flex(v-for='capability in capabilities', d-inline-flex)
-                                                template(v-for="(capa, index) in capabilities", :key="index")
-                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
-                                                        v-icon(slot='badge', dark='', small='', @click="removeCapability(index)") close
-                                                        v-card.dal-small-card(hover, raised, :width="100")
-                                                            v-card-media.white--text(height='75px', :src='"/images/capabilities/" + capa.component + ".png"')
-                                                            v-card-text.py-1.text-xs-center {{ capa.title }} {{ index }}
-
-                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
-                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="addCapability()")
-                                                        .display-2(style="font-weight: 100;") +
-
-
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' || boardType.type === 'review'" )
-                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Products
-                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="products.length === 0")
-                                                v-btn(flat, color="blue darken-3", @click="resetProductForm()") 사용된 제품 추가
-                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
-                                                template(v-for="(product, index) in products", :key="index")
-                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
-                                                        v-icon(slot='badge', dark='', small='', @click="removeProduct(index)") close
-                                                        v-card.dal-small-card(hover, raised)
-                                                            v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
-                                                                v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
-                                                                    img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
-                                                                v-flex.pa-2(style="width: 180px;")
-                                                                    v-card-text.pa-0.pb-1
-                                                                        code.elevation-0(v-if="product.isFree") Free
-                                                                        code.elevation-0(v-else) {{ product.currency.symbol }}{{ product.price }}
-                                                                    v-card-text.pa-0.title {{product.title}}
-                                                                    v-card-text.py-2.px-0.grey--text.text--darken-1 {{product.company}}
-                                                                    v-card-text.pa-0.light-blue--text.text--darken-3 Detail
-
-                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
-                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetProductForm()")
-                                                        .display-2(style="font-weight: 100;") +
-
-
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
-                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") Platforms
-                                            v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="platforms.length === 0")
-                                                v-btn(flat, color="blue darken-3", @click="resetPlatformForm()") 사용된 플랫폼 추가
-                                            v-layout.mt-2(row, wrap, justify-center, align-center, v-else)
-                                                template(v-for="(platform, index) in platforms", :key="index")
-                                                    v-badge.mr-3.mb-3.animation-fade-in(overlap='', color='red darken-1')
-                                                        v-icon(slot='badge', dark='', small='', @click="removePlatform(index)") close
-                                                        v-card.dal-small-card(hover, raised)
-                                                            v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailPlatform(platform, index)")
-                                                                v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
-                                                                    img.png-shadow(:src="platform.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
-                                                                v-flex.pa-2(style="width: 180px;")
-                                                                    v-card-text.pa-0.pb-1
-                                                                        code.elevation-0(v-if="platform.isFree") Free
-                                                                        code.elevation-0(v-else) {{ platform.currency.symbol }}{{ platform.price }}
-                                                                    v-card-text.pa-0.title {{platform.title}}
-                                                                    v-card-text.py-2.px-0.grey--text.text--darken-1 {{platform.company}}
-                                                                    v-card-text.pa-0.light-blue--text.text--darken-3 Detail
-
-                                                v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
-                                                    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetPlatformForm()")
-                                                        .display-2(style="font-weight: 100;") +
-
-
-
-                                        v-card-text.py-2.mt-4
-                                            v-layout(align-center)
-                                                v-flex.text-xs-center
-                                                    v-btn(color="grey", dark) 취소
-                                                    v-btn(color="red darken-1", dark, @click="submit()") 등록
-
-
 
 
     v-dialog.md6(v-model='detailProductDialog',  scrollable, max-width='500px')
@@ -481,6 +350,29 @@ block content
                     v-avatar(size='32px', tile='')
                         img(:src="'/images/' + tile.img")
                 v-list-tile-title {{ tile.title }}
+
+    v-dialog.md6(v-model='scrapSuccessDialog',  scrollable, max-width='500px')
+        v-card
+            v-card-title.headline(icon)
+                v-icon.mr-2(color='success') check_circle
+                | 스크랩 성공
+            v-card-text
+                | 성공적으로 스크랩하였습니다.
+            v-card-actions
+                v-btn(color='error', flat, @click="supporter.movePage('/mypage')") 확인하기
+                v-spacer
+                v-btn(color='success', flat, @click.native="scrapSuccessDialog = false") 닫기
+
+    v-dialog(v-model='scrapFailDialog', max-width='500px')
+        v-card
+            v-card-title.headline
+                v-icon.mr-2(color='error') error
+                | 안내
+            v-card-text
+                | 이미 스크랩된 게시글입니다.
+            v-card-actions
+                v-spacer
+                v-btn(color='error', flat='flat', @click="scrapFailDialog = false") 확인
 
     include user_information_dialog
 
