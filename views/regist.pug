@@ -104,7 +104,9 @@ block content
                                                 template(v-for="(capa, index) in totalCapabilities", :key="index" v-if="capa.check")
                                                     v-hover
                                                         v-card.dal-small-card.mr-3.mb-3.animation-fade-in(slot-scope="{ hover }", hover, raised, :width="150", style="height: fit-content;")
-                                                            v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
+                                                            v-card-media.white--text(height='100px')
+                                                                v-flex.platform-gradient-background(style="width: 100%; height: 100%;", justify-center, align-center, d-inline-flex)
+                                                                    img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capa.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain;")
                                                             v-card-text.py-1.text-xs-center {{ capa.capability }}
 
                                                 //v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
@@ -196,7 +198,9 @@ block content
                             v-list-tile-title {{capability.capability}}
                             v-list-tile-sub-title {{capability.description}}
                         v-list-tile-avatar
-                            img(height='75px', :src='"/images/capabilities/switch.png"')
+                            //img(height='75px', :src='"/images/capabilities/switch.png"')
+                            v-flex.platform-gradient-background(style="width: 100%; height: 100%; border-radius: 50%;", justify-center, align-center, d-inline-flex)
+                                img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capability.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain; border-radius: 0px;")
 
             v-card-text.py-2(v-else)
                 v-progress-circular(indeterminate='', color='green')
@@ -264,7 +268,9 @@ block content
                             v-layout.mt-2(row, wrap, justify-center, align-top, v-else)
                                 template(v-for="(capa, index) in tempProduct.capabilities", :key="index" v-if="capa.check")
                                     v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;")
-                                        v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
+                                        v-card-media.white--text(height='100px')
+                                            v-flex.platform-gradient-background(style="width: 100%; height: 100%;", justify-center, align-center, d-inline-flex)
+                                                img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capa.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain;")
                                         v-card-text.py-1.text-xs-center {{ capa.capability }}
                             v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="tempProduct.capabilities.length !== 0")
                                 v-btn(flat, color="blue darken-3", @click="addCapabilityDialog = true") Capability 편집
@@ -448,7 +454,9 @@ block content
                         v-layout.mt-2(row, wrap, justify-center, align-top)
                             template(v-for="(capa, index) in detailProduct.capabilities", :key="index" v-if="capa.check")
                                 v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;")
-                                    v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
+                                    v-card-media.white--text(height='100px')
+                                        v-flex.platform-gradient-background(style="width: 100%; height: 100%;", justify-center, align-center, d-inline-flex)
+                                            img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capa.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain;")
                                     v-card-text.py-1.text-xs-center {{ capa.capability }}
 
                     v-card-text.py-2.mt-3.px-0

@@ -88,7 +88,9 @@ block content
                                 template(v-for="(capa, index) in totalCapabilities", :key="index" v-if="capa.check")
                                     v-hover
                                         v-card.dal-small-card.mr-3.mb-3.animation-fade-in(slot-scope="{ hover }", hover, raised, :width="150", style="height: fit-content;")
-                                            v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
+                                            v-card-media.white--text(height='100px')
+                                                v-flex.platform-gradient-background(style="width: 100%; height: 100%;", justify-center, align-center, d-inline-flex)
+                                                    img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capa.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain;")
                                             v-card-text.py-1.text-xs-center {{ capa.capability }}
 
                         v-card-text.py-2.mt-4(v-show="products.length > 0" )
@@ -249,7 +251,9 @@ block content
                         v-layout.mt-2(row, wrap, justify-center, align-top)
                             template(v-for="(capa, index) in detailProduct.capabilities", :key="index" v-if="capa.check")
                                 v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;")
-                                    v-card-media.white--text(height='75px', :src='"/images/capabilities/switch.png"')
+                                    v-card-media.white--text(height='100px')
+                                        v-flex.platform-gradient-background(style="width: 100%; height: 100%;", justify-center, align-center, d-inline-flex)
+                                            img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capa.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain;")
                                     v-card-text.py-1.text-xs-center {{ capa.capability }}
 
                     v-card-text.py-2.mt-3.px-0

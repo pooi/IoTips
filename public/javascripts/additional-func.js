@@ -684,6 +684,10 @@ class Supporter {
             return title;
         }
     }
+
+    parseImageName(title){
+        return title.toLowerCase().replace(" ", "_");
+    }
 }
 
 class Auth {
