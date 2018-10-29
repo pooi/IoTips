@@ -459,7 +459,7 @@ function init(init_user, BOARD_TYPE) {
                         type: this.boardType.type
                     };
 
-                    if(this.graphManager.graph !== null){
+                    if(this.graphManager.graph !== null && vue.graphManager.graph.getChildCells().length > 0){
                         data['graph'] = xml2json(this.graphManager.toXML());
                     }
 
