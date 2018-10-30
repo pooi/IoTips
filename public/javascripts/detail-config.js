@@ -76,6 +76,13 @@ function init(init_user, init_boardID) {
 
             CAPABILITY: null,
             capabilities: [],
+            detailCapabilityDialog: false,
+            detailCapabilityDialogPos: {
+                x: 0,
+                y: 0
+            },
+            detailCapability: null,
+
             platforms: [],
             detailPlatformDialog: false,
             detailPlatform: null,
@@ -265,6 +272,24 @@ function init(init_user, init_boardID) {
                 // this.sheet = false;
                 this.shareSheet = false;
 
+            },
+
+            showDetailCapability: function(e, capability){
+                if(!this.detailCapabilityDialog){
+                    console.log(e, capability);
+                    if(this.detailCapability === null || this.detailCapability.id !== capability.id){
+                        this.detailCapability = capability;
+                    }
+                    this.detailCapabilityDialogPos.x = e.clientX;
+                    this.detailCapabilityDialogPos.y = e.clientY;
+                    this.detailCapabilityDialog = true;
+                }else if(this.detailCapability === null || this.detailCapability.id !== capability.id){
+                    console.log(e, capability);
+                    this.detailCapability = capability;
+                    this.detailCapabilityDialogPos.x = e.clientX;
+                    this.detailCapabilityDialogPos.y = e.clientY;
+                    this.detailCapabilityDialog = true;
+                }
             },
 
             showDetailPlatform: function (item, index) {

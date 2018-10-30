@@ -86,12 +86,11 @@ block content
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
                             v-layout.mt-2(row, wrap, justify-start, align-top)
                                 template(v-for="(capa, index) in totalCapabilities", :key="index" v-if="capa.check")
-                                    v-hover
-                                        v-card.dal-small-card.mr-3.mb-3.animation-fade-in(slot-scope="{ hover }", hover, raised, :width="150", style="height: fit-content;")
-                                            v-card-media.white--text(height='100px')
-                                                v-flex.platform-gradient-background(style="width: 100%; height: 100%;", justify-center, align-center, d-inline-flex)
-                                                    img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capa.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain;")
-                                            v-card-text.py-1.text-xs-center {{ capa.capability }}
+                                    v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;", @mouseenter="showDetailCapability($event, capa)")
+                                        v-card-media.white--text(height='100px')
+                                            v-flex.platform-gradient-background(style="width: 100%; height: 100%;", justify-center, align-center, d-inline-flex)
+                                                img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capa.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain;")
+                                        v-card-text.py-1.text-xs-center {{ capa.capability }}
 
                         v-card-text.py-2.mt-4(v-show="products.length > 0" )
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Products
@@ -213,6 +212,26 @@ block content
 
                     v-card-text.text-xs-center.py-5(v-else)
                         v-progress-circular(indeterminate='', color='green')
+
+
+    v-menu(v-model='detailCapabilityDialog', :close-on-content-click='false', :nudge-width='$vuetify.breakpoint.width < 380 ? $vuetify.breakpoint.width - 20 : 380', offset-x, transition="slide-x-transition", :position-x="detailCapabilityDialogPos.x", :position-y="detailCapabilityDialogPos.y", absolute)
+        v-card(v-if="detailCapability !== null")
+            v-list
+                v-list-tile(avatar='')
+                    v-list-tile-avatar
+                        v-flex.platform-gradient-background(style="width: 100%; height: 100%; border-radius: 50%;", justify-center, align-center, d-inline-flex)
+                            img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(detailCapability.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain; border-radius: 0px;")
+                    v-list-tile-content
+                        v-list-tile-title {{detailCapability.capability}}
+
+                v-list-tile(avatar='', v-if="detailCapability.description !== null")
+                    v-list-tile-content
+                        v-list-tile-sub-title.caption Description
+                        v-list-tile-title {{ detailCapability.description }}
+
+        v-card(v-else)
+            v-card-text.py-5.text-xs-center
+                v-progress-circular(indeterminate='', color='green')
 
 
     v-dialog.md6(v-model='detailProductDialog',  scrollable, max-width='500px')
