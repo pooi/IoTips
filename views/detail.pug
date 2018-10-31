@@ -214,7 +214,7 @@ block content
                         v-progress-circular(indeterminate='', color='green')
 
 
-    v-menu(v-model='detailCapabilityDialog', :close-on-content-click='false', :nudge-width='$vuetify.breakpoint.width < 380 ? $vuetify.breakpoint.width - 20 : 380', offset-x, transition="slide-x-transition", :position-x="detailCapabilityDialogPos.x", :position-y="detailCapabilityDialogPos.y", absolute)
+    v-menu.menu-capability(v-model='detailCapabilityDialog', :close-on-content-click='false', :nudge-width='$vuetify.breakpoint.width < 380 ? $vuetify.breakpoint.width - 20 : 380', offset-x, transition="slide-x-transition", :position-x="detailCapabilityDialogPos.x", :position-y="detailCapabilityDialogPos.y", absolute)
         v-card(v-if="detailCapability !== null")
             v-list
                 v-list-tile(avatar='')

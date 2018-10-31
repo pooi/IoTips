@@ -276,7 +276,7 @@ function init(init_user, init_boardID) {
 
             showDetailCapability: function(e, capability){
                 if(!this.detailCapabilityDialog){
-                    console.log(e, capability);
+                    // console.log(e, capability);
                     if(this.detailCapability === null || this.detailCapability.id !== capability.id){
                         this.detailCapability = capability;
                     }
@@ -284,11 +284,25 @@ function init(init_user, init_boardID) {
                     this.detailCapabilityDialogPos.y = e.clientY;
                     this.detailCapabilityDialog = true;
                 }else if(this.detailCapability === null || this.detailCapability.id !== capability.id){
-                    console.log(e, capability);
-                    this.detailCapability = capability;
-                    this.detailCapabilityDialogPos.x = e.clientX;
-                    this.detailCapabilityDialogPos.y = e.clientY;
-                    this.detailCapabilityDialog = true;
+
+                    this.detailCapabilityDialog = false;
+                    // this.detailCapability = capability;
+                    // this.detailCapabilityDialogPos.x = e.clientX;
+                    // this.detailCapabilityDialogPos.y = e.clientY;
+                    // this.detailCapabilityDialog = true;
+                    setTimeout(function () {
+                        vue.detailCapability = capability;
+                        vue.detailCapabilityDialogPos.x = e.clientX;
+                        vue.detailCapabilityDialogPos.y = e.clientY;
+                        vue.detailCapabilityDialog = true;
+                    }, 300);
+
+                    // var menu = document.getElementsByClassName("v-menu__content menuable__content__active");
+                    // if(menu.length > 0){
+                    //     var m = menu[0];
+                    //     m.style.left = this.detailCapabilityDialogPos.x + "px";
+                    //     m.style.top = this.detailCapabilityDialogPos.y + "px";
+                    // }
                 }
             },
 
