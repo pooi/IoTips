@@ -127,14 +127,14 @@ exports.registBoard = function (id, data, callback) {
 
     conn.query(sql, values, function(err, result){
         if(err){
-            callback(false);
+            callback(false, null);
         }else{
             console.log(result);
             var boardID = result.insertId;
             if(products.length > 0 || platforms.length > 0){
                 saveProductsAndPlatforms(boardID, products, platforms, callback);
             }else{
-                callback(true);
+                callback(true, boardID);
             }
         }
     })
@@ -176,10 +176,10 @@ function saveProductsAndPlatforms(boardID, products, platforms, callback){
 
     conn.query(sql, values, function(err, result){
         if(err){
-            callback(false);
+            callback(false, null);
         }else{
             console.log(result);
-            callback(true);
+            callback(true, boardID);
         }
     })
 }

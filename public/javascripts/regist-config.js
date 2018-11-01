@@ -491,9 +491,9 @@ function init(init_user, BOARD_TYPE) {
                         console.log(data);
 
                         vue.loadingProgress = false;
-                        if(data === "Success"){
+                        if(data.isSuccess){
                             alert("성공적으로 등록하였습니다.");
-                            window.location.href = "/board/" + vue.boardType.type;
+                            window.location.href = "/board/" + data.boardID;
                         }else{
                             alert("에러");
                         }

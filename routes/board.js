@@ -147,11 +147,15 @@ router.post('/regist', function (req, res, next) {
     if(user){
         var data = req.body;
         console.log(data);
-        dbDAO.registBoard(user.db_id, data, function(result){
+        dbDAO.registBoard(user.db_id, data, function(result, boardID){
+            var returnData = {
+                isSuccess:result,
+                boardID: boardID
+            };
             if(result){
-                res.send("Success");
+                res.send(returnData);
             }else{
-                res.send("Fail");
+                res.send(returnData);
             }
         });
     }

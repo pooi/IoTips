@@ -68,23 +68,7 @@ block content
                                             v-divider
 
 
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
-                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") 구성도
-                                            v-card.my-3.dal-card-blue(hover, raised)
-                                                //v-card-media.pa-0(height="400px")
-                                                v-card-actions.py-1.px-2.grey.lighten-5(style="overflow: hidden;")
-                                                    v-btn.mx-0(icon, flat, color="grey ", @click="graphManager.toXML()")
-                                                        v-icon code
-                                                    v-spacer
-                                                    v-btn-toggle.elevation-0(style="background: transparent;")
-                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomOut()")
-                                                            v-icon zoom_out
-                                                        v-btn.mx-0(icon, flat, @click="graphManager.setZoomLevel(0)")
-                                                            v-icon search
-                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomIn()")
-                                                            v-icon zoom_in
-                                                v-layout#graph-container.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
-                                                    div#graph(style="width: 100%; height: 100%; overflow:auto; ")
+
 
 
                                         v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' && totalCapabilities !== null")
@@ -162,6 +146,25 @@ block content
                                                 v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
                                                     v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetPlatformForm()")
                                                         .display-2(style="font-weight: 100;") +
+
+
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                            span.headline.red--text.text--darken-1(style="font-weight: 700;") 구성도
+                                            v-card.my-3.dal-card-blue(hover, raised)
+                                                //v-card-media.pa-0(height="400px")
+                                                v-card-actions.py-1.px-2.grey.lighten-5(style="overflow: hidden;")
+                                                    v-btn.mx-0(icon, flat, color="grey ", @click="graphManager.toXML()")
+                                                        v-icon code
+                                                    v-spacer
+                                                    v-btn-toggle.elevation-0(style="background: transparent;")
+                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomOut()")
+                                                            v-icon zoom_out
+                                                        v-btn.mx-0(icon, flat, @click="graphManager.setZoomLevel(0)")
+                                                            v-icon search
+                                                        v-btn.mx-0(icon, flat, @click="graphManager.zoomIn()")
+                                                            v-icon zoom_in
+                                                v-layout#graph-container.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
+                                                    div#graph(style="width: 100%; height: 100%; overflow:auto; ")
 
 
                                         v-card-text.py-2.mt-4
