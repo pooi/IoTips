@@ -35,6 +35,27 @@
     filter: blur(2px);
 }
 
+.box-index {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+    z-index: 99;
+    text-align: center;
+    font-family: Raleway, sans-serif;
+    font-weight: 300;
+    /*text-transform: uppercase;*/
+    /*background-color: rgba(255, 255, 255, 0.75);*/
+    /*box-shadow: 0 1em 2em -1em rgba(0, 0, 0, 0.5);*/
+    padding: 1em 2em;
+    /*line-height: 1;*/
+    /*border: 1px solid white;*/
+    /*border-top: 1px solid white;*/
+    /*border-bottom: 1px solid white;*/
+    color: white;
+}
+
 .box-title {
     position: absolute;
     top: 50%;

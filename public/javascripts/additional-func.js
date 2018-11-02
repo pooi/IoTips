@@ -704,22 +704,26 @@ class Auth {
 
     loginGoogle(){
         var pathname = window.location.pathname;
-        window.location.href = "/auth/google?redirectTo=" + pathname;
+        var search = window.location.search;
+        window.location.href = "/auth/google?redirectTo=" + pathname + search;
     }
 
     loginKakao(){
         var pathname = window.location.pathname;
-        window.location.href = "/auth/kakao?redirectTo=" + pathname;
+        var search = window.location.search;
+        window.location.href = "/auth/kakao?redirectTo=" + pathname + search;
     }
 
     loginNaver(){
         var pathname = window.location.pathname;
-        window.location.href = "/auth/naver?redirectTo=" + pathname;
+        var search = window.location.search;
+        window.location.href = "/auth/naver?redirectTo=" + pathname + search;
     }
 
     logout(){
         var pathname = window.location.pathname;
-        window.location.href = "/auth/logout?redirectTo=" + pathname;
+        var search = window.location.search;
+        window.location.href = "/auth/logout?redirectTo=" + pathname + search;
     }
 
     logoutToIndex(){

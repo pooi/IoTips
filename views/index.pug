@@ -20,11 +20,23 @@ block content
                     .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
                     .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
                     #overlay(@click="getActiveSectionIndex()")
-                        div.box-title.py-4
+                        div.box-index.py-4
+
+                            //hr.mb-2(style="width: 30%; margin: auto; border-width: 0.5px;")
+
                             h1
-                                small No.1
-                                |  IoT Shared Platform
-                                small powered by Team
+                                img(src="/images/logo/iotips_dark_large.png", :width='$vuetify.breakpoint.width <= 580 ? $vuetify.breakpoint.width - 100 : 480')
+
+                            h1.mb-2
+                                small(style="font-weight: 300;", :style='$vuetify.breakpoint.width <= 420 ? ($vuetify.breakpoint.width <= 320 ? "font-size: 30%;" : "font-size: 50%;") : ""') Share and Discuss IoT Ecosystem
+
+                            //hr.mt-3(style="width: 30%; margin: auto; border-width: 0.5px;")
+
+
+
+                            //small No.1
+                            //|  IoT Shared Platform
+                            //small powered by Team
                     //| First section ...
                     //v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
             .section.section-full-page(style="z-index: 5;")
