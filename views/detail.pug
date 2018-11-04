@@ -214,7 +214,7 @@ block content
                         v-progress-circular(indeterminate='', color='green')
 
 
-    v-menu.menu-capability(v-model='detailCapabilityDialog', :close-on-content-click='false', :nudge-width='$vuetify.breakpoint.width < 380 ? $vuetify.breakpoint.width - 20 : 380', offset-x, transition="slide-x-transition", :position-x="detailCapabilityDialogPos.x", :position-y="detailCapabilityDialogPos.y", absolute)
+    v-menu.menu-capability(v-model='detailCapabilityDialog', :close-on-content-click='false', :nudge-width='$vuetify.breakpoint.width < 380 ? $vuetify.breakpoint.width - 20 : 380', max-width="380", offset-x, transition="slide-x-transition", :position-x="detailCapabilityDialogPos.x", :position-y="detailCapabilityDialogPos.y", absolute)
         v-card(v-if="detailCapability !== null")
             v-list
                 v-list-tile(avatar='')
@@ -228,6 +228,19 @@ block content
                     v-list-tile-content
                         v-list-tile-sub-title.caption Description
                         v-list-tile-title {{ detailCapability.description }}
+
+            v-divider(v-if="detailCapabilityProducts !== null && detailCapabilityProducts.length > 0")
+
+            v-card-text.py-2.mt-2(v-if="detailCapabilityProducts !== null && detailCapabilityProducts.length > 0")
+                span.title.red--text.text--darken-1(style="font-weight: 700;") Control
+                v-layout.mt-2(row, wrap, justify-center, align-center)
+                    template(v-for="(product, index) in detailCapabilityProducts", :key="index")
+                        v-card.dal-small-card.mr-3.mb-3(hover, raised)
+                            v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
+                                v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                    img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                v-layout.pa-2(style="width: 180px;", align-center)
+                                    v-card-text.pa-0.body-2 {{product.title}}
 
         v-card(v-else)
             v-card-text.py-5.text-xs-center

@@ -82,6 +82,7 @@ function init(init_user, init_boardID) {
                 y: 0
             },
             detailCapability: null,
+            detailCapabilityProducts: [],
 
             platforms: [],
             detailPlatformDialog: false,
@@ -283,26 +284,44 @@ function init(init_user, init_boardID) {
                     this.detailCapabilityDialogPos.x = e.clientX;
                     this.detailCapabilityDialogPos.y = e.clientY;
                     this.detailCapabilityDialog = true;
+
+                    this.detailCapabilityProducts = [];
+                    for(var i=0; i<this.products.length; i++){
+                        var product = this.products[i];
+                        if(product.capabilities !== null && product.capabilities.length > 0){
+                            for(var j=0; j<product.capabilities.length; j++){
+                                if(product.capabilities[j].id === capability.id && product.capabilities[j].check){
+                                    this.detailCapabilityProducts.push(product);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                 }else if(this.detailCapability === null || this.detailCapability.id !== capability.id){
 
                     this.detailCapabilityDialog = false;
-                    // this.detailCapability = capability;
-                    // this.detailCapabilityDialogPos.x = e.clientX;
-                    // this.detailCapabilityDialogPos.y = e.clientY;
-                    // this.detailCapabilityDialog = true;
+
                     setTimeout(function () {
                         vue.detailCapability = capability;
                         vue.detailCapabilityDialogPos.x = e.clientX;
                         vue.detailCapabilityDialogPos.y = e.clientY;
                         vue.detailCapabilityDialog = true;
+
+                        vue.detailCapabilityProducts = [];
+                        for(var i=0; i<vue.products.length; i++){
+                            var product = vue.products[i];
+                            if(product.capabilities !== null && product.capabilities.length > 0){
+                                for(var j=0; j<product.capabilities.length; j++){
+                                    if(product.capabilities[j].id === capability.id && product.capabilities[j].check){
+                                        vue.detailCapabilityProducts.push(product);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }, 300);
 
-                    // var menu = document.getElementsByClassName("v-menu__content menuable__content__active");
-                    // if(menu.length > 0){
-                    //     var m = menu[0];
-                    //     m.style.left = this.detailCapabilityDialogPos.x + "px";
-                    //     m.style.top = this.detailCapabilityDialogPos.y + "px";
-                    // }
                 }
             },
 
