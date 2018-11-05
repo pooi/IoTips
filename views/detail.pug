@@ -84,7 +84,7 @@ block content
 
                         v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' && totalCapabilities !== null")
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
-                            v-layout.mt-2(row, wrap, justify-start, align-top)
+                            v-layout.mt-2(row, wrap, :justify-center="$vuetify.breakpoint.width < 364", align-top)
                                 template(v-for="(capa, index) in totalCapabilities", :key="index" v-if="capa.check")
                                     v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;", @mouseenter="showDetailCapability($event, capa)")
                                         v-card-media.white--text(height='100px')
@@ -94,7 +94,7 @@ block content
 
                         v-card-text.py-2.mt-4(v-show="products.length > 0" )
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Products
-                            v-layout.mt-2(row, wrap, justify-start, align-center)
+                            v-layout.mt-2(row, wrap, :justify-center="$vuetify.breakpoint.width < 604", align-center)
                                 template(v-for="(product, index) in products", :key="index")
                                     v-card.dal-small-card.mr-3.mb-3(hover, raised)
                                         v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
@@ -111,7 +111,7 @@ block content
 
                         v-card-text.py-2.mt-4(v-show="platforms.length > 0" )
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Platforms
-                            v-layout.mt-2(row, wrap, justify-start, align-center)
+                            v-layout.mt-2(row, wrap, :justify-center="$vuetify.breakpoint.width < 604", align-center)
                                 template(v-for="(platform, index) in platforms", :key="index")
                                     v-card.dal-small-card.mr-3.mb-3(hover, raised)
                                         v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailPlatform(platform, index)")
