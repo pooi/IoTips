@@ -88,12 +88,11 @@ block content
                                                 .caption 등록된 Capability가 없습니다.
                                             v-layout.mt-2(row, wrap, justify-center, align-top)
                                                 template(v-for="(capa, index) in totalCapabilities", :key="index" v-if="capa.check")
-                                                    v-hover
-                                                        v-card.dal-small-card.mr-3.mb-3.animation-fade-in(slot-scope="{ hover }", hover, raised, :width="150", style="height: fit-content;")
-                                                            v-card-media.white--text(height='100px')
-                                                                v-flex.platform-gradient-background(style="width: 100%; height: 100%;", justify-center, align-center, d-inline-flex)
-                                                                    img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capa.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain;")
-                                                            v-card-text.py-1.text-xs-center {{ capa.capability }}
+                                                    v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;", @mouseenter="showDetailCapability($event, capa)")
+                                                        v-card-media.white--text(height='100px')
+                                                            v-flex.platform-gradient-background(style="width: 100%; height: 100%;", justify-center, align-center, d-inline-flex)
+                                                                img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(capa.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain;")
+                                                        v-card-text.py-1.text-xs-center {{ capa.capability }}
 
                                                 //v-card.mr-3.mb-3.dal-small-card(hover, raised, :width="90", :height="90")
                                                 //    v-layout(row, wrap, justify-center, align-center, style="height: 100%;", @click="resetCapabilityForm()")
@@ -217,6 +216,39 @@ block content
                 v-spacer
                 v-btn(color='success', flat, @click.native="addCapabilityDialog = false") 닫기
                 v-btn(color='success', flat, @click="addProductCapability()") 추가
+
+
+    v-menu.menu-capability(v-model='detailCapabilityDialog', :close-on-content-click='false', :nudge-width='$vuetify.breakpoint.width < 380 ? $vuetify.breakpoint.width - 20 : 380', max-width="380", offset-x, transition="slide-x-transition", :position-x="detailCapabilityDialogPos.x", :position-y="detailCapabilityDialogPos.y", absolute)
+        v-card(v-if="detailCapability !== null")
+            v-list
+                v-list-tile(avatar='')
+                    v-list-tile-avatar
+                        v-flex.platform-gradient-background(style="width: 100%; height: 100%; border-radius: 50%;", justify-center, align-center, d-inline-flex)
+                            img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(detailCapability.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain; border-radius: 0px;")
+                    v-list-tile-content
+                        v-list-tile-title {{detailCapability.capability}}
+
+                v-list-tile(avatar='', v-if="detailCapability.description !== null")
+                    v-list-tile-content
+                        v-list-tile-sub-title.caption Description
+                        v-list-tile-title {{ detailCapability.description }}
+
+            v-divider(v-if="detailCapabilityProducts !== null && detailCapabilityProducts.length > 0")
+
+            v-card-text.py-2.mt-2(v-if="detailCapabilityProducts !== null && detailCapabilityProducts.length > 0")
+                span.title.red--text.text--darken-1(style="font-weight: 700;") Control
+                v-layout.mt-2(row, wrap, justify-center, align-center)
+                    template(v-for="(product, index) in detailCapabilityProducts", :key="index")
+                        v-card.dal-small-card.mr-3.mb-3(hover, raised)
+                            v-layout(wrap,  style="height: 100%; overflow: hidden; min-height: 80px;", @click="showDetailProuct(product, index)")
+                                v-flex.platform-gradient-background(style="width: 90px;", justify-center, align-center, d-inline-flex)
+                                    img.png-shadow(:src="product.img", style="max-width: 75%; max-height: 75%; border-radius: 10px;")
+                                v-layout.pa-2(style="width: 180px;", align-center)
+                                    v-card-text.pa-0.body-2 {{product.title}}
+
+        v-card(v-else)
+            v-card-text.py-5.text-xs-center
+                v-progress-circular(indeterminate='', color='green')
 
 
 
