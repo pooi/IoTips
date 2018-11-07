@@ -86,4 +86,14 @@ router.post('/getCapabilities', function (req, res, next) {
     });
 });
 
+router.post('/mostView', function (req, res, next) {
+    dbDAO.getMostViewedBoardListData(function (isErr, result) {
+        if(isErr){
+            res.send(404);
+        }else{
+            res.send(result);
+        }
+    });
+});
+
 module.exports = router;

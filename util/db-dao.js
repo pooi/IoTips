@@ -212,6 +212,31 @@ exports.getBoardListData = function (type, page, callback) {
     })
 };
 
+exports.getMostViewedBoardListData = function (callback) {
+    var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
+        "FROM board as A " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT * FROM user " +
+        "GROUP BY id) as B on(B.id = A.user_id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM comment " +
+        "GROUP BY board_id) as C on(C.board_id = A.id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM recommend " +
+        "GROUP BY board_id) as D on(D.board_id = A.id) " +
+        "WHERE type='ecosystem' " +
+        "ORDER BY hit DESC " +
+        "LIMIT 0, 12";
+
+    conn.query(sql, [], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            callback(false, results);
+        }
+    })
+};
+
 exports.getUserBoardListData = function (userID, callback) {
 
     var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +

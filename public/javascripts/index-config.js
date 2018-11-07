@@ -23,7 +23,7 @@ function init(init_user) {
                 loopTop: true,
                 loopBottom: true,
                 anchors: ['home', 'about', 'platform'],
-                sectionsColor: ['#41b883', '#ff5f45', '#0798ec']
+                sectionsColor: ['#41b883', '#B0BEC5', '#0798ec']
             },
             scrollData: {
                 fab: false,
@@ -55,6 +55,8 @@ function init(init_user) {
 
             supporter: null,
             auth: new Auth(),
+
+            mostViewItems: [],
 
             cItems: [
                 {
@@ -135,6 +137,25 @@ function init(init_user) {
         mounted:[
             function () {
                 this.auth.parseUserData(init_user);
+            },
+            function () {
+                var data = {};
+
+                axios.post(
+                    '/mostView',
+                    data
+                ).then(function (response) {
+                    var res = response;
+                    var data = res.data;
+                    // console.log("data: ", data);
+                    vue.mostViewItems = [];
+                    vue.mostViewItems = vue.mostViewItems.concat(data);
+                    // vue.recentModel = 0;//vue.recentItems[0].id;
+                }).catch(function (error) {
+                    alert(error);
+                    // vue.filterDialog = false;
+                    // vue.isFilterProgress = false;
+                });
             }
         ]
     });

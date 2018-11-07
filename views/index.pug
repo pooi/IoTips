@@ -41,11 +41,25 @@ block content
                     //v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
             .section.section-full-page(style="z-index: 5;")
                 v-layout.safe-area-inset(style="height: 100%")
-                    v-flex.px-5.mx-3.text-xs-center(style="margin: auto;")
-                        //v-carousel(v-if="sectionIndex != 1")
-                        //  v-carousel-item(v-for='(item,i) in cItems', :key='i', :src='item.src')
-                        | Second section ...
-                        v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
+                    v-flex.mx-3.text-xs-center(style="margin: auto;")
+
+                        //v-container(fluid, grid-list-md, style="overflow:visible")
+                        //    v-layout(wrap, style="overflow:visible")
+                        v-flex.text-xs-center.pb-1(xs12, justify-center, align-center)
+                            p(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline deep-orange--text text--darken-3 mb-0' : 'deep-orange--text text--darken-3 mb-0'", style='font-weight: bold; font-size: 230%;') 가장 많이 본 구성
+                            span(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'body-2' : 'subheading'") Most viewed
+
+
+                        v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", v-if="mostViewItems.length > 0")
+                            v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, style="overflow:visible; height: 350px;", light)
+                                v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArray(mostViewItems)', :key='i', style="overflow:visible")
+                                    v-layout
+                                        v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md4, lg3)
+                                            include index_card_item
+
+                        v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", :class="$vuetify.breakpoint.xsOnly ? '' : 'mx-3' ", v-else)
+                            v-progress-circular(indeterminate, color="orange darken-3")
+
             .section.section-full-page
                 v-layout.safe-area-inset(style="height: 100%")
                     v-flex.px-5.mx-3.text-xs-center(style="margin: auto;")

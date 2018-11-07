@@ -1,0 +1,15 @@
+v-card.dal-card-scale.text-xs-left(light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="item !== null")
+
+    v-card-media(src="https://cdn.vuetifyjs.com/images/carousel/bird.jpg", height='250px')
+
+    v-card-title.title.mb-0.py-2.grey--text.text--darken-3 {{ item.title }}
+
+    //v-card-text.py-0.text-xs-left(v-if="item.tags.length > 0 || item.recognition_tags.length > 0")
+    //    span.caption.brown--text {{ supporter.hashTagsToString(item) }}
+    v-card-actions
+        v-spacer
+        //v-btn(flat, small, slot='activator', color='orange', dark, @click="shareSheet=true; shareItem=item;") Share
+        v-btn(flat, small, slot='activator', color='orange', dark, @click="") Share
+        v-btn(flat,small, color='orange', :href="'/board/'+item.id") Detail
+
+div(v-else)
