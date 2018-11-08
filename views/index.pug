@@ -46,16 +46,19 @@ block content
                         //v-container(fluid, grid-list-md, style="overflow:visible")
                         //    v-layout(wrap, style="overflow:visible")
                         v-flex.text-xs-center.pb-1(xs12, justify-center, align-center)
-                            p(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline deep-orange--text text--darken-3 mb-0' : 'deep-orange--text text--darken-3 mb-0'", style='font-weight: bold; font-size: 230%;') 가장 많이 본 구성
-                            span(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'body-2' : 'subheading'") Most viewed
+                            p(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline deep-orange--text text--darken-3 mb-0' : 'deep-orange--text text--darken-3 mb-0'", style='font-weight: bold; font-size: 230%;') 가장 많이 본 IoT 구성
+                            span(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'body-2' : 'subheading'") 많은 사람들이 찾아본 IoT 구성입니다.
 
 
                         v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", v-if="mostViewItems.length > 0")
-                            v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, style="overflow:visible; height: 350px;", light)
+                            v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, style="overflow:visible; height: 400px;", light)
                                 v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArray(mostViewItems)', :key='i', style="overflow:visible")
                                     v-layout
                                         v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md4, lg3)
                                             include index_card_item
+
+                            v-btn.mt-0(style='margin: 0 auto;  min-width: 60px; font-size: 0.8em;', dark, small, flat, color="white", outline, round, href='/board/ecosystem')
+                                span MORE
 
                         v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", :class="$vuetify.breakpoint.xsOnly ? '' : 'mx-3' ", v-else)
                             v-progress-circular(indeterminate, color="orange darken-3")

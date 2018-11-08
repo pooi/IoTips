@@ -562,6 +562,21 @@ class Supporter {
         return newArray;
     }
 
+    hashTagsToString (list, len) {
+
+        var tags = "";
+        for (var i = 0; i < Math.min(list.length, len); i++) {
+            var tag = list[i];
+            if (tag !== "") {
+                tags += "#" + tag + " ";
+            }
+        }
+        if (list.length > len)
+            tags += "...";
+
+        return tags;
+    }
+
     static makeid(len) {
         if(len === null || len <= 0){
             len = 10;

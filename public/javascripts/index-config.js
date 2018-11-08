@@ -147,10 +147,12 @@ function init(init_user) {
                 ).then(function (response) {
                     var res = response;
                     var data = res.data;
-                    // console.log("data: ", data);
+                    for(var i=0; i<data.length; i++){
+                        data[i].tags = JSON.parse(data[i].tags);
+                        data[i].rgt_date = new Date(data[i].rgt_date);
+                    }
                     vue.mostViewItems = [];
                     vue.mostViewItems = vue.mostViewItems.concat(data);
-                    // vue.recentModel = 0;//vue.recentItems[0].id;
                 }).catch(function (error) {
                     alert(error);
                     // vue.filterDialog = false;
