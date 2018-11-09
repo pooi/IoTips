@@ -438,6 +438,10 @@ table.mxPopupMenu tr {
     font-size: 4pt;
 }
 
+#fp-nav.fp-right {
+    right: 2px !important;
+}
+
 /* SAFE AREA*/
 
 .bottom-safe-area-padding {

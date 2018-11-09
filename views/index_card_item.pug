@@ -1,6 +1,6 @@
 v-card.dal-card-scale.text-xs-left(light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="item !== null")
 
-    v-card-media(src="https://cdn.vuetifyjs.com/images/carousel/bird.jpg", height='250px')
+    v-card-media(src="https://cdn.vuetifyjs.com/images/carousel/bird.jpg", :height='Math.min($vuetify.breakpoint.height-400, 250)')
 
     v-card-title.title.mb-0.py-2.grey--text.text--darken-3 {{ item.title }}
 
