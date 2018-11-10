@@ -23,7 +23,7 @@ function init(init_user) {
                 loopTop: true,
                 loopBottom: true,
                 anchors: ['home', 'about', 'platform'],
-                sectionsColor: ['#41b883', '#2DA5E8', '#B0BEC5']
+                // sectionsColor: ['#41b883', '#2DA5E8', '#B0BEC5']
             },
             scrollData: {
                 fab: false,

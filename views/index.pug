@@ -7,48 +7,46 @@ block content
 
     include toolbar_index
 
-    //div(style="height: 100%; width: 100%; position: fixed; top: 0; left: 0;")
+    div.animation-fade-in-2s(style="height: 100%; width: 100%; position: fixed; top: 0; left: 0; background-color: rgba(0, 0, 0, 0.5);")
+        v-layout(style="height:100%;").slideshow
+            .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
+            .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
+            .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
+            .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
 
     div.animation-fade-in-2s
         full-page#fullpage(ref='fullpage', :options='options')
-            .section.section-full-page
-                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/nature/1600x1400')")
-                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/buildings/1600x1400')")
-                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/food/1600x1400')")
-                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/technology/1600x1400')")
-                v-layout(style="height:100%;").slideshow
-                    .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
-                    .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
-                    .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
-                    .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
-                    #overlay(@click="getActiveSectionIndex()")
-                        div.box-index.py-4
+            .section.section-full-page(style="background-color: none !important;")
 
-                            //hr.mb-2(style="width: 30%; margin: auto; border-width: 0.5px;")
+                //v-layout(style="height:100%;").slideshow
+                //    .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
+                //    .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
+                //    .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
+                //    .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
+                .overlay
+                    div.box-index.py-4
 
-                            h1
-                                img(src="/images/logo/iotips_dark_large.png", :width='$vuetify.breakpoint.width <= 580 ? $vuetify.breakpoint.width - 100 : 480')
+                        h1
+                            img(src="/images/logo/iotips_dark_large.png", :width='$vuetify.breakpoint.width <= 580 ? $vuetify.breakpoint.width - 100 : 480')
 
-                            h1.mb-2
-                                small(style="font-weight: 300;", :style='$vuetify.breakpoint.width <= 420 ? ($vuetify.breakpoint.width <= 320 ? "font-size: 30%;" : "font-size: 50%;") : ""') Share and Discuss IoT Ecosystem
+                        h1.mb-2
+                            small(style="font-weight: 300;", :style='$vuetify.breakpoint.width <= 420 ? ($vuetify.breakpoint.width <= 320 ? "font-size: 30%;" : "font-size: 50%;") : ""') Share and Discuss IoT Ecosystem
 
-                            //hr.mt-3(style="width: 30%; margin: auto; border-width: 0.5px;")
-
-
-
-                            //small No.1
-                            //|  IoT Shared Platform
-                            //small powered by Team
-                    //| First section ...
-                    //v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
 
 
             .section.section-full-page(style="z-index: 5;")
-                v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%", align-center, justify-center)
-                    v-flex.px-2(xs12, sm4)
-                        v-card.dal-card-scale(hover, raised, height="400", style="width: 100%;")
-                            v-layout(row, wrap, align-center, justify-center, style="height: 100%; width: 100%;")
-                                .display-3(style="font-weight: 300;") Tips
+                .overlay
+                    v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%", align-center, justify-space-around)
+                        v-flex(xs12, sm4)
+                            v-card.dal-card-scale(hover, raised, height="400", style="width: 100%; background-color: rgba(220, 220, 220, 0.3) !important;")
+                                v-layout(row, wrap, align-center, justify-center, style="height: 100%; width: 100%;")
+                                    .display-3.white--text(style="font-weight: 400;") Tips
+
+                        v-flex(xs12, sm4)
+                            v-card.dal-card-scale(hover, raised, height="400", style="width: 100%; background-color: rgba(220, 220, 220, 0.3) !important;")
+                                v-layout(row, wrap, align-center, justify-center, style="height: 100%; width: 100%;")
+                                    .display-3.white--text(style="font-weight: 400;") Curation
+
 
 
                     //v-layout.px-5.mx-3.text-xs-center.xs12(align-center, justify-center, style)
@@ -56,28 +54,29 @@ block content
 
 
             .section.section-full-page(style="z-index: 5;")
-                v-layout.safe-area-inset(style="height: 100%")
-                    v-flex.mx-3.text-xs-center(style="margin: auto;")
+                .overlay
+                    v-layout.safe-area-inset(style="height: 100%")
+                        v-flex.mx-3.text-xs-center(style="margin: auto;")
 
-                        //v-container(fluid, grid-list-md, style="overflow:visible")
-                        //    v-layout(wrap, style="overflow:visible")
-                        v-flex.text-xs-center.pb-1(xs12, justify-center, align-center)
-                            p(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline deep-orange--text text--darken-3 mb-0' : 'deep-orange--text text--darken-3 mb-0'", style='font-weight: bold; font-size: 230%;') 가장 많이 본 IoT 구성
-                            span(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'body-2' : 'subheading'") 많은 사람들이 찾아본 IoT 구성입니다.
+                            //v-container(fluid, grid-list-md, style="overflow:visible")
+                            //    v-layout(wrap, style="overflow:visible")
+                            v-flex.text-xs-center.pb-1(xs12, justify-center, align-center)
+                                p.white--text.mb-0(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline' : 'display-2'", style='font-weight: 800; font-size: 230%;') 가장 많이 본 IoT 구성
+                                span.grey--text.text--lighten-1(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'body-2' : 'subheading'") 많은 사람들이 찾아본 IoT 구성입니다.
 
 
-                        v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", v-if="mostViewItems.length > 0")
-                            v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, style="overflow:visible;", light, :style="'height: ' + (Math.min($vuetify.breakpoint.height-400, 250)+101) + 'px;'")
-                                v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArray(mostViewItems)', :key='i', style="overflow:visible")
-                                    v-layout
-                                        v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md4, lg3)
-                                            include index_card_item
+                            v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", v-if="mostViewItems.length > 0")
+                                v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, style="overflow:visible;", light, :style="'height: ' + (Math.min($vuetify.breakpoint.height-400, 250)+101) + 'px;'")
+                                    v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArray(mostViewItems)', :key='i', style="overflow:visible")
+                                        v-layout
+                                            v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md4, lg3)
+                                                include index_card_item
 
-                            //v-btn.mt-0(style='margin: 0 auto;  min-width: 60px; font-size: 0.8em;', dark, small, flat, color="white", outline, round, href='/board/ecosystem')
-                            //    span MORE
+                                //v-btn.mt-0(style='margin: 0 auto;  min-width: 60px; font-size: 0.8em;', dark, small, flat, color="white", outline, round, href='/board/ecosystem')
+                                //    span MORE
 
-                        v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", :class="$vuetify.breakpoint.xsOnly ? '' : 'mx-3' ", v-else)
-                            v-progress-circular(indeterminate, color="orange darken-3")
+                            v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", :class="$vuetify.breakpoint.xsOnly ? '' : 'mx-3' ", v-else)
+                                v-progress-circular(indeterminate, color="orange darken-3")
 
 
 
