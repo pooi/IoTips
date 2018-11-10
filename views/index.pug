@@ -7,6 +7,8 @@ block content
 
     include toolbar_index
 
+    //div(style="height: 100%; width: 100%; position: fixed; top: 0; left: 0;")
+
     div.animation-fade-in-2s
         full-page#fullpage(ref='fullpage', :options='options')
             .section.section-full-page
@@ -39,6 +41,20 @@ block content
                             //small powered by Team
                     //| First section ...
                     //v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
+
+
+            .section.section-full-page(style="z-index: 5;")
+                v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%", align-center, justify-center)
+                    v-flex.px-2(xs12, sm4)
+                        v-card.dal-card-scale(hover, raised, height="400", style="width: 100%;")
+                            v-layout(row, wrap, align-center, justify-center, style="height: 100%; width: 100%;")
+                                .display-3(style="font-weight: 300;") Tips
+
+
+                    //v-layout.px-5.mx-3.text-xs-center.xs12(align-center, justify-center, style)
+
+
+
             .section.section-full-page(style="z-index: 5;")
                 v-layout.safe-area-inset(style="height: 100%")
                     v-flex.mx-3.text-xs-center(style="margin: auto;")
@@ -63,11 +79,7 @@ block content
                         v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", :class="$vuetify.breakpoint.xsOnly ? '' : 'mx-3' ", v-else)
                             v-progress-circular(indeterminate, color="orange darken-3")
 
-            .section.section-full-page
-                v-layout.safe-area-inset(style="height: 100%")
-                    v-flex.px-5.mx-3.text-xs-center(style="margin: auto;")
-                        | Third section ...
-                        v-btn(flat, color="white", href="#home") Next
+
 
     v-flex.text-xs-center(xs12, style="width: 100%; position: fixed; bottom: 25px; z-index: 10; background: trasparent;")
         v-btn.my-0.jump(flat, color='white', outline, round, href="/board/ecosystem") Get Started
