@@ -223,6 +223,9 @@ block content
                             img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(detailCapability.capability) + ".png"', style="max-width: 60%; max-height: 60%; object-fit: contain; border-radius: 0px;")
                     v-list-tile-content
                         v-list-tile-title {{detailCapability.capability}}
+                    v-list-tile-action
+                        v-btn(icon, ripple, small, @click="detailCapabilityDialog=false")
+                            v-icon(color='grey lighten-1') close
 
                 v-list-tile(avatar='', v-if="detailCapability.description !== null")
                     v-list-tile-content
@@ -314,7 +317,7 @@ block content
             v-divider.py-0.my-0
 
             v-card-actions
-                v-btn(color='error', flat, @click="removeProductFromDetail()") 삭제
+                //v-btn(color='error', flat, @click="removeProductFromDetail()") 삭제
                 v-spacer
                 v-btn(color='success', flat, @click.native="detailProductDialog = false") 닫기
 
@@ -373,7 +376,7 @@ block content
             v-divider.py-0.my-0
 
             v-card-actions
-                v-btn(color='error', flat, @click="removePlatformFromDetail()") 삭제
+                //v-btn(color='error', flat, @click="removePlatformFromDetail()") 삭제
                 v-spacer
                 v-btn(color='success', flat, @click.native="detailPlatformDialog = false") 닫기
 
