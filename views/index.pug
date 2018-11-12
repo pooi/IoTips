@@ -36,14 +36,14 @@ block content
 
             .section.section-full-page(style="z-index: 5;")
                 .overlay
-                    v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%", align-center, justify-space-around)
-                        v-flex(xs12, sm4)
-                            v-card.dal-card-scale(hover, raised, height="400", style="width: 100%; background-color: rgba(220, 220, 220, 0.3) !important;")
+                    v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%; padding-top: 100px; padding-bottom: 100px;", align-center, justify-space-around)
+                        v-flex.py-2(xs12, sm4, style="height: fit-content;")
+                            v-card.dal-card-scale(hover, raised, :style="'height: ' + (Math.min(($vuetify.breakpoint.height-350)/2, 400)) + 'px;'", style="width: 100%; background-color: rgba(220, 220, 220, 0.3) !important;")
                                 v-layout(row, wrap, align-center, justify-center, style="height: 100%; width: 100%;")
                                     .display-3.white--text(style="font-weight: 400;") Tips
 
-                        v-flex(xs12, sm4)
-                            v-card.dal-card-scale(hover, raised, height="400", style="width: 100%; background-color: rgba(220, 220, 220, 0.3) !important;")
+                        v-flex.py-2(xs12, sm4, style="height: fit-content;")
+                            v-card.dal-card-scale(hover, raised, :style="'height: ' + (Math.min(($vuetify.breakpoint.height-350)/2, 400)) + 'px;'", style="width: 100%; background-color: rgba(220, 220, 220, 0.3) !important;")
                                 v-layout(row, wrap, align-center, justify-center, style="height: 100%; width: 100%;")
                                     .display-3.white--text(style="font-weight: 400;") Curation
 

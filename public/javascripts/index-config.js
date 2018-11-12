@@ -83,11 +83,9 @@ function init(init_user) {
 
                 if(this.scrollData.scrollT > this.scrollData.delta){
                     this.scrollData.isShowFabTop = true;
-                    this.chatManager.hide();
                     this.scrollData.scrollT = 0;
                 }else if (this.scrollData.scrollT < -this.scrollData.delta) {
                     this.scrollData.isShowFabTop = false;
-                    this.chatManager.show();
                     this.scrollData.scrollT = 0;
                 }
 
@@ -99,12 +97,12 @@ function init(init_user) {
 
                 if(!this.scrollData.statusBar && this.scrollData.offsetTop < 50){
                     this.scrollData.statusBar = !this.scrollData.statusBar;
-                    this.changeStatusBarColorOnNativeApp("orange");
-                    this.statusColor = this.supporter.getStatusLightOrange();
+                    // this.changeStatusBarColorOnNativeApp("orange");
+                    // this.statusColor = this.supporter.getStatusLightOrange();
                 }else if(this.scrollData.statusBar & this.scrollData.offsetTop >= 50){
                     this.scrollData.statusBar = !this.scrollData.statusBar;
-                    this.changeStatusBarColorOnNativeApp("white");
-                    this.statusColor = "#FFFFFF";
+                    // this.changeStatusBarColorOnNativeApp("white");
+                    // this.statusColor = "#FFFFFF";
                 }
             },
             changeStatusBarColorOnNativeApp(color){
@@ -161,7 +159,7 @@ function init(init_user) {
             }
         ]
     });
-    vue.changeStatusBarColorOnNativeApp("orange");
+    // vue.changeStatusBarColorOnNativeApp("orange");
 
     vue.supporter = new Supporter(vue);
     // vue.auth = new Auth(vue);
