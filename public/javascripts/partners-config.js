@@ -27,7 +27,7 @@ function init(init_user) {
         mounted: [
             function () {
                 this.auth.parseUserData(init_user);
-                this.auth.requireLogin();
+                // this.auth.requireLogin();
             }
         ]
     });
