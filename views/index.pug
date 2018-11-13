@@ -7,41 +7,148 @@ block content
 
     include toolbar_index
 
+    div.animation-fade-in-2s(style="height: 100%; width: 100%; position: fixed; top: 0; left: 0; background-color: rgba(0, 0, 0, 0.5);")
+        v-layout(style="height:100%;").slideshow
+            .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
+            .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
+            .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
+            .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
+
     div.animation-fade-in-2s
         full-page#fullpage(ref='fullpage', :options='options')
-            .section.section-full-page
-                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/nature/1600x1400')")
-                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/buildings/1600x1400')")
-                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/food/1600x1400')")
-                //.slideshow-image(style="background-image: url('https://source.unsplash.com/category/technology/1600x1400')")
-                v-layout(style="height:100%;").slideshow
-                    .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
-                    .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
-                    .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
-                    .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
-                    #overlay(@click="getActiveSectionIndex()")
-                        div.box-title.py-4
-                            h1
-                                small No.1
-                                |  IoT Shared Platform
-                                small powered by Team
-                    //| First section ...
-                    //v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
+            .section.section-full-page(style="background-color: none !important;")
+
+                //v-layout(style="height:100%;").slideshow
+                //    .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
+                //    .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
+                //    .slideshow-image(style="background-image: url('/images/bg_index_3.jpg')")
+                //    .slideshow-image(style="background-image: url('/images/bg_index_4.jpg')")
+                .overlay
+                    div.box-index.py-4
+
+                        h1
+                            img(src="/images/logo/iotips_dark_large.png", :width='$vuetify.breakpoint.width <= 580 ? $vuetify.breakpoint.width - 100 : 480')
+
+                        h1.mb-2
+                            small(style="font-weight: 300;", :style='$vuetify.breakpoint.width <= 420 ? ($vuetify.breakpoint.width <= 320 ? "font-size: 30%;" : "font-size: 50%;") : ""') Share and Discuss IoT Ecosystem
+
+
+
+            //.section.section-full-page(style="z-index: 5;")
+            //    .overlay
+            //
+            //        v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%; padding-top: 100px; padding-bottom: 100px;", align-center, justify-center)
+            //
+            //            v-flex.mx-3(style="margin: auto;")
+            //
+            //                //v-container(fluid, grid-list-md, style="overflow:visible")
+            //                //    v-layout(wrap, style="overflow:visible")
+            //                v-flex.text-xs-center(xs12, justify-center, align-center, :class="$vuetify.breakpoint.xsOnly ? 'pb-3' : 'pb-5'")
+            //                    p.white--text.mb-0(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline' : 'display-2'", style='font-weight: 800; font-size: 230%;') IoTips Menu
+            //
+            //                v-layout(row, wrap, style="width: 100%;", align-center, justify-center)
+            //                    template(v-if="$vuetify.breakpoint.xsOnly")
+            //                        v-card.dal-card-scale.mx-2.mb-2(hover, raised, style="width: 100%; ")
+            //                            v-layout(style="height: 100%; overflow: hidden; min-height: 100px;")
+            //                                v-flex(style="min-width: 100px; overflow: hidden; background-image: url('/images/bg_index_card_1.jpg'); background-size: cover;", justify-center, align-center, d-inline-flex)
+            //                                    //img(src="/images/bg_index_card_1.jpg", style="background-size: cover; height:100%;")
+            //                                v-flex.px-2.py-3(style="min-width: 100px; margin: auto;")
+            //                                    v-card-text.pt-0.pb-0.px-2.headline Tips
+            //                                    v-card-text.pt-2.pb-0.px-2.grey--text.text--darken-1.caption Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            //
+            //                        v-card.dal-card-scale.mx-2(hover, raised, style="width: 100%; ")
+            //                            v-layout(style="height: 100%; overflow: hidden; min-height: 100px;")
+            //                                v-flex(style="min-width: 100px; overflow: hidden; background-image: url('/images/bg_index_card_2.jpg'); background-size: cover;", justify-center, align-center, d-inline-flex)
+            //                                    //img(src="/images/bg_index_card_1.jpg", style="background-size: cover; height:100%;")
+            //                                v-flex.px-2.py-3(style="min-width: 100px; margin: auto;")
+            //                                    v-card-text.pt-0.pb-0.px-2.headline Curation
+            //                                    v-card-text.pt-2.pb-0.px-2.grey--text.text--darken-1.caption Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            //
+            //                    template(v-else)
+            //                        v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
+            //                            v-card-media(src="/images/bg_index_card_1.jpg" height="150")
+            //                            v-card-text.pt-3.pb-2.px-3.display-1 Tips
+            //                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+            //                        v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
+            //                            v-card-media(src="/images/bg_index_card_2.jpg" height="150")
+            //                            v-card-text.pt-3.pb-2.px-3.display-1 Curation
+            //                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+
+
             .section.section-full-page(style="z-index: 5;")
-                v-layout.safe-area-inset(style="height: 100%")
-                    v-flex.px-5.mx-3.text-xs-center(style="margin: auto;")
-                        //v-carousel(v-if="sectionIndex != 1")
-                        //  v-carousel-item(v-for='(item,i) in cItems', :key='i', :src='item.src')
-                        | Second section ...
-                        v-btn(flat, color="white", @click='$refs.fullpage.api.moveSectionDown()') Next
-            .section.section-full-page
-                v-layout.safe-area-inset(style="height: 100%")
-                    v-flex.px-5.mx-3.text-xs-center(style="margin: auto;")
-                        | Third section ...
-                        v-btn(flat, color="white", href="#home") Next
+                .overlay
+
+                    v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%; padding-top: 50px; padding-bottom: 50px;", align-center, justify-center)
+
+                        v-flex(style="margin: auto;")
+
+                            //v-container(fluid, grid-list-md, style="overflow:visible")
+                            //    v-layout(wrap, style="overflow:visible")
+                            v-flex.text-xs-center(xs12, justify-center, align-center, :class="$vuetify.breakpoint.xsOnly ? 'pb-3' : 'pb-5'")
+                                p.white--text.mb-0(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline' : 'display-2'", style='font-weight: 800; font-size: 230%;') IoTips Menu
+
+                            v-layout(row, wrap, style="width: 100%;", align-center, justify-center)
+                                template(v-if="$vuetify.breakpoint.xsOnly")
+                                    v-flex.pt-3.px-2(xs12, style="overflow:visible", v-if="mostViewItems.length > 0")
+                                        v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, hide-controls, interval="3000", style="overflow:visible;", light, :style="'height: ' + Math.min(($vuetify.breakpoint.height-120-70), 310) + 'px;'")
+                                            v-carousel-item.elevation-0(style="overflow:visible")
+                                                v-layout
+                                                    v-flex(xs12)
+                                                        v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light)
+                                                            v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
+                                                            v-card-text.pt-3.pb-2.px-3.display-1 Tips
+                                                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            v-carousel-item.elevation-0(style="overflow:visible")
+                                                v-layout
+                                                    v-flex(xs12)
+                                                        v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light)
+                                                            v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
+                                                            v-card-text.pt-3.pb-2.px-3.display-1 Curation
+                                                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+
+
+
+                                template(v-else)
+                                    v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
+                                        v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
+                                        v-card-text.pt-3.pb-2.px-3.display-1 Tips
+                                        v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                    v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
+                                        v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
+                                        v-card-text.pt-3.pb-2.px-3.display-1 Curation
+                                        v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+
+
+
+            .section.section-full-page(style="z-index: 5;")
+                .overlay
+                    v-layout.safe-area-inset(style="height: 100%")
+                        v-flex.mx-3.text-xs-center(style="margin: auto;")
+
+                            //v-container(fluid, grid-list-md, style="overflow:visible")
+                            //    v-layout(wrap, style="overflow:visible")
+                            v-flex.text-xs-center.pb-1(xs12, justify-center, align-center)
+                                p.white--text.mb-0(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline' : 'display-2'", style='font-weight: 800; font-size: 230%;') 가장 많이 본 IoT 구성
+                                span.grey--text.text--lighten-1(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'body-2' : 'subheading'") 많은 사람들이 찾아본 IoT 구성입니다.
+
+
+                            v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", v-if="mostViewItems.length > 0")
+                                v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, style="overflow:visible;", light, :style="'height: ' + (Math.min($vuetify.breakpoint.height-400, 250)+101) + 'px;'")
+                                    v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArray(mostViewItems)', :key='i', style="overflow:visible")
+                                        v-layout
+                                            v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md4, lg3)
+                                                include index_card_item
+
+                                //v-btn.mt-0(style='margin: 0 auto;  min-width: 60px; font-size: 0.8em;', dark, small, flat, color="white", outline, round, href='/board/ecosystem')
+                                //    span MORE
+
+                            v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", :class="$vuetify.breakpoint.xsOnly ? '' : 'mx-3' ", v-else)
+                                v-progress-circular(indeterminate, color="orange darken-3")
+
+
 
     v-flex.text-xs-center(xs12, style="width: 100%; position: fixed; bottom: 25px; z-index: 10; background: trasparent;")
-        v-btn.my-0.jump(flat, color='white', outline, round, href="/board") Get Started
+        v-btn.my-0.jump(flat, color='white', outline, round, href="/board/ecosystem") Get Started
 
 
     script(type="text/javascript" src='/javascripts/index-config.js')

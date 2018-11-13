@@ -12,7 +12,7 @@ exports.isAlreadyRegisteredUser = function (userId, callback) {
     });
 };
 
-exports.createNewUser = function (userId, name, email, photo, provider, callback) {
+exports.createNewUser = function (userId, name, nickname, email, photo, provider, callback) {
 
     var sql = "SELECT * FROM user WHERE user_id=?;";
     conn.query(sql, [userId], function(err, results) {
@@ -34,7 +34,10 @@ exports.createNewUser = function (userId, name, email, photo, provider, callback
                 });
             }else{ // new user
                 console.log("New user");
-                var nickname = email.split("@")[0] + "-" + provider[0];
+                if(nickname === null){
+                    nickname = email.split("@")[0] + "-" + provider[0];
+                }
+                // var nickname = email.split("@")[0] + "-" + provider[0];
                 var sql = "INSERT user(user_id, name, nickname, email, photo, provider) VALUES(?, ?, ?, ?, ?, ?);";
                 conn.query(sql, [userId, name, nickname, email, photo, provider], function(err, results) {
                     if (err) {
@@ -55,12 +58,14 @@ exports.getAdditionalUserData = function(userId, callback){
     var sql = "SELECT * FROM user WHERE user_id=?;";
     conn.query(sql, [userId], function(err, results) {
         if(err){
-            consoole.log(err);
+            console.log(err);
             callback(null);
         }else{
             var result = results[0];
             returnData['db_id'] = result.id;
+            returnData['name'] = result.name;
             returnData['nickname'] = result.nickname;
+            returnData['email'] = result.email;
             returnData['rgt_date'] = result.rgt_date.toJSON();
             returnData['last_login_date'] = result.last_login_date.toJSON();
             callback(returnData);
@@ -97,6 +102,11 @@ exports.registBoard = function (id, data, callback) {
         values.push(data.graph);
     }
 
+    if("tags" in data){
+        argu.push("tags");
+        values.push(JSON.stringify(data.tags));
+    }
+
     var products = [];
     var platforms = [];
     if("products" in data){
@@ -117,14 +127,14 @@ exports.registBoard = function (id, data, callback) {
 
     conn.query(sql, values, function(err, result){
         if(err){
-            callback(false);
+            callback(false, null);
         }else{
             console.log(result);
             var boardID = result.insertId;
             if(products.length > 0 || platforms.length > 0){
                 saveProductsAndPlatforms(boardID, products, platforms, callback);
             }else{
-                callback(true);
+                callback(true, boardID);
             }
         }
     })
@@ -132,7 +142,7 @@ exports.registBoard = function (id, data, callback) {
 };
 
 function saveProductsAndPlatforms(boardID, products, platforms, callback){
-    var product_sql = "INSERT INTO board_product(id, board_id, title, description, company, currency, price, image, urls) VALUES ?;";
+    var product_sql = "INSERT INTO board_product(id, board_id, title, description, company, currency, price, image, urls, capability) VALUES ?;";
     var platform_sql = "INSERT INTO board_platform(id, board_id, title, description, company, currency, price, image, urls) VALUES ?;";
 
     var sql = "";
@@ -145,6 +155,7 @@ function saveProductsAndPlatforms(boardID, products, platforms, callback){
             var value = [];
             value.push(product.id); value.push(boardID); value.push(product.title); value.push(product.description); value.push(product.company);
             value.push(product.currency); value.push(product.price); value.push(product.image); value.push(JSON.stringify(product.urls));
+            value.push(JSON.stringify(product.capability));
             product_values.push(value);
         }
         values.push(product_values);
@@ -165,10 +176,10 @@ function saveProductsAndPlatforms(boardID, products, platforms, callback){
 
     conn.query(sql, values, function(err, result){
         if(err){
-            callback(false);
+            callback(false, null);
         }else{
             console.log(result);
-            callback(true);
+            callback(true, boardID);
         }
     })
 }
@@ -192,6 +203,97 @@ exports.getBoardListData = function (type, page, callback) {
         "LIMIT ?,?";
 
     conn.query(sql, [type, page*pageStep, pageStep], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            // console.log(results);
+            callback(false, results);
+        }
+    })
+};
+
+exports.getMostViewedBoardListData = function (callback) {
+    var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike, P.product_images as product_images " +
+        "FROM board as A " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT * FROM user " +
+        "GROUP BY id) as B on(B.id = A.user_id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM comment " +
+        "GROUP BY board_id) as C on(C.board_id = A.id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM recommend " +
+        "GROUP BY board_id) as D on(D.board_id = A.id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, group_concat(image) as product_images FROM board_product " +
+        "GROUP BY board_id) as P on(P.board_id = A.id) "+
+        "WHERE type='ecosystem' " +
+        "ORDER BY hit DESC " +
+        "LIMIT 0, 12";
+
+    conn.query(sql, [], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+
+            for(var i=0; i<results.length; i++){
+                var result = results[i];
+                if(result.product_images !== null){
+                    var product_urls = result.product_images;
+                    var array = product_urls.split(",");
+                    results[i].product_images = array;
+                }
+            }
+            callback(false, results);
+        }
+    })
+};
+
+exports.getUserBoardListData = function (userID, callback) {
+
+    var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
+        "FROM board as A " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT * FROM user " +
+        "GROUP BY id) as B on(B.id = A.user_id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM comment " +
+        "GROUP BY board_id) as C on(C.board_id = A.id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM recommend " +
+        "GROUP BY board_id) as D on(D.board_id = A.id) " +
+        "WHERE A.user_id=? " +
+        "ORDER BY id DESC " +
+        "LIMIT 0,10";
+
+    conn.query(sql, [userID], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            // console.log(results);
+            callback(false, results);
+        }
+    })
+};
+
+exports.getUserScrapBoardListData = function (userID, callback) {
+
+    var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
+        "FROM board as A " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT * FROM user " +
+        "GROUP BY id) as B on(B.id = A.user_id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM comment " +
+        "GROUP BY board_id) as C on(C.board_id = A.id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM recommend " +
+        "GROUP BY board_id) as D on(D.board_id = A.id) " +
+        "WHERE A.id in (SELECT board_id FROM scrap WHERE user_id=?) " +
+        "ORDER BY id DESC " +
+        "LIMIT 0,10";
+
+    conn.query(sql, [userID], function(err, results){
         if(err){
             callback(true, err);
         }else{
@@ -275,6 +377,40 @@ exports.getUserInformation = function (userID, callback) {
             callback(true, err);
         }else{
             callback(false, results[0]);
+        }
+    })
+};
+
+exports.getCapabilities = function (callback) {
+    var sql = "SELECT * FROM capability";
+
+    conn.query(sql, [], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            callback(false, results);
+        }
+    })
+};
+
+exports.saveScrap = function (boardID, userID, callback) {
+    var sql = "SELECT * FROM scrap WHERE user_id=? and board_id=?";
+    conn.query(sql, [userID, boardID], function(err, results){
+        if(err){
+            callback(true, false, err);
+        }else{
+            if(results.length > 0){
+                callback(false, true, err);
+            }else{
+                var insertSql = "INSERT INTO scrap(user_id, board_id) VALUES(?,?)";
+                conn.query(insertSql, [userID, boardID], function(err, results){
+                    if(err){
+                        callback(true, false, err);
+                    }else{
+                        callback(false, false, results);
+                    }
+                })
+            }
         }
     })
 };

@@ -10,9 +10,18 @@ var url = require('url');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log(req);
   var user = support.ensureAuthenticated(req);
   res.render('index', { user: JSON.stringify(user) });
+});
+
+router.get('/mypage', function(req, res, next) {
+    var user = support.ensureAuthenticated(req);
+    if(user){
+        res.render('mypage', { user: JSON.stringify(user) });
+    }else{
+        res.redirect("/");
+    }
+
 });
 
 router.post('/parseurl', function (req, res, next) {
@@ -65,6 +74,26 @@ router.post('/getUserInfo', function (req, res, next) {
     }else{
         res.send(404);
     }
+});
+
+router.post('/getCapabilities', function (req, res, next) {
+    dbDAO.getCapabilities(function (isErr, result) {
+        if(isErr){
+            res.send(404);
+        }else{
+            res.send(result);
+        }
+    });
+});
+
+router.post('/mostView', function (req, res, next) {
+    dbDAO.getMostViewedBoardListData(function (isErr, result) {
+        if(isErr){
+            res.send(404);
+        }else{
+            res.send(result);
+        }
+    });
 });
 
 module.exports = router;

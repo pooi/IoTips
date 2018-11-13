@@ -24,10 +24,14 @@ function init(init_user, init_boardID) {
 
             supporter: null,
             auth: new Auth(),
-            graphManager: new GraphManager("graph"),
+            graphManager: new GraphManager("graph", false),
             userInfo: new UserInformation(),
 
             viewer: null,
+            shareSheet: false,
+            shares: [
+                { img: 'kakao.png', title: 'Kakao' },
+            ],
 
             result: null,
 
@@ -70,7 +74,16 @@ function init(init_user, init_boardID) {
             comments: null,
             commentLoading: false,
 
+            CAPABILITY: null,
             capabilities: [],
+            detailCapabilityDialog: false,
+            detailCapabilityDialogPos: {
+                x: 0,
+                y: 0
+            },
+            detailCapability: null,
+            detailCapabilityProducts: [],
+
             platforms: [],
             detailPlatformDialog: false,
             detailPlatform: null,
@@ -85,6 +98,8 @@ function init(init_user, init_boardID) {
             tempParentComment: null,
             commentSubmitProgress: false,
 
+            scrapSuccessDialog: false,
+            scrapFailDialog: false,
 
         },
         methods:{
@@ -152,6 +167,163 @@ function init(init_user, init_boardID) {
             onEditorReady(editor) {
                 console.log('editor ready!');//, editor)
             },
+            scrap: function(){
+                if(this.auth.user === null){
+                    this.auth.toggleDialog();
+                    return;
+                }
+
+
+
+                var data = {
+                    boardID: this.result.id,
+                    userID: this.auth.user.db_id
+                };
+
+                axios.post(
+                    '/board/user/scrap/save',
+                    data
+                ).then(function (res) {
+                    var result = res.data;
+
+                    if(result){
+                        vue.scrapSuccessDialog = true;
+                    }else{
+                        vue.scrapFailDialog = true;
+                    }
+
+                }).catch(function (error) {
+                    alert(error);
+                });
+
+            },
+            shareTo: function (title) {
+
+                var url = window.location.href;
+                var origin = window.location.origin;
+                var pathname = window.location.pathname;
+
+                var shareItem = this.result;
+                if(title === "Kakao"){
+
+                    var tags = "";
+                    var tagList = this.result.tags;
+                    if(tagList !== null){
+                        for(var i=0; i<Math.min(tagList.length, 5); i++){
+                            var tag = tagList[i];
+                            if(tag !== ""){
+                                tags += "#" + tag + " ";
+                            }
+                        }
+                        if(tagList.length > 5)
+                            tags += "...";
+                    }
+
+                    var templateArgs = {
+                        title: 'IoTips' + " - " + shareItem.title,
+                        content: tags,
+                        button1_title: '확인하기',
+                        button1_link: pathname.substring(1),
+                        viewCount: shareItem.hit,
+                        likeCount: 20,
+                        commentCount: vue.comments === null ? 0 : vue.comments.length
+                    };
+
+                    if(this.products !== null && this.products.length > 0){
+                        var img_count = Math.min(this.products.length,3);
+                        for(var i=0; i<img_count; i++){
+                            var key = 'img_' + (i+1);
+                            templateArgs[key] = this.products[i].img;
+                        }
+                        templateArgs['img_count'] = img_count;
+                    }
+
+                    Kakao.Link.sendCustom({
+                        templateId: 12946,
+                        templateArgs: templateArgs
+                    });
+
+                    // Kakao.Link.sendDefault({
+                    //     objectType: 'feed',
+                    //     content: {
+                    //         title: 'IoTips' + " - " + shareItem.title,
+                    //         description: tags,
+                    //         imageUrl: origin + "/images/logo/iotips_light.png",
+                    //         link: {
+                    //             mobileWebUrl: url,
+                    //             webUrl: url
+                    //         }
+                    //     },
+                    //     buttons: [
+                    //         {
+                    //             title: '확인하기',
+                    //             link: {
+                    //                 mobileWebUrl: url,
+                    //                 webUrl: url
+                    //             }
+                    //         }
+                    //     ],
+                    //     social: {
+                    //         likeCount: 20,
+                    //         viewCount: shareItem.hit,
+                    //         commentCount: vue.comments === null ? 0 : vue.comments.length
+                    //     }
+                    // });
+                }
+                // this.sheet = false;
+                this.shareSheet = false;
+
+            },
+
+            showDetailCapability: function(e, capability){
+                if(!this.detailCapabilityDialog){
+                    // console.log(e, capability);
+                    if(this.detailCapability === null || this.detailCapability.id !== capability.id){
+                        this.detailCapability = capability;
+                    }
+                    this.detailCapabilityDialogPos.x = e.clientX;
+                    this.detailCapabilityDialogPos.y = e.clientY;
+                    this.detailCapabilityDialog = true;
+
+                    this.detailCapabilityProducts = [];
+                    for(var i=0; i<this.products.length; i++){
+                        var product = this.products[i];
+                        if(product.capabilities !== null && product.capabilities.length > 0){
+                            for(var j=0; j<product.capabilities.length; j++){
+                                if(product.capabilities[j].id === capability.id && product.capabilities[j].check){
+                                    this.detailCapabilityProducts.push(product);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                }else if(this.detailCapability === null || this.detailCapability.id !== capability.id){
+
+                    this.detailCapabilityDialog = false;
+
+                    setTimeout(function () {
+                        vue.detailCapability = capability;
+                        vue.detailCapabilityDialogPos.x = e.clientX;
+                        vue.detailCapabilityDialogPos.y = e.clientY;
+                        vue.detailCapabilityDialog = true;
+
+                        vue.detailCapabilityProducts = [];
+                        for(var i=0; i<vue.products.length; i++){
+                            var product = vue.products[i];
+                            if(product.capabilities !== null && product.capabilities.length > 0){
+                                for(var j=0; j<product.capabilities.length; j++){
+                                    if(product.capabilities[j].id === capability.id && product.capabilities[j].check){
+                                        vue.detailCapabilityProducts.push(product);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }, 300);
+
+                }
+            },
 
             showDetailPlatform: function (item, index) {
                 this.detailPlatform = item;
@@ -196,6 +368,36 @@ function init(init_user, init_boardID) {
                 this.detailProductDialog = true;
             },
 
+            getCapabilityList: function(){
+                this.capabilityLoading = true;
+
+                var data = {};
+                axios.post(
+                    '/getCapabilities',
+                    data
+                ).then(function (res) {
+                    var data = res.data;
+                    // console.log(data);
+
+                    vue.CAPABILITY = data;
+                    for(var i=0; i<vue.CAPABILITY.length; i++){
+                        vue.CAPABILITY[i]['check'] = false;
+                    }
+                    vue.totalCapabilities = JSON.parse(JSON.stringify( vue.CAPABILITY ));
+                    vue.capabilityLoading = false;
+
+                    // vue.tempCapabilities = [];
+                    // for(var i=0; i<vue.CAPABILITY.length; i++){
+                    //     var data = vue.CAPABILITY[i];
+                    //     data['check'] = false;
+                    //     vue.tempCapabilities.push(data);
+                    // }
+
+                }).catch(function (error) {
+                    alert(error);
+                });
+            },
+
             getComments: function () {
                 if("id" in this.result){
                     this.commentLoading = true;
@@ -214,7 +416,28 @@ function init(init_user, init_boardID) {
                             for(var i=0; i<data.length; i++){
                                 data[i].rgt_date = new Date(data[i].rgt_date);
                             }
-                            vue.comments = data;
+
+                            vue.comments = [];
+                            for(var i=0; i<data.length; i++){
+                                if(data[i].parent < 0){
+                                    vue.comments.push(data[i]);
+                                }else{
+                                    var parentID = data[i].parent;
+                                    var check = false;
+                                    for(var j=0; j<vue.comments.length; j++){
+                                        if(vue.comments[j].id === parentID){
+                                            vue.comments.splice(j+1, 0, data[i]);
+                                            check = true;
+                                            break;
+                                        }
+                                    }
+                                    if(!check){
+                                        vue.comments.push(data[i]);
+                                    }
+                                }
+                            }
+
+                            // vue.comments = data;
                             vue.commentLoading = false;
                         }).catch(function (error) {
                             alert(error);
@@ -330,7 +553,7 @@ function init(init_user, init_boardID) {
                     data
                 ).then(function (res) {
                     var result = res.data.result;
-                    // console.log(result);
+                    console.log(result);
 
                     if(result.content != null){
                         vue.content = json2html(JSON.parse(result.content));
@@ -368,6 +591,10 @@ function init(init_user, init_boardID) {
                         }
                     }
 
+                    if("tags" in result){
+                        result.tags = JSON.parse(result.tags);
+                    }
+
                     vue.result = result;
 
                     var platforms = res.data.platforms;
@@ -385,7 +612,25 @@ function init(init_user, init_boardID) {
                         vue.products.push(product);
                     }
 
+                    if(products.length > 0){
+                        vue.getCapabilityList();
+                    }
+
                     vue.getComments();
+
+                    if("graph" in result){
+                        if(result.graph != null){
+                            // var graph = JSON.parse(result.graph);
+                            // console.log(json2xml(graph));
+                            // vue.graphManager.makeFromXml(json2xml(graph));
+                            setTimeout(function () {
+                                // vue.graphManager = new GraphManager("graph");
+                                vue.graphManager.main();
+                                var graph = JSON.parse(result.graph);
+                                vue.graphManager.makeFromXml(json2xml(graph));
+                            }, 1000);
+                        }
+                    }
 
                 }).catch(function (error) {
                     alert(error);
@@ -449,6 +694,34 @@ function init(init_user, init_boardID) {
             editor() {
                 return this.$refs.myTextEditor.quill
             },
+            totalCapabilities: function () {
+                var capabilities = null;
+                if(this.CAPABILITY !== null){
+                    capabilities = JSON.parse(JSON.stringify(this.CAPABILITY));
+                    for(var i=0; i<capabilities.length; i++){
+                        capabilities[i].check = false;
+                    }
+
+                    var haveCapa = false;
+                    for(var i=0; i<this.products.length; i++){
+                        var product = this.products[i];
+                        if(product.capabilities !== null && product.capabilities.length > 0){
+                            for(var j=0; j<product.capabilities.length; j++){
+                                if(product.capabilities[j].check){
+                                    haveCapa = true;
+                                    capabilities[j].check = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if(!haveCapa){
+                        capabilities = null;
+                    }
+                }
+
+                return capabilities
+            }
             // contentCode() {
             //     return hljs.highlightAuto(this.content).value
             // }

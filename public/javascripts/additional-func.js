@@ -92,7 +92,7 @@ class Product {
         this.description = null;
         this.img = null;
 
-        this.isFree = true;
+        this.isFree = false;
         this.price = null;
         this.currencies = CURRENCIES;
         this.currency = this.currencies[0];
@@ -127,6 +127,18 @@ class Product {
     }
 
     toDic(){
+        var capabilityJSON = null;
+        if(this.capabilities !== null && this.capabilities.length > 0){
+            // var capabilities = [];
+            // for(var i=0; i<this.capabilities.length; i++){
+            //     var capability = this.capabilities[i];
+            //     if(capability.check){
+            //         capabilities.push(capability);
+            //     }
+            // }
+            capabilityJSON = this.capabilities;
+        }
+
         return {
             id: this.id,
             title: this.title,
@@ -136,7 +148,7 @@ class Product {
             image: this.img,
             price: this.isFree ? 0 : this.price,
             currency: this.isFree ? undefined : this.currency.currency,
-
+            capability: capabilityJSON === null ? undefined : capabilityJSON
         };
     }
 
@@ -155,6 +167,7 @@ class Product {
                 break;
             }
         }
+        this.capabilities = JSON.parse(data.capability);
     }
 }
 
@@ -256,8 +269,13 @@ class Supporter {
                 "href" : "/",
                 "submenu" : [
                     {
+<<<<<<< HEAD
                         "title" : "구성도",
                         "href" : "/curation"
+=======
+                        "title" : "구성",
+                        "href" : "/"
+>>>>>>> e5a46ef636278ffeb1a014ffd54ca1a09571f13d
                     },
                    {
                         "title" : "제품",
@@ -549,6 +567,21 @@ class Supporter {
         return newArray;
     }
 
+    hashTagsToString (list, len) {
+
+        var tags = "";
+        for (var i = 0; i < Math.min(list.length, len); i++) {
+            var tag = list[i];
+            if (tag !== "") {
+                tags += "#" + tag + " ";
+            }
+        }
+        if (list.length > len)
+            tags += "...";
+
+        return tags;
+    }
+
     static makeid(len) {
         if(len === null || len <= 0){
             len = 10;
@@ -581,11 +614,11 @@ class Supporter {
     parseBoardDate(date){
         var today = new Date();
         var str = "";
-        if(today.getFullYear() === date.getFullYear() && today.getDay() === date.getDay() && today.getMonth() === date.getMonth()){
+        if(today.getFullYear() === date.getFullYear() && today.getDate() === date.getDate() && today.getMonth() === date.getMonth()){
             str = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
         }else{
             var month = date.getMonth()+1;
-            var day = date.getDay();
+            var day = date.getDate();
             str = (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day);
         }
         return str;
@@ -613,8 +646,67 @@ class Supporter {
                 title: "구성도",
                 fullTitle: "구성도 게시판"
             }
-        ]
+        ];
         return boardTypes;
+    }
+
+    getBoardTypes() {
+        var boardTypes = [
+            {
+                type: "free",
+                title: "자유",
+                fullTitle: "자유 게시판"
+            },
+            {
+                type: "question",
+                title: "질문",
+                fullTitle: "질문 게시판"
+            },
+            {
+                type: "review",
+                title: "품평",
+                fullTitle: "품평 게시판"
+            },
+            {
+                type: "ecosystem",
+                title: "구성도",
+                fullTitle: "구성도 게시판"
+            }
+        ];
+        return boardTypes;
+    }
+
+    getBoardTitleFromType(type){
+        var boardTypes = this.getBoardTypes();
+        for(var i=0; i<boardTypes.length; i++){
+            if(boardTypes[i].type === type){
+                return boardTypes[i].title;
+            }
+        }
+        return "";
+    }
+
+    convertTitle(title){
+        var breakpoint = this.vue.__proto__.$vuetify.breakpoint;
+        if(breakpoint.xs || breakpoint.xl){
+            var stringByteLength = (function(s,b,i,c){
+                for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
+                return b
+            })(title);
+            // console.log(stringByteLength);
+            if(stringByteLength < 50){
+                return title;
+            }else{
+                var newTitle = title.substring(0, 20) + "...";
+                return newTitle;
+            }
+        }else{
+            return title;
+        }
+    }
+
+    parseImageName(title){
+        return title.toLowerCase().replace(" ", "_");
     }
 }
 
@@ -627,15 +719,35 @@ class Auth {
         this.loginDialog = false;
         this.detailDialog = false;
         this.dialogPersistent = false;
+        this.requireLoginDialog = false;
     }
 
     loginGoogle(){
         var pathname = window.location.pathname;
-        window.location.href = "/auth/google?redirectTo=" + pathname;
+        var search = window.location.search;
+        window.location.href = "/auth/google?redirectTo=" + pathname + search;
+    }
+
+    loginKakao(){
+        var pathname = window.location.pathname;
+        var search = window.location.search;
+        window.location.href = "/auth/kakao?redirectTo=" + pathname + search;
+    }
+
+    loginNaver(){
+        var pathname = window.location.pathname;
+        var search = window.location.search;
+        window.location.href = "/auth/naver?redirectTo=" + pathname + search;
     }
 
     logout(){
         var pathname = window.location.pathname;
+        var search = window.location.search;
+        window.location.href = "/auth/logout?redirectTo=" + pathname + search;
+    }
+
+    logoutToIndex(){
+        var pathname = "/";
         window.location.href = "/auth/logout?redirectTo=" + pathname;
     }
 
@@ -649,6 +761,10 @@ class Auth {
         this.dialogPersistent = true;
     }
 
+    toggleLoginRequire(){
+        this.requireLoginDialog = true;
+    }
+
     requireLogin(){
         if(this.user === null){
             this.toggleDialogWithPersistent();
@@ -656,15 +772,18 @@ class Auth {
     }
 
     parseUserData(init_user){
-        // console.log(init_user);
         this.user = JSON.parse(init_user);
+        if(this.user !==  null){
+            this.user.rgt_date = new Date(this.user.rgt_date);
+            this.user.last_login_date = new Date(this.user.last_login_date);
+        }
         // console.log(this.user);
     }
 
 }
 
 class GraphManager {
-    constructor(id){
+    constructor(id, setDefault){
 
         this.zoomLevel = 0;
 
@@ -674,6 +793,8 @@ class GraphManager {
 
         this.addOffsetX = 30;
         this.addOffsetY = 30;
+
+        this.setDefault = setDefault;
 
 
         this.init();
@@ -948,10 +1069,12 @@ class GraphManager {
 
 
 
-        var gm = this;
-        $( document ).ready( function () {
-            gm.main();
-        } );
+        if(this.setDefault) {
+            var gm = this;
+            $(document).ready(function () {
+                gm.main();
+            });
+        }
 
     }
 
@@ -961,6 +1084,7 @@ class GraphManager {
 
         var container = document.getElementById(this.containerId);
         this.container = container;
+        console.log(container);
 
         // Checks if the browser is supported
         if (!mxClient.isBrowserSupported()) {
@@ -1294,229 +1418,226 @@ class GraphManager {
             }
 
 
+            if(this.setDefault) {
 
-            // Creates rubberband selection
-            var rubberband = new mxRubberband(graph);
+                // Creates rubberband selection
+                var rubberband = new mxRubberband(graph);
 
-            graph.popupMenuHandler.autoExpand = true;
+                graph.popupMenuHandler.autoExpand = true;
 
-            graph.popupMenuHandler.isSelectOnPopup = function (me) {
-                return mxEvent.isMouseEvent(me.getEvent());
-            };
+                graph.popupMenuHandler.isSelectOnPopup = function (me) {
+                    return mxEvent.isMouseEvent(me.getEvent());
+                };
 
-            // Installs context menu
-            graph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
-                menu.addItem('Add node', null, function () {
-                    console.log(menu, cell, evt);
-                    // var zl = gm.zoomLevel;
-                    // gm.setZoomLevel(0);
-                    var parent = graph.getDefaultParent();
-                    graph.getModel().beginUpdate();
-                    try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX , evt.layerY, 80, 30);
+                // Installs context menu
+                graph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
+                    menu.addItem('Add node', null, function () {
+                        console.log(menu, cell, evt);
+                        // var zl = gm.zoomLevel;
+                        // gm.setZoomLevel(0);
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 30);
+                        }
+                        finally {
+                            // Updates the display
+                            // gm.setZoomLevel(zl);
+                            graph.getModel().endUpdate();
+                        }
+                    });
+
+                    menu.addItem('Add circle node', null, function () {
+                        console.log(menu, cell, evt);
+                        // var zl = gm.zoomLevel;
+                        // gm.setZoomLevel(0);
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 40, 'shape=ellipse;perimeter=ellipsePerimeter');
+                        }
+                        finally {
+                            // Updates the display
+                            // gm.setZoomLevel(zl);
+                            graph.getModel().endUpdate();
+                        }
+                    });
+
+                    menu.addItem('Add rhombus node', null, function () {
+                        console.log(menu, cell, evt);
+                        // var zl = gm.zoomLevel;
+                        // gm.setZoomLevel(0);
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 100, 40, 'shape=rhombus;perimeter=rhombusPerimeter');
+                        }
+                        finally {
+                            // Updates the display
+                            // gm.setZoomLevel(zl);
+                            graph.getModel().endUpdate();
+                        }
+                    });
+
+                    var submenu1 = menu.addItem('More', null, null);
+                    menu.addItem('Subitem 1', null, function () {
+                        // alert('Subitem 1');
+                    }, submenu1);
+                    menu.addItem('Subitem 1', null, function () {
+                        // alert('Subitem 2');
+                    }, submenu1);
+
+
+                    if (cell !== null) {
+                        menu.addSeparator();
+
+                        menu.addItem("Edit", null, function () {
+                            // graph.removeCells([cell]);
+                            if (graph.isEnabled() && !graph.isSelectionEmpty()) {
+                                graph.startEditing();
+                            }
+                        });
+
+                        menu.addItem("Delete", null, function () {
+                            // graph.removeCells([cell]);
+                            if (graph.isEnabled() && !graph.isSelectionEmpty()) {
+                                graph.removeCells();
+                            }
+                        });
+
+                        menu.addSeparator();
+
+                        menu.addItem("Cut", null, function () {
+                            // graph.removeCells([cell]);
+                            if (graph.isEnabled() && !graph.isSelectionEmpty()) {
+
+                            }
+                        });
+
+                        menu.addItem("Copy", null, function () {
+                            // graph.removeCells([cell]);
+                            if (graph.isEnabled() && !graph.isSelectionEmpty()) {
+
+                            }
+                        });
+
+
                     }
-                    finally {
-                        // Updates the display
-                        // gm.setZoomLevel(zl);
-                        graph.getModel().endUpdate();
+                };
+
+                // Context menu trigger implementation depending on current selection state
+                // combined with support for normal popup trigger.
+                var cellSelected = false;
+                var selectionEmpty = false;
+                var menuShowing = false;
+
+                graph.fireMouseEvent = function (evtName, me, sender) {
+                    if (evtName == mxEvent.MOUSE_DOWN) {
+                        // For hit detection on edges
+                        me = this.updateMouseEvent(me);
+
+                        cellSelected = this.isCellSelected(me.getCell());
+                        selectionEmpty = this.isSelectionEmpty();
+                        menuShowing = graph.popupMenuHandler.isMenuShowing();
+
+                        // console.log(me.getCell());
+                    }
+
+                    mxGraph.prototype.fireMouseEvent.apply(this, arguments);
+                };
+
+                // Shows popup menu if cell was selected or selection was empty and background was clicked
+                graph.popupMenuHandler.mouseUp = function (sender, me) {
+                    this.popupTrigger = !graph.isEditing() && (this.popupTrigger || (!menuShowing &&
+                        !graph.isEditing() && !mxEvent.isMouseEvent(me.getEvent()) &&
+                        ((selectionEmpty && me.getCell() == null && graph.isSelectionEmpty()) ||
+                            (cellSelected && graph.isCellSelected(me.getCell())))));
+                    mxPopupMenuHandler.prototype.mouseUp.apply(this, arguments);
+                };
+
+                // Tap and hold on background starts rubberband for multiple selected
+                // cells the cell associated with the event is deselected
+                graph.addListener(mxEvent.TAP_AND_HOLD, function (sender, evt) {
+                    if (!mxEvent.isMultiTouchEvent(evt)) {
+                        var me = evt.getProperty('event');
+                        var cell = evt.getProperty('cell');
+
+                        if (cell == null) {
+                            var pt = mxUtils.convertPoint(this.container,
+                                mxEvent.getClientX(me), mxEvent.getClientY(me));
+                            rubberband.start(pt.x, pt.y);
+                        }
+                        else if (graph.getSelectionCount() > 1 && graph.isCellSelected(cell)) {
+                            graph.removeSelectionCell(cell);
+                        }
+
+                        // Blocks further processing of the event
+                        evt.consume();
                     }
                 });
 
-                menu.addItem('Add circle node', null, function () {
-                    console.log(menu, cell, evt);
-                    // var zl = gm.zoomLevel;
-                    // gm.setZoomLevel(0);
-                    var parent = graph.getDefaultParent();
-                    graph.getModel().beginUpdate();
-                    try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 40, 'shape=ellipse;perimeter=ellipsePerimeter');
-                    }
-                    finally {
-                        // Updates the display
-                        // gm.setZoomLevel(zl);
-                        graph.getModel().endUpdate();
-                    }
-                });
+                // Adds mouse wheel handling for zoom
+                // mxEvent.addMouseWheelListener(function (evt, up) {
+                //     if (up) {
+                //         graph.zoomIn();
+                //     }
+                //     else {
+                //         graph.zoomOut();
+                //     }
+                //
+                //     mxEvent.consume(evt);
+                // });
 
-                menu.addItem('Add rhombus node', null, function () {
-                    console.log(menu, cell, evt);
-                    // var zl = gm.zoomLevel;
-                    // gm.setZoomLevel(0);
-                    var parent = graph.getDefaultParent();
-                    graph.getModel().beginUpdate();
-                    try {
-                        var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 100, 40, 'shape=rhombus;perimeter=rhombusPerimeter');
-                    }
-                    finally {
-                        // Updates the display
-                        // gm.setZoomLevel(zl);
-                        graph.getModel().endUpdate();
-                    }
-                });
-
-                var submenu1 = menu.addItem('More', null, null);
-                menu.addItem('Subitem 1', null, function () {
-                    // alert('Subitem 1');
-                }, submenu1);
-                menu.addItem('Subitem 1', null, function () {
-                    // alert('Subitem 2');
-                }, submenu1);
+                // Gets the default parent for inserting new cells. This
+                // is normally the first child of the root (ie. layer 0).
 
 
+                // var parent = graph.getDefaultParent();
+                //
+                // // Adds cells to the model in a single step
+                // graph.getModel().beginUpdate();
+                // try {
+                //     var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
+                //     var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
+                //     var e1 = graph.insertEdge(parent, null, '', v1, v2);
+                // }
+                // finally {
+                //     // Updates the display
+                //     graph.getModel().endUpdate();
+                // }
 
+                // Disables new connections via "hotspot"
+                graph.connectionHandler.marker.isEnabled = function () {
+                    return this.graph.connectionHandler.first != null;
+                };
 
-                if(cell !== null){
-                    menu.addSeparator();
+                // Adds custom hit detection if native hit detection found no cell
+                graph.updateMouseEvent = function (me) {
+                    var me = mxGraph.prototype.updateMouseEvent.apply(this, arguments);
 
-                    menu.addItem("Edit", null, function () {
-                        // graph.removeCells([cell]);
-                        if (graph.isEnabled() && !graph.isSelectionEmpty())
-                        {
-                            graph.startEditing();
+                    if (me.getState() == null) {
+                        var cell = this.getCellAt(me.graphX, me.graphY);
+
+                        if (cell != null && this.isSwimlane(cell) && this.hitsSwimlaneContent(cell, me.graphX, me.graphY)) {
+                            cell = null;
                         }
-                    });
+                        else {
+                            me.state = this.view.getState(cell);
 
-                    menu.addItem("Delete", null, function () {
-                        // graph.removeCells([cell]);
-                        if (graph.isEnabled() && !graph.isSelectionEmpty())
-                        {
-                            graph.removeCells();
-                        }
-                    });
-
-                    menu.addSeparator();
-
-                    menu.addItem("Cut", null, function () {
-                        // graph.removeCells([cell]);
-                        if (graph.isEnabled() && !graph.isSelectionEmpty())
-                        {
-
-                        }
-                    });
-
-                    menu.addItem("Copy", null, function () {
-                        // graph.removeCells([cell]);
-                        if (graph.isEnabled() && !graph.isSelectionEmpty())
-                        {
-
-                        }
-                    });
-
-
-                }
-            };
-
-            // Context menu trigger implementation depending on current selection state
-            // combined with support for normal popup trigger.
-            var cellSelected = false;
-            var selectionEmpty = false;
-            var menuShowing = false;
-
-            graph.fireMouseEvent = function (evtName, me, sender) {
-                if (evtName == mxEvent.MOUSE_DOWN) {
-                    // For hit detection on edges
-                    me = this.updateMouseEvent(me);
-
-                    cellSelected = this.isCellSelected(me.getCell());
-                    selectionEmpty = this.isSelectionEmpty();
-                    menuShowing = graph.popupMenuHandler.isMenuShowing();
-
-                    // console.log(me.getCell());
-                }
-
-                mxGraph.prototype.fireMouseEvent.apply(this, arguments);
-            };
-
-            // Shows popup menu if cell was selected or selection was empty and background was clicked
-            graph.popupMenuHandler.mouseUp = function (sender, me) {
-                this.popupTrigger = !graph.isEditing() && (this.popupTrigger || (!menuShowing &&
-                    !graph.isEditing() && !mxEvent.isMouseEvent(me.getEvent()) &&
-                    ((selectionEmpty && me.getCell() == null && graph.isSelectionEmpty()) ||
-                        (cellSelected && graph.isCellSelected(me.getCell())))));
-                mxPopupMenuHandler.prototype.mouseUp.apply(this, arguments);
-            };
-
-            // Tap and hold on background starts rubberband for multiple selected
-            // cells the cell associated with the event is deselected
-            graph.addListener(mxEvent.TAP_AND_HOLD, function (sender, evt) {
-                if (!mxEvent.isMultiTouchEvent(evt)) {
-                    var me = evt.getProperty('event');
-                    var cell = evt.getProperty('cell');
-
-                    if (cell == null) {
-                        var pt = mxUtils.convertPoint(this.container,
-                            mxEvent.getClientX(me), mxEvent.getClientY(me));
-                        rubberband.start(pt.x, pt.y);
-                    }
-                    else if (graph.getSelectionCount() > 1 && graph.isCellSelected(cell)) {
-                        graph.removeSelectionCell(cell);
-                    }
-
-                    // Blocks further processing of the event
-                    evt.consume();
-                }
-            });
-
-            // Adds mouse wheel handling for zoom
-            // mxEvent.addMouseWheelListener(function (evt, up) {
-            //     if (up) {
-            //         graph.zoomIn();
-            //     }
-            //     else {
-            //         graph.zoomOut();
-            //     }
-            //
-            //     mxEvent.consume(evt);
-            // });
-
-            // Gets the default parent for inserting new cells. This
-            // is normally the first child of the root (ie. layer 0).
-
-
-            // var parent = graph.getDefaultParent();
-            //
-            // // Adds cells to the model in a single step
-            // graph.getModel().beginUpdate();
-            // try {
-            //     var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
-            //     var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
-            //     var e1 = graph.insertEdge(parent, null, '', v1, v2);
-            // }
-            // finally {
-            //     // Updates the display
-            //     graph.getModel().endUpdate();
-            // }
-
-            // Disables new connections via "hotspot"
-            graph.connectionHandler.marker.isEnabled = function () {
-                return this.graph.connectionHandler.first != null;
-            };
-
-            // Adds custom hit detection if native hit detection found no cell
-            graph.updateMouseEvent = function (me) {
-                var me = mxGraph.prototype.updateMouseEvent.apply(this, arguments);
-
-                if (me.getState() == null) {
-                    var cell = this.getCellAt(me.graphX, me.graphY);
-
-                    if (cell != null && this.isSwimlane(cell) && this.hitsSwimlaneContent(cell, me.graphX, me.graphY)) {
-                        cell = null;
-                    }
-                    else {
-                        me.state = this.view.getState(cell);
-
-                        if (me.state != null && me.state.shape != null) {
-                            this.container.style.cursor = me.state.shape.node.style.cursor;
+                            if (me.state != null && me.state.shape != null) {
+                                this.container.style.cursor = me.state.shape.node.style.cursor;
+                            }
                         }
                     }
-                }
 
-                if (me.getState() == null) {
-                    this.container.style.cursor = 'default';
-                }
+                    if (me.getState() == null) {
+                        this.container.style.cursor = 'default';
+                    }
 
-                return me;
-            };
+                    return me;
+                };
+
+            }
 
             var style = [];
             style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
@@ -1528,7 +1649,12 @@ class GraphManager {
             this.graph = graph;
 
 
-            this.makeFromXml('<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="2" value="Hello," vertex="1" parent="1"><mxGeometry x="20" y="20" width="80" height="30" as="geometry"/></mxCell><mxCell id="3" value="World!" vertex="1" parent="1"><mxGeometry x="200" y="150" width="80" height="30" as="geometry"/></mxCell><mxCell id="4" value="" edge="1" parent="1" source="2" target="3"><mxGeometry relative="1" as="geometry"/></mxCell></root></mxGraphModel>');
+            if(this.setDefault){
+                // this.makeFromXml('<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="2" value="Hello," vertex="1" parent="1"><mxGeometry x="20" y="20" width="80" height="30" as="geometry"/></mxCell><mxCell id="3" value="World!" vertex="1" parent="1"><mxGeometry x="200" y="150" width="80" height="30" as="geometry"/></mxCell><mxCell id="4" value="" edge="1" parent="1" source="2" target="3"><mxGeometry relative="1" as="geometry"/></mxCell></root></mxGraphModel>');
+            }else{
+                this.graph.setEnabled(false);
+            }
+
         }
 
     }

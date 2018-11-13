@@ -31,6 +31,51 @@ router.post('/', function (req, res, next) {
 
 });
 
+router.post('/user', function (req, res, next) {
+    var body = req.body;
+    if("userID" in body){
+        dbDAO.getUserBoardListData(body.userID, function (isErr, results) {
+            if(isErr){
+                res.send(null);
+            }else{
+                res.send(results);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
+router.post('/user/scrap', function (req, res, next) {
+    var body = req.body;
+    if("userID" in body){
+        dbDAO.getUserScrapBoardListData(body.userID, function (isErr, results) {
+            if(isErr){
+                res.send(null);
+            }else{
+                res.send(results);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
+router.post('/user/scrap/save', function (req, res, next) {
+    var body = req.body;
+    if("userID" in body && "boardID" in body){
+        dbDAO.saveScrap(body.boardID, body.userID, function (isErr, scraped, results) {
+            if(isErr){
+                res.send(404);
+            }else{
+                res.send(!scraped);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
 router.get('/free', function(req, res, next) {
     var boardType = "free";
     var page = req.query.page;
@@ -81,7 +126,8 @@ router.get('/ecosystem', function(req, res, next) {
         page = 1;
 
     var user = support.ensureAuthenticated(req);
-    res.render('ecosystem_board', { user: JSON.stringify(user), boardType: boardType, page: page });
+    // res.render('ecosystem_board', { user: JSON.stringify(user), boardType: boardType, page: page });
+    res.render('board', { user: JSON.stringify(user), title: "구성도 게시판", boardType: boardType, page: page });
 });
 
 
@@ -101,11 +147,15 @@ router.post('/regist', function (req, res, next) {
     if(user){
         var data = req.body;
         console.log(data);
-        dbDAO.registBoard(user.db_id, data, function(result){
+        dbDAO.registBoard(user.db_id, data, function(result, boardID){
+            var returnData = {
+                isSuccess:result,
+                boardID: boardID
+            };
             if(result){
-                res.send("Success");
+                res.send(returnData);
             }else{
-                res.send("Fail");
+                res.send(returnData);
             }
         });
     }

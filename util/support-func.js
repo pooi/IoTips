@@ -53,17 +53,45 @@ exports.getTodayMsWithoutTime = function () {
 exports.ensureAuthenticated = function (req) {
     if (req.isAuthenticated()) {
         var user = req.user;
-        var userData = {
-            id: user.id,
-            db_id: user.db_id,
-            displayName: user.displayName,
-            nickname: user.nickname,
-            rgt_date: user.rgt_date,
-            last_login_date: user.last_login_date,
-            email: user.emails[0].value,
-            photo: user.photos[0].value,
-            provider: user.provider
-        };
+        var userData = null;
+        if(user.provider === "google"){
+            userData = {
+                id: user.id,
+                db_id: user.db_id,
+                displayName: user.displayName,
+                nickname: user.nickname,
+                rgt_date: user.rgt_date,
+                last_login_date: user.last_login_date,
+                email: user.email,
+                photo: user.photos[0].value,
+                provider: user.provider
+            };
+        }else if(user.provider === "kakao"){
+            userData = {
+                id: user.id,
+                db_id: user.db_id,
+                displayName: user.displayName,
+                nickname: user.nickname,
+                rgt_date: user.rgt_date,
+                last_login_date: user.last_login_date,
+                email: user.email,
+                photo: user._json.properties.profile_image,
+                provider: user.provider
+            };
+        }else if(user.provider === "naver"){
+            console.log(user);
+            userData = {
+                id: user.id,
+                db_id: user.db_id,
+                displayName: user.name,
+                nickname: user.nickname,
+                rgt_date: user.rgt_date,
+                last_login_date: user.last_login_date,
+                email: user.email,
+                photo: user._json.profile_image,
+                provider: user.provider
+            };
+        }
         return userData;
     }
     return null;

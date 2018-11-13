@@ -23,7 +23,7 @@ function init(init_user) {
                 loopTop: true,
                 loopBottom: true,
                 anchors: ['home', 'about', 'platform'],
-                sectionsColor: ['#41b883', '#ff5f45', '#0798ec']
+                // sectionsColor: ['#41b883', '#2DA5E8', '#B0BEC5']
             },
             scrollData: {
                 fab: false,
@@ -56,6 +56,8 @@ function init(init_user) {
             supporter: null,
             auth: new Auth(),
 
+            mostViewItems: [],
+
             cItems: [
                 {
                     src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
@@ -81,11 +83,9 @@ function init(init_user) {
 
                 if(this.scrollData.scrollT > this.scrollData.delta){
                     this.scrollData.isShowFabTop = true;
-                    this.chatManager.hide();
                     this.scrollData.scrollT = 0;
                 }else if (this.scrollData.scrollT < -this.scrollData.delta) {
                     this.scrollData.isShowFabTop = false;
-                    this.chatManager.show();
                     this.scrollData.scrollT = 0;
                 }
 
@@ -97,12 +97,12 @@ function init(init_user) {
 
                 if(!this.scrollData.statusBar && this.scrollData.offsetTop < 50){
                     this.scrollData.statusBar = !this.scrollData.statusBar;
-                    this.changeStatusBarColorOnNativeApp("orange");
-                    this.statusColor = this.supporter.getStatusLightOrange();
+                    // this.changeStatusBarColorOnNativeApp("orange");
+                    // this.statusColor = this.supporter.getStatusLightOrange();
                 }else if(this.scrollData.statusBar & this.scrollData.offsetTop >= 50){
                     this.scrollData.statusBar = !this.scrollData.statusBar;
-                    this.changeStatusBarColorOnNativeApp("white");
-                    this.statusColor = "#FFFFFF";
+                    // this.changeStatusBarColorOnNativeApp("white");
+                    // this.statusColor = "#FFFFFF";
                 }
             },
             changeStatusBarColorOnNativeApp(color){
@@ -135,10 +135,31 @@ function init(init_user) {
         mounted:[
             function () {
                 this.auth.parseUserData(init_user);
+            },
+            function () {
+                var data = {};
+
+                axios.post(
+                    '/mostView',
+                    data
+                ).then(function (response) {
+                    var res = response;
+                    var data = res.data;
+                    for(var i=0; i<data.length; i++){
+                        data[i].tags = JSON.parse(data[i].tags);
+                        data[i].rgt_date = new Date(data[i].rgt_date);
+                    }
+                    vue.mostViewItems = [];
+                    vue.mostViewItems = vue.mostViewItems.concat(data);
+                }).catch(function (error) {
+                    alert(error);
+                    // vue.filterDialog = false;
+                    // vue.isFilterProgress = false;
+                });
             }
         ]
     });
-    vue.changeStatusBarColorOnNativeApp("orange");
+    // vue.changeStatusBarColorOnNativeApp("orange");
 
     vue.supporter = new Supporter(vue);
     // vue.auth = new Auth(vue);

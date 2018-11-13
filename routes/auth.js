@@ -44,15 +44,56 @@ module.exports = function (app) {
     });
 
     router.get('/google/callback',
-        passport.authenticate('google', { failureRedirect: '/login' }),
-        function(req, res) {
+        passport.authenticate('google', {failureRedirect: '/'}),
+        function (req, res) {
             console.log(req.query);
             var redirectTo = req.session.redirectTo ? req.session.redirectTo : '/';
             delete req.session.redirectTo;
             res.redirect(redirectTo);
-        });
+        }
+    );
 
-    router.get('/logout', function(req, res){
+    router.get('/kakao', function (req, res, next) {
+        // console.log(req, res, next);
+        var redirectTo = req.query.redirectTo ? req.query.redirectTo : "/";
+        req.session.redirectTo = redirectTo;
+        console.log("redirectTo: ", redirectTo);
+        passport.authenticate('kakao', {
+
+        })(req, res, next);
+    });
+
+    router.get('/kakao/callback',
+        passport.authenticate('kakao', {failureRedirect: '/'}),
+        function (req, res) {
+            console.log(req.query);
+            var redirectTo = req.session.redirectTo ? req.session.redirectTo : '/';
+            delete req.session.redirectTo;
+            res.redirect(redirectTo);
+        }
+    );
+
+    router.get('/naver', function (req, res, next) {
+        // console.log(req, res, next);
+        var redirectTo = req.query.redirectTo ? req.query.redirectTo : "/";
+        req.session.redirectTo = redirectTo;
+        console.log("redirectTo: ", redirectTo);
+        passport.authenticate('naver', {
+
+        })(req, res, next);
+    });
+
+    router.get('/naver/callback',
+        passport.authenticate('naver', {failureRedirect: '/'}),
+        function (req, res) {
+            console.log(req.query);
+            var redirectTo = req.session.redirectTo ? req.session.redirectTo : '/';
+            delete req.session.redirectTo;
+            res.redirect(redirectTo);
+        }
+    );
+
+    router.get('/logout', function (req, res) {
         req.logout();
         var redirectTo = req.query.redirectTo ? req.query.redirectTo : "/";
         res.redirect(redirectTo);

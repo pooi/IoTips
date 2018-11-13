@@ -1,6 +1,7 @@
-v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: rgba(0,0,0,0.3);", height="80")
+v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: rgba(0,0,0,0.3);", :height="$vuetify.breakpoint.xsOnly ? '50' : '80'")
     v-toolbar-side-icon(@click="supporter.drawer = !supporter.drawer")
-    v-toolbar-title.ml-2(onclick="window.location.href='/'") IoTips
+    //v-toolbar-title.ml-2(onclick="window.location.href='/'", style="cursor: pointer")
+    img(src="/images/logo/iotips_dark.png", height="18px", onclick="window.location.href='/'", style="cursor: pointer")
     v-spacer
 
     //v-menu(bottom, left, v-if="$vuetify.breakpoint.xsOnly ")
@@ -31,12 +32,12 @@ v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: r
         //    v-icon account_circle
         v-btn.pa-0.ma-0(flat, dark, style="height: 100%;", @click="auth.toggleDialog()") 로그인
     template(v-else)
-        v-btn.ma-0(flat, color="white", style="height: 100%;", @click="auth.detailDialog = true", v-if="!$vuetify.breakpoint.xsOnly ")
+        v-btn.ma-0(flat, color="white", style="height: 100%;", onclick="window.location.href='/mypage'", v-if="!$vuetify.breakpoint.xsOnly ")
             v-avatar.mr-2(:tile='false', size='30px')
                 img(:src='auth.user.photo', alt='Avatar', style="border-radius: 35% !important;")
             | My Tips
-        v-avatar(:tile='false', size='30px', @click="auth.detailDialog = true", v-else)
-            img(:src='auth.user.photo', alt='Avatar', style="border-radius: 35% !important;")
+        v-avatar(:tile='false', size='30px', onclick="window.location.href='/mypage'", v-else)
+            img(:src='auth.user.photo', alt='Avatar', style="border-radius: 35% !important; object-fit: cover;")
 
 include login
 include navigation_drawer

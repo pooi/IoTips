@@ -2,9 +2,14 @@ v-layout
     v-navigation-drawer.white--text(v-model='supporter.drawer', app, width="400", fixed, temporary, dark, style="z-index: 101; background : rgba(31,31,31,.99); overflow-y:scroll;", :style="$vuetify.breakpoint.xsOnly ? 'width: 100% !important;' : ''")
         //v-card.pa-0(style="background: none;")
         //    v-card-text.pa-0.ma-0
-        v-card-text.pa-2
-            v-btn(flat, icon, color='white', @click="supporter.drawer = false")
-                v-icon close
+        v-card-text.pa-2.pl-4
+            v-layout(row, wrap, align-center)
+                img(src="/images/logo/iotips_dark.png", height="20px", onclick="window.location.href='/'", style="cursor: pointer")
+                v-spacer
+                v-btn(flat, icon, color='white', @click="supporter.drawer = false")
+                    v-icon close
+
+
         v-card-text(v-if="auth.user === null", @click="auth.toggleDialog()") 로그인해주세요.
         v-list-group.pa-1(v-else)
             v-list-tile(avatar, slot="activator")
@@ -36,16 +41,16 @@ v-layout
 
 
         v-divider
-        v-card-text.pa-0.mt-2
-            v-layout.px-4.py-4(row, wrap, style="border-bottom: .5px solid rgba(255,255,255,.1) !important;", v-if="!supporter.isHomePage()")
-                v-flex.xs5
-                    v-list.no-padding-list.pa-0
-                        v-list-tile
-                            v-list-tile-title.headline.blue--text.text--lighten-1(style="height: fit-content;") Home
-                v-flex.xs7
-                    v-list.no-padding-list.pa-0
-                        v-list-tile(@click='supporter.movePage("/")')
-                            v-list-tile-title.title.pl-2(style="height: fit-content; font-weight:100;") 홈
+        v-card-text.pa-0.mt-2.bottom-safe-area-padding
+            //v-layout.px-4.py-4(row, wrap, style="border-bottom: .5px solid rgba(255,255,255,.1) !important;", v-if="!supporter.isHomePage()")
+            //    v-flex.xs5
+            //        v-list.no-padding-list.pa-0
+            //            v-list-tile
+            //                v-list-tile-title.headline.blue--text.text--lighten-1(style="height: fit-content;") Home
+            //    v-flex.xs7
+            //        v-list.no-padding-list.pa-0
+            //            v-list-tile(@click='supporter.movePage("/")')
+            //                v-list-tile-title.title.pl-2(style="height: fit-content; font-weight:100;") 홈
 
             v-layout.px-4.py-4(row, wrap, v-for='item in supporter.menus', :key='item.title', style="border-bottom: .5px solid rgba(255,255,255,.1) !important;")
                 v-flex.xs5

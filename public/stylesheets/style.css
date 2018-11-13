@@ -12,6 +12,14 @@
     /*padding-bottom: 48px !important;*/
 }
 
+.logo_blue {
+    background: #2DA5E8 !important;
+}
+
+.logo_blue_text {
+    color: #2DA5E8 !important;
+}
+
 /* CUSTOM */
 .image-section {
     background-image: url("/images/bg_index.jpg");
@@ -25,6 +33,27 @@
     -o-filter: blur(2px);
     -ms-filter: blur(2px);
     filter: blur(2px);
+}
+
+.box-index {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+    z-index: 99;
+    text-align: center;
+    font-family: Raleway, sans-serif;
+    font-weight: 300;
+    /*text-transform: uppercase;*/
+    /*background-color: rgba(255, 255, 255, 0.75);*/
+    /*box-shadow: 0 1em 2em -1em rgba(0, 0, 0, 0.5);*/
+    padding: 1em 2em;
+    /*line-height: 1;*/
+    /*border: 1px solid white;*/
+    /*border-top: 1px solid white;*/
+    /*border-bottom: 1px solid white;*/
+    color: white;
 }
 
 .box-title {
@@ -80,6 +109,42 @@
     transition: .5s ease;
 }
 
+.kakao-login-btn {
+    background-image: url('/images/auth/kakao_account_login_btn_medium_narrow.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+
+    height: 50px;
+    width: 208px;
+    transition: .5s ease;
+
+    margin: auto;
+}
+
+.kakao-login-btn:hover {
+    background-image: url('/images/auth/kakao_account_login_btn_medium_narrow_ov.png');
+    transition: .5s ease;
+}
+
+.naver-login-btn {
+    background-image: url('/images/auth/Log_in_with_NAVER_Official__green.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+
+    height: 50px;
+    width: 208px;
+    transition: .5s ease;
+
+    margin: auto;
+}
+
+.naver-login-btn:hover {
+    background-image: url('/images/auth/Log_in_with_NAVER_Official__white.png');
+    transition: .5s ease;
+}
+
 .platform-gradient-background {
     background-image: linear-gradient(to bottom right, rgba(140, 198, 63, 1), rgba(0, 146, 69, 1));
 }
@@ -108,9 +173,13 @@
     font-size: 10px !important;
 }
 
+.mouse-over {
+    cursor: pointer;
+}
+
 /* EXTERNAL*/
 
-#overlay {
+.overlay {
     /*position: fixed; !* Sit on top of the page content *!*/
     /*display: none; !* Hidden by default *!*/
     width: 100%; /* Full width (cover the whole page) */
@@ -149,7 +218,7 @@
     /*padding-bottom: constant(safe-area-inset-bottom);*/
 }
 
-.bottom-sheet.dialog.bottom-sheet--inset {
+.v-bottom-sheet.v-dialog.v-bottom-sheet--inset {
     border-radius: 20px 20px 0px 0px !important;
     overflow: hidden;
 }
@@ -369,11 +438,20 @@ table.mxPopupMenu tr {
     font-size: 4pt;
 }
 
+#fp-nav.fp-right {
+    right: 2px !important;
+}
+
 /* SAFE AREA*/
 
 .bottom-safe-area-padding {
     padding-bottom: env(safe-area-inset-bottom) !important;
     padding-bottom: constant(safe-area-inset-bottom) !important;
+}
+
+.bottom-safe-area-margin{
+    margin-bottom: env(safe-area-inset-bottom) !important;
+    margin-bottom: constant(safe-area-inset-bottom) !important;
 }
 
 .tab-nav {
