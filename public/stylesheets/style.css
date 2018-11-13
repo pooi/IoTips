@@ -449,6 +449,11 @@ table.mxPopupMenu tr {
     padding-bottom: constant(safe-area-inset-bottom) !important;
 }
 
+.bottom-safe-area-margin{
+    margin-bottom: env(safe-area-inset-bottom) !important;
+    margin-bottom: constant(safe-area-inset-bottom) !important;
+}
+
 .tab-nav {
     margin-bottom: env(safe-area-inset-bottom);
     margin-bottom: constant(safe-area-inset-bottom);

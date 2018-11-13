@@ -382,7 +382,7 @@ block content
 
 
     v-bottom-sheet(v-model='shareSheet', inset, max-width='500px')
-        v-list
+        v-list.bottom-safe-area-padding
             v-subheader 공유하기
             v-list-tile(v-for='tile in shares', :key='tile', @click='shareTo(tile.title)')
                 v-list-tile-avatar

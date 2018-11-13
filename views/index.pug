@@ -34,22 +34,89 @@ block content
 
 
 
+            //.section.section-full-page(style="z-index: 5;")
+            //    .overlay
+            //
+            //        v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%; padding-top: 100px; padding-bottom: 100px;", align-center, justify-center)
+            //
+            //            v-flex.mx-3(style="margin: auto;")
+            //
+            //                //v-container(fluid, grid-list-md, style="overflow:visible")
+            //                //    v-layout(wrap, style="overflow:visible")
+            //                v-flex.text-xs-center(xs12, justify-center, align-center, :class="$vuetify.breakpoint.xsOnly ? 'pb-3' : 'pb-5'")
+            //                    p.white--text.mb-0(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline' : 'display-2'", style='font-weight: 800; font-size: 230%;') IoTips Menu
+            //
+            //                v-layout(row, wrap, style="width: 100%;", align-center, justify-center)
+            //                    template(v-if="$vuetify.breakpoint.xsOnly")
+            //                        v-card.dal-card-scale.mx-2.mb-2(hover, raised, style="width: 100%; ")
+            //                            v-layout(style="height: 100%; overflow: hidden; min-height: 100px;")
+            //                                v-flex(style="min-width: 100px; overflow: hidden; background-image: url('/images/bg_index_card_1.jpg'); background-size: cover;", justify-center, align-center, d-inline-flex)
+            //                                    //img(src="/images/bg_index_card_1.jpg", style="background-size: cover; height:100%;")
+            //                                v-flex.px-2.py-3(style="min-width: 100px; margin: auto;")
+            //                                    v-card-text.pt-0.pb-0.px-2.headline Tips
+            //                                    v-card-text.pt-2.pb-0.px-2.grey--text.text--darken-1.caption Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            //
+            //                        v-card.dal-card-scale.mx-2(hover, raised, style="width: 100%; ")
+            //                            v-layout(style="height: 100%; overflow: hidden; min-height: 100px;")
+            //                                v-flex(style="min-width: 100px; overflow: hidden; background-image: url('/images/bg_index_card_2.jpg'); background-size: cover;", justify-center, align-center, d-inline-flex)
+            //                                    //img(src="/images/bg_index_card_1.jpg", style="background-size: cover; height:100%;")
+            //                                v-flex.px-2.py-3(style="min-width: 100px; margin: auto;")
+            //                                    v-card-text.pt-0.pb-0.px-2.headline Curation
+            //                                    v-card-text.pt-2.pb-0.px-2.grey--text.text--darken-1.caption Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            //
+            //                    template(v-else)
+            //                        v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
+            //                            v-card-media(src="/images/bg_index_card_1.jpg" height="150")
+            //                            v-card-text.pt-3.pb-2.px-3.display-1 Tips
+            //                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+            //                        v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
+            //                            v-card-media(src="/images/bg_index_card_2.jpg" height="150")
+            //                            v-card-text.pt-3.pb-2.px-3.display-1 Curation
+            //                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+
+
             .section.section-full-page(style="z-index: 5;")
                 .overlay
-                    v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%; padding-top: 100px; padding-bottom: 100px;", align-center, justify-space-around)
-                        v-flex.py-2(xs12, sm4, style="height: fit-content;")
-                            v-card.dal-card-scale(hover, raised, :style="'height: ' + (Math.min(($vuetify.breakpoint.height-350)/2, 400)) + 'px;'", style="width: 100%; background-color: rgba(220, 220, 220, 0.3) !important;")
-                                v-layout(row, wrap, align-center, justify-center, style="height: 100%; width: 100%;")
-                                    .display-3.white--text(style="font-weight: 400;") Tips
 
-                        v-flex.py-2(xs12, sm4, style="height: fit-content;")
-                            v-card.dal-card-scale(hover, raised, :style="'height: ' + (Math.min(($vuetify.breakpoint.height-350)/2, 400)) + 'px;'", style="width: 100%; background-color: rgba(220, 220, 220, 0.3) !important;")
-                                v-layout(row, wrap, align-center, justify-center, style="height: 100%; width: 100%;")
-                                    .display-3.white--text(style="font-weight: 400;") Curation
+                    v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%; padding-top: 50px; padding-bottom: 50px;", align-center, justify-center)
+
+                        v-flex(style="margin: auto;")
+
+                            //v-container(fluid, grid-list-md, style="overflow:visible")
+                            //    v-layout(wrap, style="overflow:visible")
+                            v-flex.text-xs-center(xs12, justify-center, align-center, :class="$vuetify.breakpoint.xsOnly ? 'pb-3' : 'pb-5'")
+                                p.white--text.mb-0(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline' : 'display-2'", style='font-weight: 800; font-size: 230%;') IoTips Menu
+
+                            v-layout(row, wrap, style="width: 100%;", align-center, justify-center)
+                                template(v-if="$vuetify.breakpoint.xsOnly")
+                                    v-flex.pt-3.px-2(xs12, style="overflow:visible", v-if="mostViewItems.length > 0")
+                                        v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, hide-controls, interval="3000", style="overflow:visible;", light, :style="'height: ' + Math.min(($vuetify.breakpoint.height-120-70), 310) + 'px;'")
+                                            v-carousel-item.elevation-0(style="overflow:visible")
+                                                v-layout
+                                                    v-flex(xs12)
+                                                        v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light)
+                                                            v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
+                                                            v-card-text.pt-3.pb-2.px-3.display-1 Tips
+                                                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            v-carousel-item.elevation-0(style="overflow:visible")
+                                                v-layout
+                                                    v-flex(xs12)
+                                                        v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light)
+                                                            v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
+                                                            v-card-text.pt-3.pb-2.px-3.display-1 Curation
+                                                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 
 
 
-                    //v-layout.px-5.mx-3.text-xs-center.xs12(align-center, justify-center, style)
+                                template(v-else)
+                                    v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
+                                        v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
+                                        v-card-text.pt-3.pb-2.px-3.display-1 Tips
+                                        v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                    v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
+                                        v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
+                                        v-card-text.pt-3.pb-2.px-3.display-1 Curation
+                                        v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 
 
 
