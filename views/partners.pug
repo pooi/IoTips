@@ -1,0 +1,22 @@
+extends layout
+
+block content
+
+    include toolbar
+
+    v-content.brown.lighten-5.animation-fade-in(style="padding-top: 50px; width: 100%; height: 500px; background-color: pink;")
+        .text-xs-center.headline(style="margin-top: 100px;")
+            strong IoTips
+            span 는 다양한 브랜드,
+            br
+            span 서비스 및 개발사들과 함께 하겠습니다.
+
+            div
+                button(v-on:click="say('Thank you! :)')") click!
+        
+
+    include footer
+
+    script(type="text/javascript" src='/javascripts/partners-config.js')
+    script.
+        const vue = init('!{user}');

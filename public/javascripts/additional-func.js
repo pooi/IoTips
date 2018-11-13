@@ -257,18 +257,18 @@ class Supporter {
                 "submenu" : [
                     {
                         "title" : "구성도",
-                        "href" : "/"
+                        "href" : "/curation"
                     },
                    {
                         "title" : "제품",
-                        "href" : "/"
+                        "href" : "/curation/product"
                     }
 
                 ]
             },
             {
                 "title" : "파트너",
-                "href" : "/",
+                "href" : "/partners",
                 "submenu" : []
             }
         ];

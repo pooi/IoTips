@@ -1,0 +1,45 @@
+extends layout
+
+block content
+    script(src='/scripts/vue-fullpage.min.js')
+    link(rel='stylesheet', type='text/css', href='https://unpkg.com/fullpage.js/dist/fullpage.min.css')
+
+    include toolbar
+
+    //- div.animation-fade-in-2s
+    //-     full-page#fullpage(ref='fullpage', :options='options')
+    //-         .section
+    //-             v-btn.actions-button(flat, color="white", @click="$refs.fullpage.api.moveSectionDown()") go!
+    //-         .section
+
+    template
+        v-stepper(v-model='e1')
+            v-stepper-header
+            v-stepper-step(:complete='e1 > 1', step='1') Name of step 1
+            v-divider
+            v-stepper-step(:complete='e1 > 2', step='2') Name of step 2
+            v-divider
+            v-stepper-step(step='3') Name of step 3
+            v-stepper-items
+            v-stepper-content(step='1')
+                v-card.mb-5(color='grey lighten-1', height='200px')
+                v-btn(color='primary', @click='e1 = 2')
+                | Continue
+                v-btn(flat='') Cancel
+            v-stepper-content(step='2')
+                v-card.mb-5(color='grey lighten-1', height='200px')
+                v-btn(color='primary', @click='e1 = 3')
+                | Continue
+                v-btn(flat='') Cancel
+            v-stepper-content(step='3')
+                v-card.mb-5(color='grey lighten-1', height='200px')
+                v-btn(color='primary', @click='e1 = 1')
+                | Continue
+                v-btn(flat='') Cancel
+
+
+    include footer
+
+    script(type="text/javascript" src="/javascripts/curation-config.js")
+    script.
+        const vue = init('!{user}');

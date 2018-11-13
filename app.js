@@ -39,13 +39,17 @@ app.use('/scripts', express.static(__dirname + '/node_modules/xml-js/dist'));
 
 var indexRouter = require('./routes/index');
 var boardRouter = require('./routes/board');
+var curationRouter = require('./routes/curation');
 var usersRouter = require('./routes/users');
 var auth = require('./routes/auth')(app);
+var partnersRouter = require('./routes/partners');
 
 app.use('/', indexRouter);
 app.use('/auth', auth);
 app.use('/users', usersRouter);
 app.use('/board', boardRouter);
+app.use('/curation', curationRouter);
+app.use('/partners', partnersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

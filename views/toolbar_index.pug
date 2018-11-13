@@ -20,7 +20,7 @@ v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: r
                 v-list
                     v-list-tile(v-for='(subitem, index) in item.submenu', :key='index', @click='supporter.movePage(subitem.href)')
                         v-list-tile-title {{ subitem.title }}
-            v-btn(flat, color="white", v-else) {{item.title}}
+            v-btn(flat, color="white",  @click='supporter.movePage(item.href)', v-else) {{item.title}}
         //template(v-for="toolbar in toolbarItems")
         //    v-btn(flat, style='height: auto;', :color="toolbar.color", :href="'#' + toolbar.href") {{toolbar.title}}
         //v-btn(flat, style='height: auto;', color="white", href="#home") Home
