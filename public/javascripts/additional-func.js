@@ -305,7 +305,13 @@ class Supporter {
         this.rules = {
             required: value => !!value || 'Required.',
             counter: value => value.length <= 20 || 'Max 20 characters',
-            counter_2: value => value.length >= 2 || 'Min 2 characters',
+            counter_2: value => {
+                if(value === null){
+                    return 'Please enter text'
+                }else{
+                    return value.length >= 2 || 'Min 2 characters'
+                }
+            },
             counter_20: value => {
                 if(value === null){
                     return 'Please enter text'

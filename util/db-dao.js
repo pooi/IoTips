@@ -369,6 +369,18 @@ exports.registComment = function (userID, boardID, content, parentCommentID, cal
     })
 };
 
+exports.registReview = function (userID, boardID, title, content, rating, callback) {
+    var sql = "INSERT INTO review(user_id, board_id, title, content, star) VALUES(?,?,?,?,?)";
+
+    conn.query(sql, [userID, boardID, title, content, rating], function(err, results){
+        if(err){
+            callback(false);
+        }else{
+            callback(true);
+        }
+    })
+};
+
 exports.getUserInformation = function (userID, callback) {
       var sql = "SELECT * FROM user WHERE id=?";
 

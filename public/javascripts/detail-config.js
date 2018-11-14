@@ -71,8 +71,14 @@ function init(init_user, init_boardID) {
             },
 
             content: null,
-            comments: null,
+            comments: [],
             commentLoading: false,
+
+            reviews: [],
+            reviewLoading: false,
+            writeReviewDialog: false,
+            tempReview: null,
+            submitReviewProgress: false,
 
             CAPABILITY: null,
             capabilities: [],
@@ -489,6 +495,81 @@ function init(init_user, init_boardID) {
                 this.userInfo.show(e);
                 alert(id);
             },
+
+            toggleReviewDialog: function () {
+                if(this.auth.user === null){
+                    this.auth.toggleDialog();
+                    return;
+                }
+
+                this.writeReviewDialog = true;
+                this.submitReviewProgress = false;
+                this.tempReview = {
+                    title: null,
+                    content: null,
+                    rating: 0
+                }
+            },
+
+            getReview: function(){
+
+            },
+
+            submitReview: function () {
+                if(this.tempReview === null){
+                    alert("Error!");
+                    return;
+                }
+
+                if(this.tempReview.rating <= 0){
+                    alert("별점을 입력해주세요.");
+                    return;
+                }
+
+                var form = this.$refs.form_review;
+                if(form.validate()){
+
+                    console.log("validate");
+                    this.submitReviewProgress = true;
+                    var boardID = this.result.id;
+
+                    var data = {
+                        boardID: boardID,
+                        title: this.tempReview.title,
+                        content: this.tempReview.content,
+                        rating: this.tempReview.rating
+                    };
+
+                    axios.post(
+                        '/board/registReview',
+                        data
+                    ).then(function (res) {
+                        var data = res.data;
+
+                        if(data.statusCode === 200){
+
+                            alert("성공적으로 등록되었습닏다.");
+                            vue.getReview();
+
+                        }else{
+
+                            alert(data.errorMsg);
+
+                        }
+
+                        vue.writeReviewDialog = false;
+                        vue.submitReviewProgress = false;
+
+                    }).catch(function (error) {
+                        alert(error);
+                        vue.submitReviewProgress = false;
+                    });
+
+
+                }else{
+                    alert("제목과 내용을 입력해주세요.");
+                }
+            }
 
 
 

@@ -224,6 +224,28 @@ router.post('/registComment', function (req, res, next) {
     }
 });
 
+router.post('/registReview', function (req, res, next) {
+    var data = req.body;
+    if("boardID" in data && "title" in data && "content" in data && "rating" in data){
+        var boardID = req.body.boardID;
+        var user = support.ensureAuthenticated(req);
+        dbDAO.registReview(user.db_id, boardID, data.title, data.content, data.rating, function (isSuccess) {
+            if(isSuccess){
+                res.send({
+                    statusCode: 200
+                });
+            }else{
+                res.send({
+                    statusCode: 500,
+                    errorMsg: "Error"
+                });
+            }
+        });
+    }else{
+        res.send(404);
+    }
+});
+
 
 
 router.get('/:id', function (req, res, next) {
