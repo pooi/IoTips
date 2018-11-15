@@ -336,7 +336,8 @@ exports.getBoardComments = function (boardID, callback) {
         "LEFT OUTER JOIN ( " +
         "SELECT * FROM user " +
         "GROUP BY id) as B on(B.id = A.user_id) " +
-        "WHERE A.board_id=?";
+        "WHERE A.board_id=? " +
+        "ORDER BY id ASC";
 
     conn.query(sql, [boardID], function(err, results){
         if(err){
