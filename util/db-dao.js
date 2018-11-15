@@ -369,14 +369,41 @@ exports.registComment = function (userID, boardID, content, parentCommentID, cal
     })
 };
 
-exports.registReview = function (userID, boardID, title, content, rating, callback) {
-    var sql = "INSERT INTO review(user_id, board_id, title, content, star) VALUES(?,?,?,?,?)";
+exports.registReview = function (userID, boardID, title, content, rating, nickname, callback) {
+    var sql = "INSERT INTO review(user_id, board_id, title, content, star, nickname) VALUES(?,?,?,?,?,?)";
 
-    conn.query(sql, [userID, boardID, title, content, rating], function(err, results){
+    conn.query(sql, [userID, boardID, title, content, rating, nickname], function(err, results){
         if(err){
             callback(false);
         }else{
             callback(true);
+        }
+    })
+};
+
+exports.getReview = function (boardID, size, callback) {
+    var sql = "SELECT * FROM review WHERE board_id=? ORDER BY id DESC ";
+    if(size > 0){
+        sql += " limit 0, ?";
+    }
+
+    conn.query(sql, [boardID, size], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            callback(false, results);
+        }
+    })
+};
+
+exports.getReviewSummary = function (boardID, callback) {
+    var sql = "SELECT COUNT(id) as count, IFNULL(AVG(star),0) as rating FROM review where board_id=?";
+
+    conn.query(sql, [boardID], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            callback(false, results[0]);
         }
     })
 };

@@ -170,31 +170,58 @@ block content
                             v-divider.my-0
 
 
-                        v-card-text.mt-3.pb-5
-                            v-layout(row, wrap, :class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-4'", v-if="reviews.length > 0 && !reviewLoading")
-                                .headline(style="font-weight: 700;") {{reviews.length}} User Review{{ reviews.length > 1 ? "s":"" }}
-                                v-card-text.pa-0.mt-2
-                                    v-divider.my-0
-
-                            v-layout(row, wrap, justify-center style="width: 100%;", :class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-4'")
-                                v-card-text.py-5.text-xs-center(v-if="reviewLoading")
-                                    v-progress-circular(indeterminate='', color='green')
-
-                                v-card-text.pa-0.ma-0(v-else-if="reviews.length > 0")
-                                    v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
-                                        v-list-tile(v-for='(review, index) in reviews', :key='index', @click='')
-                                            include review_item
-
-                                v-card-text.pa-0.ma-0.text-xs-center.mt-2(v-else) 리뷰가 없습니다.
-
-                                v-card-text.pa-0.ma-0.text-xs-center.mt-2(v-if="reviews.length <= 0")
-                                    v-btn.elevation-0.ma-0.mt-2.logo_blue(dark, small, style="min-width: 10px !important;", @click="toggleReviewDialog()")
-                                        v-icon.pr-1.subheading(dark, v-if="!$vuetify.breakpoint.xsOnly") create
-                                        | Write a Review
 
 
-                        v-card-text.py-0
-                            v-divider.my-0
+                        template(v-if="boardType.type === 'ecosystem'")
+                            v-card-text.mt-3.pb-5
+                                v-layout(row, wrap, align-end, :class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-4'", v-if="reviews.length > 0 && !reviewLoading")
+                                    .headline(style="font-weight: 700;") {{ reviewSummary === null ? reviews.length : reviewSummary.count }} User Review{{ (reviewSummary === null ? reviews.length : reviewSummary.count) > 1 ? "s":"" }}
+                                    v-spacer
+                                    .caption.logo_blue_text.mouse-over(v-if="reviewSummary!== null && reviewSummary.count > reviews.length", @click="toggleAllReviewDialog()") See All
+
+                                    v-card-text.pa-0
+                                        v-layout(xs12, align-end)
+
+                                            v-layout(align-end)
+                                                .grey--text.text--darken-3(style="font-weight: 700;", :class="$vuetify.breakpoint.xsOnly ? 'headline' : 'display-2' ") {{ reviewSummary.rating.toFixed(1) }}
+                                                .caption.grey--text.text--darken-1.ml-2.mb-1 out of 5
+                                            v-rating.no-padding-rating(v-if="reviewSummary !== null", v-model="reviewSummary.rating", :medium="!$vuetify.breakpoint.xsOnly", half-increments, color="orange darken-1", background-color="grey lighten-1", readonly, style="width: fit-content;")
+
+                                    v-card-text.pa-0.mt-2
+                                        v-divider.my-0
+
+                                    //v-layout(xs12, align-center)
+                                    //    v-rating.no-padding-rating(v-if="reviewSummary !== null", v-model="reviewSummary.rating",  half-increments, color="orange darken-1", background-color="grey lighten-1", readonly, style="width: fit-content;")
+                                    //    .headline.orange--text.text--darken-1.ml-2 {{ reviewSummary.rating.toFixed(2) }}
+
+
+
+                                v-layout(row, wrap, justify-center style="width: 100%;", :class="$vuetify.breakpoint.xsOnly ? 'px-0' : 'px-4'")
+                                    v-card-text.py-5.text-xs-center(v-if="reviewLoading")
+                                        v-progress-circular(indeterminate='', color='green')
+
+                                    v-card-text.pa-0.ma-0(v-else-if="reviews.length > 0")
+                                        v-flex.pt-3.mt-0.px-2(xs12, container, style="overflow:visible")
+                                            v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, hide-controls, style="overflow:visible;", light, :style="'height: ' + (reviewHeight) + 'px;'")
+                                                v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArrayBig(reviews)', :key='i', style="overflow:visible")
+                                                    v-layout
+                                                        v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md6, lg4)
+                                                            include review_item
+
+                                        v-btn.elevation-0.ma-0.mt-2.logo_blue_text(flat, small, style="min-width: 10px !important;", @click="toggleReviewDialog()")
+                                            v-icon.pr-1.subheading(dark) create
+                                            | Write a Review
+
+                                    v-card-text.pa-0.ma-0.text-xs-center.mt-2(v-else) 리뷰가 없습니다.
+
+                                    v-card-text.pa-0.ma-0.text-xs-center.mt-2(v-if="reviews.length <= 0")
+                                        v-btn.elevation-0.ma-0.mt-2.logo_blue(dark, small, style="min-width: 10px !important;", @click="toggleReviewDialog()")
+                                            v-icon.pr-1.subheading(dark) create
+                                            | Write a Review
+
+
+                            v-card-text.py-0
+                                v-divider.my-0
 
 
                         v-card-text.mt-3.pb-5
@@ -235,6 +262,20 @@ block content
 
                                         v-textarea.ml-2.mr-3.py-0.my-0.no-padding-text-field(ref="area_comment", :hide-details="tempComment === null || tempComment.length == 0 || (tempComment.length >= 2 && tempComment.length <= 200)", full-width, required, :rules="[supporter.rules.counter_2, supporter.rules.counter_200]" :placeholder='auth.user === null ? "로그인이 필요합니다." : "댓글을 입력해주세요."', v-model="tempComment", :disabled="auth.user === null || commentSubmitProgress")
                                         v-btn.pa-0.ma-0.elevation-0.logo_blue(v-if="!commentSubmitProgress", block, small, dark, @click="submitComment()", submit, :disabled="auth.user === null") 등록
+
+                        v-card-text.py-0
+                            v-divider.my-0
+
+
+                        v-card-text.pt-0.pb-5
+                            v-layout(style="width: 100%;")
+                                v-btn.elevation-0.ma-0.mt-2(flat, dark, small, color="grey darken-1" style="min-width: 10px !important;", onclick="window.history.back()")
+                                    v-icon.pr-1.subheading(dark) list
+                                    | 목록으로
+                                v-spacer
+                                v-btn.elevation-0.ma-0.mt-2(flat, dark, small, color="red", style="min-width: 10px !important;", @click="goRegist()")
+                                    v-icon.mr-2.subheading(left, dark) edit
+                                    | 글작성
 
 
                     v-card-text.text-xs-center.py-5(v-else)
@@ -416,7 +457,7 @@ block content
 
                 v-card-text.py-1.px-2.text-xs-center
                     v-rating(v-model="tempReview.rating", hover, half-increments, color="orange darken-1", background-color="grey lighten-1", :readonly="submitReviewProgress")
-                    span.caption.grey--text(v-if="tempReview.rating === 0") 별점은 0.5 이상 필요합니다.
+                    span.caption.grey--text(v-if="tempReview.rating === 0") Tap to Rate (more than 0.5)
                     span.caption.grey--text(v-else) {{ tempReview.rating }}
                 //v-divider.py-0.my-0
 
@@ -429,6 +470,12 @@ block content
                     v-textarea.ml-2.mr-3.py-0.my-0.no-padding-text-field(ref="area_review", :hide-details="tempReview.content === null || tempReview.content.length == 0 || (tempReview.content.length >= 2 && tempReview.content.length <= 200)", full-width, required, :rules="[supporter.rules.counter_2, supporter.rules.counter_200]" placeholder="리뷰를 입력해주세요.", v-model="tempReview.content", :disabled="submitReviewProgress")
 
 
+                v-divider.py-0.my-0
+
+                v-card-text.py-0.px-2
+                    v-text-field(v-model='tempReview.nickname', ref="review_nickname", label='Nickname', :hide-details="tempReview.nickname === null || tempReview.nickname.length == 0 || (tempReview.nickname.length >= 2 && tempReview.nickname.length <= 10)", single-line, full-width, required, :rules="[supporter.rules.counter_2, supporter.rules.counter_10]", :disabled="submitReviewProgress")
+
+
                 v-card-text.pa-0(v-if="submitReviewProgress")
                     v-progress-linear.my-0(indeterminate, height="2", color="green")
                 v-divider.py-0.my-0(v-else)
@@ -437,6 +484,38 @@ block content
                     v-btn(color='error', flat, @click="writeReviewDialog = false", :disabled="submitReviewProgress") 취소
                     v-spacer
                     v-btn(color='success', flat, @click="submitReview()", :disabled="submitReviewProgress") 제출
+
+
+    v-dialog.md6(v-model='reviewDialog', scrollable, max-width='500px')
+        v-card
+            v-card-text.pb-0(style="height: 140px;")
+                v-layout.px-0(row, wrap, align-end, v-if="reviews.length > 0 && !reviewLoading")
+                    .headline(style="font-weight: 700;") {{ reviewSummary === null ? reviews.length : reviewSummary.count }} User Review{{ (reviewSummary === null ? reviews.length : reviewSummary.count) > 1 ? "s":"" }}
+
+                    v-card-text.pa-0
+                        v-layout(xs12, align-end)
+
+                            v-layout(align-end)
+                                .grey--text.text--darken-3(style="font-weight: 700;", :class="$vuetify.breakpoint.xsOnly ? 'headline' : 'display-2' ") {{ reviewSummary.rating.toFixed(1) }}
+                                .caption.grey--text.text--darken-1.ml-2.mb-1 out of 5
+                            v-rating.no-padding-rating(v-if="reviewSummary !== null", v-model="reviewSummary.rating", :medium="!$vuetify.breakpoint.xsOnly", half-increments, color="orange darken-1", background-color="grey lighten-1", readonly, style="width: fit-content;")
+
+
+
+            v-card-text.py-2.px-0(v-if="allReviews !== null && allReviews.length > 0")
+                v-list.px-0.fit-height-list
+                    v-list-tile(v-for="(item, index) in allReviews", :key="index")
+                        include review_item
+
+            v-card-text.py-3.text-xs-center(v-else)
+                v-progress-circular(indeterminate='', color='green')
+
+            v-divider.py-0.my-0
+
+            v-card-actions
+                //v-btn(color='error', flat, @click="addCapability()") Clear
+                v-spacer
+                v-btn(color='success', flat, @click.native="reviewDialog = false") 닫기
 
 
     v-bottom-sheet(v-model='shareSheet', inset, max-width='500px')

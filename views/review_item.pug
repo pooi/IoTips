@@ -1,4 +1,21 @@
-template(v-if="comment !== null")
-    v-layout.py-3.px-2(column, wrap)
-        v-card(style="height: 150px; width: 300px")
+v-card.dal-card-scale.text-xs-left.pa-3.review-height(light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="item !== null")
 
+    v-card-text.mb-2.pa-0.grey--text.text--darken-3
+        v-layout(row, wrap, xs12)
+            v-flex(xs10)
+                .title {{ item.title }}
+            v-flex.text-xs-right(xs2)
+                .caption.grey--text {{ item.nickname }}
+
+    v-card-text.mb-2.pa-0
+        v-layout(row, wrap, xs12)
+            v-flex(xs6)
+                v-layout(style="width: 100%;", align-center)
+                    v-rating.no-padding-rating(v-model="item.star", small, half-increments, color="orange darken-1", background-color="grey lighten-1", readonly, style="width: fit-content;")
+                    .caption.grey--text.ml-1 ({{item.star.toFixed(1)}})
+            v-flex.text-xs-right(xs6)
+                .caption.grey--text {{ supporter.parseBoardDate(item.rgt_date) }}
+
+    v-card-text.pa-0(style="max-height: 120px;") {{ item.content }}
+
+div(v-else)

@@ -74,11 +74,15 @@ function init(init_user, init_boardID) {
             comments: [],
             commentLoading: false,
 
+            reviewSummary: null,
             reviews: [],
             reviewLoading: false,
             writeReviewDialog: false,
             tempReview: null,
             submitReviewProgress: false,
+            reviewHeight:100,
+            reviewDialog: false,
+            allReviews: null,
 
             CAPABILITY: null,
             capabilities: [],
@@ -162,6 +166,9 @@ function init(init_user, init_boardID) {
                 $('html, body').animate({
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
+            },
+            goRegist: function () {
+                window.location.href = "/board/regist?boardType=" + this.boardType.type;
             },
 
             onEditorBlur(editor) {
@@ -507,12 +514,81 @@ function init(init_user, init_boardID) {
                 this.tempReview = {
                     title: null,
                     content: null,
-                    rating: 0
+                    rating: 0,
+                    nickname: null
                 }
+            },
+            toggleAllReviewDialog: function(){
+                this.reviewDialog = true;
+                var boardID = this.result.id;
+
+                var data = {
+                    boardID: boardID,
+                    size: 0
+                };
+
+                axios.post(
+                    '/board/reviews',
+                    data
+                ).then(function (res) {
+                    var data = res.data;
+                    for(var i=0; i<data.length; i++){
+                        data[i].rgt_date = new Date(data[i].rgt_date);
+                    }
+
+                    vue.allReviews = data;
+
+                }).catch(function (error) {
+                    alert(error);
+                });
+
             },
 
             getReview: function(){
+                if("id" in this.result){
+                    this.reviewLoading = true;
+                    var boardID = this.result.id;
 
+                    var data = {
+                        boardID: boardID,
+                        size: 3
+                    };
+
+                    axios.post(
+                        '/board/reviewSummary',
+                        data
+                    ).then(function (res) {
+                        var data = res.data;
+
+                        vue.reviewSummary = data;
+
+                        // vue.comments = data;
+                        // vue.reviewLoading = false;
+                    }).catch(function (error) {
+                        alert(error);
+                        // vue.reviewLoading = false;
+                    });
+
+                    axios.post(
+                        '/board/reviews',
+                        data
+                    ).then(function (res) {
+                        var data = res.data;
+                        for(var i=0; i<data.length; i++){
+                            data[i].rgt_date = new Date(data[i].rgt_date);
+                        }
+
+                        vue.reviews = data;
+
+                        // vue.comments = data;
+                        vue.reviewLoading = false;
+                    }).catch(function (error) {
+                        alert(error);
+                        vue.reviewLoading = false;
+                    });
+
+
+                }
             },
 
             submitReview: function () {
@@ -537,7 +613,8 @@ function init(init_user, init_boardID) {
                         boardID: boardID,
                         title: this.tempReview.title,
                         content: this.tempReview.content,
-                        rating: this.tempReview.rating
+                        rating: this.tempReview.rating,
+                        nickname: this.tempReview.nickname
                     };
 
                     axios.post(
@@ -548,7 +625,7 @@ function init(init_user, init_boardID) {
 
                         if(data.statusCode === 200){
 
-                            alert("성공적으로 등록되었습닏다.");
+                            alert("성공적으로 등록되었습니다.");
                             vue.getReview();
 
                         }else{
@@ -567,7 +644,7 @@ function init(init_user, init_boardID) {
 
 
                 }else{
-                    alert("제목과 내용을 입력해주세요.");
+                    alert("제목, 내용 및 닉네임을 입력해주세요.");
                 }
             }
 
@@ -698,6 +775,7 @@ function init(init_user, init_boardID) {
                     }
 
                     vue.getComments();
+                    vue.getReview();
 
                     if("graph" in result){
                         if(result.graph != null){
@@ -802,11 +880,49 @@ function init(init_user, init_boardID) {
                 }
 
                 return capabilities
-            }
+            },
+            // reviewHeight: function(){
+            //     try{
+            //         var reviews = document.getElementsByClassName("review-height");
+            //         var maxHeight = 0;
+            //         for(var i=0; i<reviews.length; i++){
+            //             var h = reviews[i].clientHeight;
+            //             if(maxHeight < h){
+            //                 maxHeight = h;
+            //             }
+            //         }
+            //         console.log("reviewHeight");
+            //         return maxHeight;
+            //     }catch(err){
+            //         return 100;
+            //     }
+            // }
             // contentCode() {
             //     return hljs.highlightAuto(this.content).value
             // }
         },
+        watch: {
+            reviews: function (val) {
+                setTimeout(function () {
+                    try{
+                        var reviews = document.getElementsByClassName("review-height");
+                        console.log("review: ", reviews);
+                        var maxHeight = 0;
+                        for(var i=0; i<reviews.length; i++){
+                            var h = reviews[i].clientHeight;
+                            if(maxHeight < h){
+                                maxHeight = h;
+                            }
+                        }
+                        console.log("reviewHeight");
+                        vue.reviewHeight = maxHeight;
+                    }catch(err){
+                        vue.reviewHeight = 100;
+                    }
+                }, 500);
+
+            },
+        }
     });
 
     vue.supporter = new Supporter(vue);

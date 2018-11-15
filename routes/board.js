@@ -224,12 +224,42 @@ router.post('/registComment', function (req, res, next) {
     }
 });
 
+router.post('/reviews', function(req, res, next){
+    var data = req.body;
+    if("boardID" in data && "size" in data){
+        dbDAO.getReview(data.boardID, data.size, function (isErr, results) {
+            if(isErr){
+                res.send(404);
+            }else{
+                res.send(results);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
+router.post('/reviewSummary', function(req, res, next){
+    var data = req.body;
+    if("boardID" in data){
+        dbDAO.getReviewSummary(data.boardID, function (isErr, result) {
+            if(isErr){
+                res.send(404);
+            }else{
+                res.send(result);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
 router.post('/registReview', function (req, res, next) {
     var data = req.body;
-    if("boardID" in data && "title" in data && "content" in data && "rating" in data){
+    if("boardID" in data && "title" in data && "content" in data && "rating" in data && "nickname" in data){
         var boardID = req.body.boardID;
         var user = support.ensureAuthenticated(req);
-        dbDAO.registReview(user.db_id, boardID, data.title, data.content, data.rating, function (isSuccess) {
+        dbDAO.registReview(user.db_id, boardID, data.title, data.content, data.rating, data.nickname, function (isSuccess) {
             if(isSuccess){
                 res.send({
                     statusCode: 200

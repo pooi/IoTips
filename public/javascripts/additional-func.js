@@ -312,6 +312,13 @@ class Supporter {
                     return value.length >= 2 || 'Min 2 characters'
                 }
             },
+            counter_10: value => {
+                if(value === null){
+                    return 'Please enter text'
+                } else{
+                    return value.length <= 10 || 'Max 10 characters'
+                }
+            },
             counter_20: value => {
                 if(value === null){
                     return 'Please enter text'
@@ -519,6 +526,11 @@ class Supporter {
         return timeString;
     }
 
+    getTempText(len){
+        var str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pretium nisi sed quam sollicitudin vehicula. Suspendisse pretium ut ante non vehicula. Duis quis consectetur lectus, pellentesque tempus elit. Aliquam erat volutpat. Donec pellentesque eleifend nisi ac vulputate. Pellentesque ullamcorper a lorem eu rhoncus. Morbi pharetra, dolor non fermentum porttitor, metus ipsum finibus nisi, ut commodo nunc magna malesuada massa. Vestibulum auctor arcu id vestibulum sagittis. Praesent tortor nulla, volutpat eu porttitor quis, mattis eu dolor. Integer sollicitudin eros efficitur dui varius dignissim. Ut imperdiet nec urna vel sodales.";
+        return str.substring(0, len);
+    }
+
     reduceString (str, len) {
         var newStr = str.substring(0, len);
         if(str.length > 100){
@@ -550,6 +562,35 @@ class Supporter {
             chunk = 3;
         else
             chunk = 4;
+        // console.log(this.__proto__.$vuetify.breakpoint);
+        // console.log("chunk", chunk);
+
+        var i,j,temparray;
+        var newArray = [];
+        for (i=0,j=array.length; i<j; i+=chunk) {
+            temparray = array.slice(i,i+chunk);
+
+            while(temparray.length < chunk){
+                temparray.push(null);
+            }
+
+            newArray.push(temparray);
+        }
+        // console.log(newArray);
+        return newArray;
+    }
+
+    splitArrayBig (array) {
+        var chunk = 1;
+        var breakpoint = this.vue.__proto__.$vuetify.breakpoint;
+        if(breakpoint.xs || breakpoint.xl)
+            chunk = 1;
+        else if(breakpoint.sm)
+            chunk = 2;
+        else if(breakpoint.md)
+            chunk = 2;
+        else
+            chunk = 3;
         // console.log(this.__proto__.$vuetify.breakpoint);
         // console.log("chunk", chunk);
 
