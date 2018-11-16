@@ -33,6 +33,9 @@ function init(init_user, init_boardID) {
                 { img: 'kakao.png', title: 'Kakao' },
             ],
 
+            boardLoading: false,
+            board: null,
+
             result: null,
 
             boardType: null,
@@ -170,6 +173,9 @@ function init(init_user, init_boardID) {
             goRegist: function () {
                 window.location.href = "/board/regist?boardType=" + this.boardType.type;
             },
+            goList: function(){
+                window.location.href = "/board/" + this.boardType.type;
+            },
 
             onEditorBlur(editor) {
                 console.log('editor blur!');//, editor)
@@ -180,6 +186,38 @@ function init(init_user, init_boardID) {
             onEditorReady(editor) {
                 console.log('editor ready!');//, editor)
             },
+
+            getBoardData: function () {
+                this.boardLoading = true;
+                var data = {
+                    type: this.boardType.type,
+                    page: this.page
+                };
+
+                setTimeout(function () {
+                    axios.post(
+                        '/board',
+                        data
+                    ).then(function (res) {
+                        var data = res.data;
+                        vue.board = data;
+                        for(var i=0; i<vue.board.length; i++){
+                            vue.board[i].rgt_date = new Date(vue.board[i].rgt_date);
+                        }
+                        vue.boardLoading = false;
+                    }).catch(function (error) {
+                        alert(error);
+                        vue.boardLoading = false;
+                    });
+                }, 500);
+
+
+            },
+            moveDetail: function(item){
+                console.log(item);
+                window.location.href = "/board/" + item.id;
+            },
+
             scrap: function(){
                 if(this.auth.user === null){
                     this.auth.toggleDialog();
@@ -774,8 +812,12 @@ function init(init_user, init_boardID) {
                         vue.getCapabilityList();
                     }
 
+
                     vue.getComments();
                     vue.getReview();
+
+                    vue.getBoardData();
+
 
                     if("graph" in result){
                         if(result.graph != null){

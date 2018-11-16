@@ -267,15 +267,30 @@ block content
                             v-divider.my-0
 
 
-                        v-card-text.pt-0.pb-5
+                        v-card-text.pt-0.pb-2
                             v-layout(style="width: 100%;")
-                                v-btn.elevation-0.ma-0.mt-2(flat, dark, small, color="grey darken-1" style="min-width: 10px !important;", onclick="window.history.back()")
+                                v-btn.elevation-0.ma-0.mt-2(flat, dark, small, color="grey darken-1" style="min-width: 10px !important;", @click="goList()")
                                     v-icon.pr-1.subheading(dark) list
                                     | 목록으로
                                 v-spacer
                                 v-btn.elevation-0.ma-0.mt-2(flat, dark, small, color="red", style="min-width: 10px !important;", @click="goRegist()")
                                     v-icon.mr-2.subheading(left, dark) edit
                                     | 글작성
+
+                        template(v-if="!boardLoading")
+
+                            v-card-title.pb-2.logo_blue_text(style="margin-top: 20px;")
+                                span.display-1(style="font-weight: 800;") {{boardType.fullTitle}}
+
+                            v-card-title.pt-0.pb-5(v-if="board !== null && board.length > 0")
+                                v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
+                                    v-list-tile(v-for='(item, index) in board', :key='index', @click='moveDetail(item)', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'", :class="item.id === result.id ? 'indigo lighten-5' : '' ")
+                                        include board_item
+
+                            v-card-text.py-5.title.text-xs-center(v-else) 결과가 없습니다.
+
+                        v-card-text.py-5.text-xs-center(v-else)
+                            v-progress-circular(indeterminate='', color='green')
 
 
                     v-card-text.text-xs-center.py-5(v-else)
