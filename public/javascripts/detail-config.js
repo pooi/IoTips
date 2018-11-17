@@ -76,6 +76,8 @@ function init(init_user, init_boardID) {
             content: null,
             comments: [],
             commentLoading: false,
+            showCommentGraph: false,
+            commentGraph: null,
 
             reviewSummary: null,
             reviews: [],
@@ -505,6 +507,23 @@ function init(init_user, init_boardID) {
                 var area = this.$refs.area_comment;
                 area.focus();
             },
+
+            toggleCommentGraph: function(){
+                this.showCommentGraph = true;
+                this.commentGraph = new GraphManager("comment-graph", true);
+
+                setTimeout(function () {
+                    vue.commentGraph.makeFromXml(vue.graphManager.toXML());
+                }, 500);
+
+
+            },
+            removeCommentGraph: function(){
+                this.showCommentGraph = false;
+                this.commentGraph = null;
+                document.getElementById("comment-graph").innerHTML = '';
+            },
+
             submitComment: function(){
                 var commentForm = this.$refs.form_comment;
                 if(commentForm.validate()){
@@ -518,12 +537,19 @@ function init(init_user, init_boardID) {
                         parentCommentID: this.tempParentComment == null ? null : this.tempParentComment.id
                     };
 
+                    if(this.showCommentGraph && this.commentGraph.graph !== null && this.commentGraph.graph.getChildCells().length > 0){
+                        data['graph'] = xml2json(this.commentGraph.toXML());
+                    }else{
+                        data['graph'] = null;
+                    }
+
                     axios.post(
                         '/board/registComment',
                         data
                     ).then(function (res) {
                         var data = res.data;
                         if(data){
+                            vue.removeCommentGraph();
                             vue.commentSubmitProgress = false;
                             vue.tempComment = null;
                             vue.tempParentComment = null;

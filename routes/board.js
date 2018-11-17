@@ -213,10 +213,10 @@ router.post('/comments', function(req, res, next){
 
 router.post('/registComment', function (req, res, next) {
     var data = req.body;
-    if("boardID" in data && "content" in data && "parentCommentID" in data){
+    if("boardID" in data && "content" in data && "parentCommentID" in data && "graph" in data){
         var boardID = req.body.boardID;
         var user = support.ensureAuthenticated(req);
-        dbDAO.registComment(user.db_id, boardID, data.content, data.parentCommentID, function (isSuccess) {
+        dbDAO.registComment(user.db_id, boardID, data.content, data.parentCommentID, data.graph, function (isSuccess) {
             res.send(isSuccess);
         });
     }else{

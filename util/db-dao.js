@@ -349,14 +349,25 @@ exports.getBoardComments = function (boardID, callback) {
     })
 };
 
-exports.registComment = function (userID, boardID, content, parentCommentID, callback) {
+exports.registComment = function (userID, boardID, content, parentCommentID, graph, callback) {
     var sql = "";
     var argument = [userID, boardID, content];
 
     if(parentCommentID === null){
-        sql = "INSERT INTO comment(user_id, board_id, content) VALUES(?,?,?)";
+        if(graph === null){
+            sql = "INSERT INTO comment(user_id, board_id, content) VALUES(?,?,?)";
+        }else{
+            sql = "INSERT INTO comment(user_id, board_id, content, graph) VALUES(?,?,?,?)";
+            argument.push(graph);
+        }
+
     }else{
-        sql = "INSERT INTO comment(user_id, board_id, content, parent, depth) VALUES(?,?,?,?,?)";
+        if(graph === null){
+            sql = "INSERT INTO comment(user_id, board_id, content, parent, depth) VALUES(?,?,?,?,?)";
+        }else{
+            sql = "INSERT INTO comment(user_id, board_id, content, graph, parent, depth) VALUES(?,?,?,?,?,?)";
+        }
+        argument.push(graph);
         argument.push(parentCommentID);
         argument.push(2);
     }
