@@ -262,7 +262,7 @@ block content
 
                                             //v-layout(style="width:100%;", row, wrap)
                                         v-textarea.ml-2.mr-3.py-0.my-0.no-padding-text-field(ref="area_comment", :hide-details="tempComment === null || tempComment.length == 0 || (tempComment.length >= 2 && tempComment.length <= 200)", full-width, required, :rules="[supporter.rules.counter_2, supporter.rules.counter_200]" :placeholder='auth.user === null ? "로그인이 필요합니다." : "댓글을 입력해주세요."', v-model="tempComment", :disabled="auth.user === null || commentSubmitProgress")
-                                        v-layout(row, wrap, style="width: 100%;", align-center, justify-center)
+                                        v-layout(row, wrap, style="width: 100%;", align-center, justify-center, v-show="auth.user !== null")
                                             v-btn.logo_blue_text(flat, v-show="!showCommentGraph" @click="toggleCommentGraph()") 그래프 추가
                                             v-card.ma-3.dal-card-blue(hover, raised, style="width: 100%;", v-show="showCommentGraph")
                                                 //v-card-media.pa-0(height="400px")
