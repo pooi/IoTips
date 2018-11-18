@@ -473,22 +473,41 @@ function init(init_user, init_boardID) {
                             vue.comments = [];
                             for(var i=0; i<data.length; i++){
                                 if(data[i].parent < 0){
-                                    vue.comments.push(data[i]);
+                                    var comment = new Comment(data[i]);
+                                    vue.comments.push(comment);
+                                    // vue.comments.push(data[i]);
                                 }else{
                                     var parentID = data[i].parent;
                                     var check = false;
                                     for(var j=0; j<vue.comments.length; j++){
                                         if(vue.comments[j].id === parentID){
-                                            vue.comments.splice(j+1, 0, data[i]);
+                                            var comment = new Comment(data[i]);
+                                            vue.comments.splice(j+1, 0, comment);
                                             check = true;
                                             break;
                                         }
                                     }
                                     if(!check){
-                                        vue.comments.push(data[i]);
+                                        var comment = new Comment(data[i]);
+                                        vue.comments.push(comment);
+                                        // vue.comments.push(data[i]);
                                     }
                                 }
                             }
+
+                            setTimeout(function () {
+                                for(var i=0; i<vue.comments.length; i++){
+
+                                    if(vue.comments[i].data.graph != null){
+                                        vue.comments[i].graphManager = new GraphManager("graph"+vue.comments[i].id, false);
+                                        vue.comments[i].graphManager.main();
+                                        var graph = JSON.parse(vue.comments[i].data.graph);
+                                        console.log("graph"+vue.comments[i].id, graph);
+                                        vue.comments[i].graphManager.makeFromXml(json2xml(graph));
+                                    }
+
+                                }
+                            }, 500);
 
                             // vue.comments = data;
                             vue.commentLoading = false;

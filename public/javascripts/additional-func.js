@@ -171,6 +171,14 @@ class Product {
     }
 }
 
+class Comment{
+    constructor(data){
+        this.data = data;
+        this.graphManager = null;
+        this.id = data.id;
+    }
+}
+
 class UserInformation {
     constructor(){
         this.dialog = false;

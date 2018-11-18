@@ -253,9 +253,9 @@ block content
                                             v-card-text.pa-0.small-caption
                                                 v-layout.px-3(row, wrap, align-center, fill-height)
                                                     v-avatar.mr-2(:tile='false', size='20px')
-                                                        img(:src='tempParentComment.user_photo', alt='Avatar', style="border-radius: 35% !important;")
-                                                    .pr-2(style="border-right: .4px solid rgba(0,0,0,0.2);") {{ tempParentComment.nickname }}
-                                                    .small-caption.pl-2 {{tempParentComment.content}}
+                                                        img(:src='tempParentComment.data.user_photo', alt='Avatar', style="border-radius: 35% !important;")
+                                                    .pr-2(style="border-right: .4px solid rgba(0,0,0,0.2);") {{ tempParentComment.data.nickname }}
+                                                    .small-caption.pl-2 {{tempParentComment.data.content}}
                                                     v-spacer
                                                     v-btn(icon, flat, small, color="grey", @click="tempParentComment = null")
                                                         v-icon.subheading close
