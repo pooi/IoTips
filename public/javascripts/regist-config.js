@@ -26,6 +26,12 @@ function init(init_user, BOARD_TYPE) {
             viewer: null,
 
             loadingProgress: false,
+            originalProgress: {
+                product: true,
+                platform: true,
+                capability: true,
+                graph: true
+            },
 
             boardType: null,
             boardTypes: Supporter.getBoardTypes(),
@@ -447,6 +453,7 @@ function init(init_user, BOARD_TYPE) {
                     }
                     vue.totalCapabilities = JSON.parse(JSON.stringify( vue.CAPABILITY ));
                     vue.capabilityLoading = false;
+                    vue.originalProgress.capability = true;
 
                     // vue.tempCapabilities = [];
                     // for(var i=0; i<vue.CAPABILITY.length; i++){
@@ -541,6 +548,11 @@ function init(init_user, BOARD_TYPE) {
                         data['tags'] = this.tags;
                     }
 
+                    var parent = (new URL(window.location.href)).searchParams.get("originalPost");
+                    if(parent){
+                        data['parent'] = parent;
+                    }
+
                     axios.post(
                         '/board/regist',
                         data
@@ -588,6 +600,76 @@ function init(init_user, BOARD_TYPE) {
                     default:
                         this.boardType = this.boardTypes[0];
                         break;
+                }
+            },
+            function(){
+                // var url_string = window.location.href;
+                // var url = new URL(url_string);
+                var originalPost = (new URL(window.location.href)).searchParams.get("originalPost");
+
+                if(originalPost){
+                    // console.log("originalPost");
+
+                    for(var key in this.originalProgress){
+                        this.originalProgress[key] = false;
+                    }
+
+                    var data = {
+                        boardID: originalPost
+                    };
+
+                    axios.post(
+                        '/board/getDetail',
+                        data
+                    ).then(function (res) {
+                        var result = res.data.result;
+                        console.log(result);
+
+                        var platforms = res.data.platforms;
+                        var products = res.data.products;
+
+                        for(var i=0; i<platforms.length; i++){
+                            var platform = new Platform();
+                            platform.fromDicWithoutID(platforms[i]);
+                            vue.platforms.push(platform);
+                        }
+                        vue.originalProgress.platform = true;
+
+                        for(var i=0; i<products.length; i++){
+                            var product = new Product();
+                            product.fromDicWithoutID(products[i]);
+                            vue.products.push(product);
+                        }
+                        vue.originalProgress.product = true;
+
+                        if(products.length > 0){
+                            vue.getCapabilityList();
+                        }
+
+
+                        if("graph" in result){
+                            if(result.graph != null){
+                                document.getElementById("graph").innerHTML = '';
+                                // vue.graphManager = new GraphManager("graph", true);
+                                // var graph = JSON.parse(result.graph);
+                                // console.log(json2xml(graph));
+                                // vue.graphManager.makeFromXml(json2xml(graph));
+                                setTimeout(function () {
+                                    // vue.graphManager = new GraphManager("graph");
+                                    // vue.graphManager.main();
+                                    var graph = JSON.parse(result.graph);
+                                    vue.graphManager.makeFromXml(json2xml(graph));
+                                    vue.originalProgress.graph = true;
+                                }, 500);
+                            }
+                        }
+
+                    }).catch(function (error) {
+                        alert(error);
+                        // vue.commentLoading = false;
+                    });
+
+
                 }
             },
             function () {
@@ -667,6 +749,14 @@ function init(init_user, BOARD_TYPE) {
                 }
 
                 return capabilities
+            },
+            originalLoading: function () {
+                for(var key in this.originalProgress){
+                    if(!this.originalProgress[key]){
+                        return true;
+                    }
+                }
+                return false
             }
             // contentCode() {
             //     return hljs.highlightAuto(this.content).value

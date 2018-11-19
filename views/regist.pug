@@ -41,8 +41,10 @@ block content
                                     v-select(v-model='boardType', :items='boardTypes', item-text='title', item-value='type', label='게시판선택', persistent-hint, return-object, single-line, hide-details, full-width, required, style="border-bottom: .4px solid rgba(0,0,0,0.2);", :disabled="loadingProgress")
 
 
+                        v-card-text.px-0.py-2.text-xs-center(v-show="originalLoading")
+                            v-progress-circular(indeterminate='', color='green')
 
-                        v-card-text
+                        v-card-text(v-show="!originalLoading")
                             v-layout
                                 v-flex(xs12)
                                     v-card.pa-0.elevation-4

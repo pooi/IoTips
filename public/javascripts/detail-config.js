@@ -175,6 +175,9 @@ function init(init_user, init_boardID) {
             goRegist: function () {
                 window.location.href = "/board/regist?boardType=" + this.boardType.type;
             },
+            goRegistWithGraph: function () {
+                window.location.href = "/board/regist?boardType=" + this.boardType.type + "&originalPost=" + this.result.id;
+            },
             goList: function(){
                 window.location.href = "/board/" + this.boardType.type;
             },

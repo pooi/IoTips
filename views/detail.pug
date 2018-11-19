@@ -78,6 +78,13 @@ block content
                         //v-card-text.py-0
                         //    v-divider.my-0
 
+
+                        v-card-text.py-3(v-if="result.parent_board_id !== null")
+                            v-layout.px-2(row, wrap, style="width: 100%;", align-center, justify-center)
+                                v-card.dal-card-scale.pa-3(style="width:100%;", :href='"/board/" + result.parent_board_id')
+                                    v-card-text.caption.pa-0.pb-1.grey--text Original Post
+                                    v-card-text.pa-0 {{ result.parent_title }}
+
                         v-card-text.pt-2.pb-3
                             quill-editor.no-border-quill-editor(:content='content', :options='editorOption', readonly, readOnly, disabled)
 
@@ -132,7 +139,7 @@ block content
                                 v-card-actions.py-1.px-2.grey.lighten-5(style="overflow: hidden;")
                                     //v-btn.mx-0(icon, flat, color="grey ", @click="graphManager.toXML()")
                                     //    v-icon code
-                                    v-btn.elevation-0.mx-0(color="red darken-1", dark, small, flat, style="min-width: 10px !important;", v-if="graphManager.graph !== null")
+                                    v-btn.elevation-0.mx-0(color="red darken-1", dark, small, flat, style="min-width: 10px !important;", v-if="graphManager.graph !== null", @click="goRegistWithGraph()")
                                         v-icon.pr-1.subheading(dark, v-if="!$vuetify.breakpoint.xsOnly") trending_up
                                         | 구성도 가져오기
                                     v-spacer

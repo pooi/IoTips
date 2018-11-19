@@ -136,7 +136,7 @@ router.get('/regist', function(req, res, next) {
     if(boardType === undefined){
         boardType = "free";
     }
-    console.log(boardType);
+    // console.log(boardType);
     var user = support.ensureAuthenticated(req);
     res.render('regist', { user: JSON.stringify(user), boardType: boardType });
 });

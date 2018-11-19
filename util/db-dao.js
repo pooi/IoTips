@@ -107,6 +107,11 @@ exports.registBoard = function (id, data, callback) {
         values.push(JSON.stringify(data.tags));
     }
 
+    if("parent" in data){
+        argu.push("parent_board_id");
+        values.push(data.parent);
+    }
+
     var products = [];
     var platforms = [];
     if("products" in data){
@@ -305,7 +310,7 @@ exports.getUserScrapBoardListData = function (userID, callback) {
 
 exports.getBoardDetailFromID = function (boardID, callback) {
     var sql = "UPDATE board SET hit=hit+1 WHERE id=?;" +
-        "SELECT A.*, B.nickname as nickname " +
+        "SELECT A.*, B.nickname as nickname, IFNULL((SELECT title FROM board WHERE id=A.parent_board_id), NULL) as parent_title " +
         "FROM board as A " +
         "LEFT OUTER JOIN ( " +
         "SELECT * FROM user " +

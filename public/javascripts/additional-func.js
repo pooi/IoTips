@@ -80,6 +80,23 @@ class Platform{
         }
     }
 
+    fromDicWithoutID(data){
+        // this.id = data.id;
+        this.title = data.title;
+        this.description = data.description;
+        this.company = data.company;
+        this.price = data.price;
+        this.isFree = (data.price === 0);
+        this.img = data.image;
+        this.url = JSON.parse(data.urls)[0];
+        for(var i=0; i<this.currencies.length; i++){
+            if(this.currencies[i].currency === data.currency){
+                this.currency = this.currencies[i];
+                break;
+            }
+        }
+    }
+
 }
 
 class Product {
@@ -154,6 +171,24 @@ class Product {
 
     fromDic(data){
         this.id = data.id;
+        this.title = data.title;
+        this.description = data.description;
+        this.company = data.company;
+        this.price = data.price;
+        this.isFree = (data.price === 0);
+        this.img = data.image;
+        this.url = JSON.parse(data.urls)[0];
+        for(var i=0; i<this.currencies.length; i++){
+            if(this.currencies[i].currency === data.currency){
+                this.currency = this.currencies[i];
+                break;
+            }
+        }
+        this.capabilities = JSON.parse(data.capability);
+    }
+
+    fromDicWithoutID(data){
+        // this.id = data.id;
         this.title = data.title;
         this.description = data.description;
         this.company = data.company;
