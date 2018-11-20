@@ -35,7 +35,7 @@ template(v-if="comment !== null")
                             v-icon search
                         v-btn.mx-0(icon, flat, @click="comment.graphManager.zoomIn()")
                             v-icon zoom_in
-                v-layout#graph-container.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
+                v-layout.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
                     div(style="width: 100%; height: 100%; overflow:auto; ", :id='"graph" + comment.id')
 
         //v-layout.pa-0.xs12.mt-2(row, wrap, style="width: 100%; font-weight: 500;")

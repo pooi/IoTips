@@ -219,7 +219,7 @@ function init(init_user, init_boardID) {
 
             },
             moveDetail: function(item){
-                console.log(item);
+                // console.log(item);
                 window.location.href = "/board/" + item.id;
             },
 
@@ -505,7 +505,7 @@ function init(init_user, init_boardID) {
                                         vue.comments[i].graphManager = new GraphManager("graph"+vue.comments[i].id, false);
                                         vue.comments[i].graphManager.main();
                                         var graph = JSON.parse(vue.comments[i].data.graph);
-                                        console.log("graph"+vue.comments[i].id, graph);
+                                        // console.log("graph"+vue.comments[i].id, graph);
                                         vue.comments[i].graphManager.makeFromXml(json2xml(graph));
                                     }
 
@@ -534,8 +534,33 @@ function init(init_user, init_boardID) {
                 this.showCommentGraph = true;
                 this.commentGraph = new GraphManager("comment-graph", true);
 
+                // setTimeout(function () {
+                //     vue.commentGraph.makeFromXml(vue.graphManager.toXML());
+                // }, 500);
+
+
+            },
+            fillCommentGraph: function(type){
+                this.commentGraph = null;
+                document.getElementById("comment-graph").innerHTML = '';
+                this.commentGraph = new GraphManager("comment-graph", true);
+
+                var xml = "";
+                switch (type) {
+                    case "board":
+                        xml = vue.graphManager.toXML();
+                        break;
+                    case "comment":
+                        if(this.tempParentComment !== null && this.tempParentComment.data.graph !== null){
+                            xml = vue.tempParentComment.graphManager.toXML();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
                 setTimeout(function () {
-                    vue.commentGraph.makeFromXml(vue.graphManager.toXML());
+                    vue.commentGraph.makeFromXml(xml);
                 }, 500);
 
 
@@ -797,7 +822,7 @@ function init(init_user, init_boardID) {
                     data
                 ).then(function (res) {
                     var result = res.data.result;
-                    console.log(result);
+                    // console.log(result);
 
                     if(result.content != null){
                         vue.content = json2html(JSON.parse(result.content));
@@ -996,7 +1021,7 @@ function init(init_user, init_boardID) {
                 setTimeout(function () {
                     try{
                         var reviews = document.getElementsByClassName("review-height");
-                        console.log("review: ", reviews);
+                        // console.log("review: ", reviews);
                         var maxHeight = 0;
                         for(var i=0; i<reviews.length; i++){
                             var h = reviews[i].clientHeight;
@@ -1004,7 +1029,7 @@ function init(init_user, init_boardID) {
                                 maxHeight = h;
                             }
                         }
-                        console.log("reviewHeight");
+                        // console.log("reviewHeight");
                         vue.reviewHeight = maxHeight;
                     }catch(err){
                         vue.reviewHeight = 100;

@@ -274,8 +274,10 @@ block content
                                             v-card.ma-3.dal-card-blue(hover, raised, style="width: 100%;", v-show="showCommentGraph")
                                                 //v-card-media.pa-0(height="400px")
                                                 v-card-actions.py-1.px-2.grey.lighten-5(style="overflow: hidden;", v-if="commentGraph !== null")
-                                                    v-btn.mx-0(icon, flat, color="grey ", @click="commentGraph.toXML()")
-                                                        v-icon code
+                                                    v-btn.mx-0(icon, flat, color="red", @click="removeCommentGraph()")
+                                                        v-icon clear
+                                                    v-btn.mx-0(icon, flat, color="grey", @click="fillCommentGraph('clear')")
+                                                        v-icon delete_outline
                                                     v-spacer
                                                     v-btn-toggle.elevation-0(style="background: transparent;")
                                                         v-btn.mx-0(icon, flat, @click="commentGraph.zoomOut()")
@@ -284,11 +286,20 @@ block content
                                                             v-icon search
                                                         v-btn.mx-0(icon, flat, @click="commentGraph.zoomIn()")
                                                             v-icon zoom_in
-                                                v-layout#graph-container.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
+                                                v-layout.pb-2(row, wrap, justify-center, align-center, style="width: 100%; height: 400px;")
                                                     div#comment-graph(style="width: 100%; height: 100%; overflow:auto; ")
 
+                                                v-divider
+
+                                                v-card-text.pa-0.pt-2.text-xs-center
+                                                    .caption 그래프 가져오기
+
                                                 v-card-text.pa-0.text-xs-center
-                                                    v-btn(flat, color="red", @click="removeCommentGraph()") 그래프 삭제
+                                                    v-btn.logo_blue_text(flat, style="min-width: 10px !important;", @click="fillCommentGraph('board')") 본문
+                                                    v-btn.logo_blue_text(flat, style="min-width: 10px !important;", @click="fillCommentGraph('comment')", v-if="tempParentComment !== null && tempParentComment.data.graph !== null") 댓글
+
+                                                //v-card-text.pa-0.text-xs-center
+                                                //    v-btn(flat, color="red", @click="removeCommentGraph()") 그래프 삭제
 
                                         v-btn.pa-0.ma-0.elevation-0.logo_blue(v-if="!commentSubmitProgress", block, small, dark, @click="submitComment()", submit, :disabled="auth.user === null") 등록
 

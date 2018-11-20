@@ -369,6 +369,13 @@ class Supporter {
                     return value.length <= 20 || 'Max 20 characters'
                 }
             },
+            counter_30: value => {
+                if(value === null){
+                    return 'Please enter text'
+                } else{
+                    return value.length <= 30 || 'Max 30 characters'
+                }
+            },
             counter_40: value => {
                 if(value === null){
                     return 'Please enter text'
@@ -1169,7 +1176,7 @@ class GraphManager {
 
         var container = document.getElementById(this.containerId);
         this.container = container;
-        console.log(container);
+        // console.log(container);
 
         // Checks if the browser is supported
         if (!mxClient.isBrowserSupported()) {
@@ -1517,7 +1524,7 @@ class GraphManager {
                 // Installs context menu
                 graph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
                     menu.addItem('Add node', null, function () {
-                        console.log(menu, cell, evt);
+                        // console.log(menu, cell, evt);
                         // var zl = gm.zoomLevel;
                         // gm.setZoomLevel(0);
                         var parent = graph.getDefaultParent();
@@ -1533,7 +1540,7 @@ class GraphManager {
                     });
 
                     menu.addItem('Add circle node', null, function () {
-                        console.log(menu, cell, evt);
+                        // console.log(menu, cell, evt);
                         // var zl = gm.zoomLevel;
                         // gm.setZoomLevel(0);
                         var parent = graph.getDefaultParent();
@@ -1549,7 +1556,7 @@ class GraphManager {
                     });
 
                     menu.addItem('Add rhombus node', null, function () {
-                        console.log(menu, cell, evt);
+                        // console.log(menu, cell, evt);
                         // var zl = gm.zoomLevel;
                         // gm.setZoomLevel(0);
                         var parent = graph.getDefaultParent();
@@ -1818,7 +1825,7 @@ class GraphManager {
         var node = encoder.encode(graph.getModel());
 
         var xml = mxUtils.getXml(node);
-        console.log(xml);
+        // console.log(xml);
         // alert(xml);
         return xml;
         // mxUtils.popup(mxUtils.getXml(node), true);

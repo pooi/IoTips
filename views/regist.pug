@@ -280,7 +280,7 @@ block content
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
-                            v-text-field(v-model='tempProduct.company', ref="product_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempProduct.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempProduct.company=""')
+                            v-text-field(v-model='tempProduct.company', ref="product_company", color="green darken-1", required, :rules="[supporter.rules.required, supporter.rules.counter_30]", :disabled="tempProduct.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempProduct.company=""')
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
@@ -390,7 +390,7 @@ block content
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
-                            v-text-field(v-model='tempPlatform.company', ref="platform_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempPlatform.company=""')
+                            v-text-field(v-model='tempPlatform.company', ref="platform_company", color="green darken-1", required, :rules="[supporter.rules.required, supporter.rules.counter_30]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempPlatform.company=""')
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
