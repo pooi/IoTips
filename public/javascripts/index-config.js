@@ -156,7 +156,13 @@ function init(init_user) {
                     // vue.filterDialog = false;
                     // vue.isFilterProgress = false;
                 });
-            }
+            },
+            // function () {
+            //     setTimeout(function () {
+            //         alert(JSON.stringify(document.getElementsByClassName("animation-fade-in-2s")[0].style));
+            //     }, 500);
+            //
+            // }
         ]
     });
     // vue.changeStatusBarColorOnNativeApp("orange");

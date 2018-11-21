@@ -35,6 +35,8 @@ function init(init_user, init_boardID) {
 
             boardLoading: false,
             board: null,
+            relatedBoardLoading: false,
+            relatedBoard: null,
 
             result: null,
 
@@ -215,6 +217,32 @@ function init(init_user, init_boardID) {
                         vue.boardLoading = false;
                     });
                 }, 500);
+
+
+            },
+            getRelatedBoardData: function () {
+                if(this.result !== null && this.result.id !== null){
+                    this.relatedBoardLoading = true;
+                    var data = {
+                        parentBoardID: this.result.id
+                    };
+                    console.log(data);
+
+                    axios.post(
+                        '/board/related',
+                        data
+                    ).then(function (res) {
+                        var data = res.data;
+                        vue.relatedBoard = data;
+                        for(var i=0; i<vue.relatedBoard.length; i++){
+                            vue.relatedBoard[i].rgt_date = new Date(vue.relatedBoard[i].rgt_date);
+                        }
+                        vue.relatedBoardLoading = false;
+                    }).catch(function (error) {
+                        alert(error);
+                        vue.relatedBoardLoading = false;
+                    });
+                }
 
 
             },
@@ -890,6 +918,7 @@ function init(init_user, init_boardID) {
                     vue.getReview();
 
                     vue.getBoardData();
+                    vue.getRelatedBoardData();
 
 
                     if("graph" in result){

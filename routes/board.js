@@ -31,6 +31,20 @@ router.post('/', function (req, res, next) {
 
 });
 
+router.post('/related', function (req, res, next) {
+    var body = req.body;
+    if("parentBoardID" in body) {
+        dbDAO.getRelatedBoardListData(body.parentBoardID, function (isErr, results) {
+            if (isErr) {
+                res.send(null);
+            } else {
+                res.send(results);
+            }
+        })
+    }
+
+});
+
 router.post('/user', function (req, res, next) {
     var body = req.body;
     if("userID" in body){
