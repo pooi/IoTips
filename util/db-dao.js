@@ -189,7 +189,7 @@ function saveProductsAndPlatforms(boardID, products, platforms, callback){
     })
 }
 
-exports.getBoardListData = function (type, page, callback) {
+exports.getBoardListData = function (type, page, query, callback) {
     var pageStep = 20;
     page = Math.max(page-1, 0);
     var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
@@ -203,11 +203,26 @@ exports.getBoardListData = function (type, page, callback) {
         "LEFT OUTER JOIN ( " +
         "SELECT board_id, COUNT(id) as num FROM recommend " +
         "GROUP BY board_id) as D on(D.board_id = A.id) " +
-        "WHERE type=? " +
-        "ORDER BY id DESC " +
+        "WHERE type=? ";
+
+    var arguments = [type];
+
+    if(query !== null){
+        sql += " AND (title like ? OR content like ? OR tags like ?) ";
+        arguments.push("%" + query + "%");
+        arguments.push("%" + query + "%");
+        arguments.push("%" + query + "%");
+    }
+    sql += "ORDER BY id DESC " +
         "LIMIT ?,?";
 
-    conn.query(sql, [type, page*pageStep, pageStep], function(err, results){
+    arguments.push(page*pageStep);
+    arguments.push(pageStep);
+
+    console.log(sql);
+    console.log(arguments);
+
+    conn.query(sql, arguments, function(err, results){
         if(err){
             callback(true, err);
         }else{

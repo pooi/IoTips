@@ -90,12 +90,21 @@ function init(init_user, BOARD_TYPE, init_page) {
             goRegist: function () {
                 window.location.href = "/board/regist?boardType=" + this.boardType;
             },
+            goBoardMain: function(){
+                window.location.href = "/board/" + this.boardType;
+
+            },
 
             getBoardData: function () {
                 this.loading = true;
                 var data = {
                     type: this.boardType,
                     page: this.page
+                }
+
+                var query = (new URL(window.location.href)).searchParams.get("query");
+                if(query){
+                    data['query'] = query;
                 }
 
                 setTimeout(function () {
@@ -120,7 +129,20 @@ function init(init_user, BOARD_TYPE, init_page) {
 
             moveDetail: function(item){
                 window.location.href = "/board/" + item.id;
-            }
+            },
+            search: function () {
+                if(this.searchText !== null && this.searchText.length > 0){
+                    var pathname = window.location.pathname;
+                    window.location.href = pathname + "?query=" + this.searchText;
+                }else{
+                    this.goBoardMain();
+                }
+            },
+            searchEnter: function (e) {
+                if(e.keyCode === 13){
+                    this.search();
+                }
+            },
 
         },
         mounted:[
@@ -158,6 +180,10 @@ function init(init_user, BOARD_TYPE, init_page) {
             // },
             function () {
                 this.getBoardData();
+                var query = (new URL(window.location.href)).searchParams.get("query");
+                if(query){
+                    this.searchText = query;
+                }
             }
         ],
         watch: {

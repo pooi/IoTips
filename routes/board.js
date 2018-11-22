@@ -12,6 +12,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function (req, res, next) {
    var data = req.body;
+   console.log(data);
    var type = "free";
    var page = 1;
    if("type" in data){
@@ -20,8 +21,12 @@ router.post('/', function (req, res, next) {
    if("page" in data){
        page = data.page;
    }
+   var query = null;
+   if("query" in data){
+       query = data.query;
+   }
 
-   dbDAO.getBoardListData(type, page, function (isErr, results) {
+   dbDAO.getBoardListData(type, page, query, function (isErr, results) {
        if(isErr){
            res.send(null);
        }else{
