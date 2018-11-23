@@ -532,6 +532,7 @@ function init(init_user, init_boardID) {
                                     if(vue.comments[i].data.graph != null){
                                         vue.comments[i].graphManager = new GraphManager("graph"+vue.comments[i].id, false);
                                         vue.comments[i].graphManager.main();
+                                        vue.comments[i].graphManager.graph.setStylesheet(vue.graphManager.graph.getStylesheet());
                                         var graph = JSON.parse(vue.comments[i].data.graph);
                                         // console.log("graph"+vue.comments[i].id, graph);
                                         vue.comments[i].graphManager.makeFromXml(json2xml(graph));
@@ -588,6 +589,7 @@ function init(init_user, init_boardID) {
                 }
 
                 setTimeout(function () {
+                    vue.commentGraph.graph.setStylesheet(vue.graphManager.graph.getStylesheet());
                     vue.commentGraph.makeFromXml(xml);
                 }, 500);
 
@@ -928,9 +930,29 @@ function init(init_user, init_boardID) {
                             // vue.graphManager.makeFromXml(json2xml(graph));
                             setTimeout(function () {
                                 // vue.graphManager = new GraphManager("graph");
+
                                 vue.graphManager.main();
                                 var graph = JSON.parse(result.graph);
                                 vue.graphManager.makeFromXml(json2xml(graph));
+
+                                for(var i=0; i<vue.products.length; i++){
+                                    var product = vue.products[i];
+                                    if(product.img !== null){
+                                        vue.graphManager.addImageStyle(product.id, product.img, function (w, h) {
+                                            vue.graphManager.graph.refresh();
+                                        });
+                                    }
+                                }
+
+                                for(var i=0; i<vue.platforms.length; i++){
+                                    var platform = vue.platforms[i];
+                                    if(platform.img !== null){
+                                        vue.graphManager.addImageStyle(platform.id, platform.img, function (w, h) {
+                                            vue.graphManager.graph.refresh();
+                                        });
+                                    }
+                                }
+
                             }, 1000);
                         }
                     }

@@ -380,7 +380,11 @@ function init(init_user, BOARD_TYPE) {
                 if(form.validate()){
                     this.tempProduct.saveSelectedPlatform();
                     this.products.push(this.tempProduct);
-                    this.graphManager.addNode(this.tempProduct.title, this.tempProduct.id);
+                    if(this.tempProduct.img !== null){
+                        this.graphManager.addNodeWithImage(this.tempProduct.title, this.tempProduct.id, this.tempProduct.img);
+                    }else{
+                        this.graphManager.addNode(this.tempProduct.title, this.tempProduct.id);
+                    }
                     this.addProductDialog = false;
                     // this.calcTotalCapabilities();
                 }

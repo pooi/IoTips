@@ -1207,6 +1207,7 @@ class GraphManager {
             graph.centerZoom = false;
             graph.setConnectable(true);
             graph.setPanning(true);
+            graph.setAutoSizeCells(true);
 
             { // Style
 
@@ -1214,6 +1215,8 @@ class GraphManager {
                 var style = graph.getStylesheet().getDefaultEdgeStyle();
                 style[mxConstants.STYLE_ROUNDED] = true;
                 style[mxConstants.STYLE_EDGE] = mxEdgeStyle.OrthConnector;
+                // style[mxConstants.STYLE_SPACING] = '8';
+                style[mxConstants.STYLE_LABEL_PADDING] = '3';
             }
 
 
@@ -1780,6 +1783,33 @@ class GraphManager {
 
     }
 
+    getImageMeta(url, size, callback){
+        var img = new Image();
+        img.addEventListener("load", function(){
+            // alert( this.naturalWidth +' '+ this.naturalHeight );
+
+            var width = this.naturalWidth;
+            var height = this.naturalHeight;
+
+            if(width > height){
+                height = (height * size)/width;
+                width = size;
+            }else{
+                width = (width * size)/height;
+                height = size;
+            }
+
+
+
+            callback(width, height)
+            // return {
+            //     width: this.naturalWidth,
+            //     height: this.naturalHeight
+            // };
+        });
+        img.src = url;
+    }
+
     addNode(title, id){
         var graph = this.graph;
         var parent = graph.getDefaultParent();
@@ -1792,6 +1822,64 @@ class GraphManager {
                 this.addOffsetY = this.addOffsetY % 300 + 20;
                 this.addOffsetX += 20;
             }
+        }
+        finally {
+            // Updates the display
+            graph.getModel().endUpdate();
+        }
+    }
+
+    addImageStyle(id, img, callback){
+        var graph = this.graph;
+        this.getImageMeta(img, 80, function (width, height) {
+            console.log(width, height);
+
+            var style = new Object();
+            style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
+            // style[mxConstants.STYLE_STROKECOLOR] = '#e43535';
+            // style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
+            // style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+            style[mxConstants.STYLE_IMAGE] = img;
+            style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_LABEL;
+            // style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
+            // style[mxConstants.STYLE_IMAGE_ALIGN] = mxConstants.ALIGN_LEFT;
+            // style[mxConstants.STYLE_SPACING_LEFT] = '55';
+            style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+            style[mxConstants.STYLE_IMAGE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+            style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_RIGHT;
+            style[mxConstants.STYLE_IMAGE_ALIGN] = mxConstants.ALIGN_RIGHT;
+            style[mxConstants.STYLE_SPACING_RIGHT] = (width + 20).toString();
+
+            style[mxConstants.STYLE_IMAGE_WIDTH] = width.toString();
+            style[mxConstants.STYLE_IMAGE_HEIGHT] = height.toString();
+
+            style[mxConstants.STYLE_SPACING] = '4';
+            graph.getStylesheet().putCellStyle(id, style);
+
+            callback(width+20, height);
+
+        });
+
+    }
+
+    addNodeWithImage(title, id, img){
+        var gm = this;
+        var graph = this.graph;
+        var parent = graph.getDefaultParent();
+
+        graph.getModel().beginUpdate();
+        try {
+            this.addImageStyle(id, img, function (imgWidth, imgHeight) {
+                var v1 = graph.insertVertex(parent, id, title, gm.addOffsetX, gm.addOffsetY, title.length * 8 + imgWidth, imgHeight+20, id);
+
+                gm.addOffsetY += 20;
+                if(gm.addOffsetY > 300){
+                    gm.addOffsetY = gm.addOffsetY % 300 + 20;
+                    gm.addOffsetX += 20;
+                }
+            });
+
+
         }
         finally {
             // Updates the display
