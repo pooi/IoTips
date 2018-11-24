@@ -1209,6 +1209,8 @@ class GraphManager {
             graph.setPanning(true);
             graph.setAutoSizeCells(true);
 
+            var highlight = new mxCellTracker(graph, '#00FF00');
+
             { // Style
 
                 // Changes the default style for edges "in-place"
@@ -1217,6 +1219,37 @@ class GraphManager {
                 style[mxConstants.STYLE_EDGE] = mxEdgeStyle.OrthConnector;
                 // style[mxConstants.STYLE_SPACING] = '8';
                 style[mxConstants.STYLE_LABEL_PADDING] = '3';
+            }
+
+            { // Graph Listener
+
+                graph.addListener(mxEvent.CLICK, function(sender, evt) {
+                    var cell = evt.getProperty('cell');
+
+                    if (cell != null) {
+                        console.log(cell);
+
+                        // var overlays = graph.getCellOverlays(cell);
+
+                        // if (overlays == null) {
+                        //     // Creates a new overlay with an image and a tooltip
+                        //     var overlay = new mxCellOverlay(
+                        //         new mxImage('editors/images/overlays/check.png', 16, 16),
+                        //         'Overlay tooltip');
+                        //
+                        //     // Installs a handler for clicks on the overlay
+                        //     overlay.addListener(mxEvent.CLICK, function(sender, evt2) {
+                        //         mxUtils.alert('Overlay clicked');
+                        //     });
+                        //
+                        //     // Sets the overlay for the cell in the graph
+                        //     graph.addCellOverlay(cell, overlay);
+                        // } else {
+                        //     graph.removeCellOverlays(cell);
+                        // }
+                    }
+                });
+
             }
 
 
@@ -1839,6 +1872,7 @@ class GraphManager {
             // style[mxConstants.STYLE_STROKECOLOR] = '#e43535';
             // style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
             // style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+            // style[mxConstants.STYLE_ROUNDED] = true;
             style[mxConstants.STYLE_IMAGE] = img;
             style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_LABEL;
             // style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
@@ -1867,9 +1901,10 @@ class GraphManager {
         var graph = this.graph;
         var parent = graph.getDefaultParent();
 
-        graph.getModel().beginUpdate();
-        try {
-            this.addImageStyle(id, img, function (imgWidth, imgHeight) {
+
+        this.addImageStyle(id, img, function (imgWidth, imgHeight) {
+            graph.getModel().beginUpdate();
+            try {
                 var v1 = graph.insertVertex(parent, id, title, gm.addOffsetX, gm.addOffsetY, title.length * 8 + imgWidth, imgHeight+20, id);
 
                 gm.addOffsetY += 20;
@@ -1877,14 +1912,13 @@ class GraphManager {
                     gm.addOffsetY = gm.addOffsetY % 300 + 20;
                     gm.addOffsetX += 20;
                 }
-            });
 
-
-        }
-        finally {
-            // Updates the display
-            graph.getModel().endUpdate();
-        }
+            }
+            finally {
+                // Updates the display
+                graph.getModel().endUpdate();
+            }
+        });
     }
 
     addCircleNode(title, id){
@@ -1905,6 +1939,40 @@ class GraphManager {
             // Updates the display
             graph.getModel().endUpdate();
         }
+    }
+
+    addCircleNodeWithImage(title, id, img){
+        var gm = this;
+        var graph = this.graph;
+        var parent = graph.getDefaultParent();
+        console.log(title);
+
+        this.addImageStyle(id, img, function (imgWidth, imgHeight) {
+            graph.getModel().beginUpdate();
+            try {
+
+                var style = graph.getStylesheet().getCellStyle(id);
+                style[mxConstants.STYLE_STROKECOLOR] = '#e43535';
+                style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
+                style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+                style[mxConstants.STYLE_ROUNDED] = true;
+
+                graph.getStylesheet().putCellStyle(id, style);
+
+                var v1 = graph.insertVertex(parent, id, title, gm.addOffsetX, gm.addOffsetY, title.length * 8 + imgWidth, imgHeight+20, id);
+
+                gm.addOffsetY += 20;
+                if(gm.addOffsetY > 300){
+                    gm.addOffsetY = gm.addOffsetY % 300 + 20;
+                    gm.addOffsetX += 20;
+                }
+
+            }
+            finally {
+                // Updates the display
+                graph.getModel().endUpdate();
+            }
+        });
     }
 
     toXML(){

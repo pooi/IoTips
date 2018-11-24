@@ -324,7 +324,11 @@ function init(init_user, BOARD_TYPE) {
                 var form = this.$refs.platform_form;
                 if(form.validate()){
                     this.platforms.push(this.tempPlatform);
-                    this.graphManager.addCircleNode(this.tempPlatform.title, this.tempPlatform.id);
+                    if(this.tempPlatform.img !== null){
+                        this.graphManager.addCircleNodeWithImage(this.tempPlatform.title, this.tempPlatform.id, this.tempPlatform.img);
+                    }else{
+                        this.graphManager.addCircleNode(this.tempPlatform.title, this.tempPlatform.id);
+                    }
                     this.addPlatformDialog = false;
                 }
 
