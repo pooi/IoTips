@@ -1772,6 +1772,8 @@ class GraphManager {
             style[mxConstants.STYLE_STROKECOLOR] = '#e43535';
             style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
             style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+            style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_LABEL;
+            style[mxConstants.STYLE_ROUNDED] = true;
             graph.getStylesheet().putCellStyle('ellipse_red', style);
 
             this.graph = graph;
