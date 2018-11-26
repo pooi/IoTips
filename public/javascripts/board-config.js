@@ -27,6 +27,8 @@ function init(init_user, BOARD_TYPE, init_page) {
             fab: false,
             boardType: BOARD_TYPE,
             page : parseInt(init_page),
+            pageStep: 20,
+            totalBoardCount: 0,
             items: [],
 
             searchText: null,
@@ -112,7 +114,10 @@ function init(init_user, BOARD_TYPE, init_page) {
                         '/board',
                         data
                     ).then(function (res) {
-                        var data = res.data;
+                        console.log(res.data);
+                        vue.totalBoardCount = res.data[0][0].total;
+
+                        var data = res.data[1];
                         vue.items = data;
                         for(var i=0; i<vue.items.length; i++){
                             vue.items[i].rgt_date = new Date(vue.items[i].rgt_date);
@@ -133,7 +138,7 @@ function init(init_user, BOARD_TYPE, init_page) {
             search: function () {
                 if(this.searchText !== null && this.searchText.length > 0){
                     var pathname = window.location.pathname;
-                    window.location.href = pathname + "?query=" + this.searchText;
+                    window.location.href = pathname + "?" + this.supporter.encodeQueryData({query: this.searchText})
                 }else{
                     this.goBoardMain();
                 }
@@ -143,6 +148,11 @@ function init(init_user, BOARD_TYPE, init_page) {
                     this.search();
                 }
             },
+
+            movePage: function(page){
+                var pathname = window.location.pathname;
+                window.location.href = pathname + "?" + this.supporter.encodeQueryData({page: page});
+            }
 
         },
         mounted:[
@@ -179,16 +189,26 @@ function init(init_user, BOARD_TYPE, init_page) {
             //     }
             // },
             function () {
-                this.getBoardData();
+
                 var query = (new URL(window.location.href)).searchParams.get("query");
                 if(query){
                     this.searchText = query;
                 }
+
+                var page = (new URL(window.location.href)).searchParams.get("page");
+                if(page){
+                    this.page = page;
+                }else{
+                    this.page = 1;
+                }
+
+                this.getBoardData();
             }
         ],
         watch: {
             page: function (val) {
                 this.getBoardData();
+                // this.movePage(val);
             }
         }
     });

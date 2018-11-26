@@ -192,6 +192,9 @@ function saveProductsAndPlatforms(boardID, products, platforms, callback){
 exports.getBoardListData = function (type, page, query, callback) {
     var pageStep = 20;
     page = Math.max(page-1, 0);
+
+    var countSql = "select count(id) as total FROM board WHERE type=?";
+
     var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
         "FROM board as A " +
         "LEFT OUTER JOIN ( " +
@@ -205,6 +208,7 @@ exports.getBoardListData = function (type, page, query, callback) {
         "GROUP BY board_id) as D on(D.board_id = A.id) " +
         "WHERE type=? ";
 
+    var countArguments = [type];
     var arguments = [type];
 
     if(query !== null){
@@ -212,17 +216,21 @@ exports.getBoardListData = function (type, page, query, callback) {
         arguments.push("%" + query + "%");
         arguments.push("%" + query + "%");
         arguments.push("%" + query + "%");
+
+        countSql += " AND (title like ? OR content like ? OR tags like ?) ";
+        countArguments.push("%" + query + "%");
+        countArguments.push("%" + query + "%");
+        countArguments.push("%" + query + "%");
     }
-    sql += "ORDER BY id DESC " +
-        "LIMIT ?,?";
+    sql += "ORDER BY id DESC LIMIT ?,?";
 
     arguments.push(page*pageStep);
     arguments.push(pageStep);
 
-    console.log(sql);
-    console.log(arguments);
+    var totalSql = countSql + ";" + sql + ";";
+    var totalArguments = countArguments.concat(arguments);
 
-    conn.query(sql, arguments, function(err, results){
+    conn.query(totalSql, totalArguments, function(err, results){
         if(err){
             callback(true, err);
         }else{

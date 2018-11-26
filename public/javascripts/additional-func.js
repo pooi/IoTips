@@ -800,6 +800,31 @@ class Supporter {
     parseImageName(title){
         return title.toLowerCase().replace(" ", "_");
     }
+
+    getJsonFromUrl() {
+        var query = location.search.substr(1);
+        var result = {};
+        query.split("&").forEach(function(part) {
+            var item = part.split("=");
+            result[item[0]] = decodeURIComponent(item[1]);
+        });
+        return result;
+    }
+
+    encodeQueryData(data) {
+
+        var originalData = this.getJsonFromUrl();
+        for(let d in data){
+            originalData[d] = data[d];
+        }
+
+        const ret = [];
+        for(let od in originalData)
+            ret.push(od + '=' + originalData[od]);
+
+        return ret.join('&');
+    }
+
 }
 
 class Auth {
