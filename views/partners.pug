@@ -4,16 +4,24 @@ block content
 
     include toolbar
 
-    v-content.brown.lighten-5.animation-fade-in(style="padding-top: 50px; width: 100%; height: 500px; background-color: pink;")
-        .text-xs-center.headline(style="margin-top: 100px;")
+    v-content.white.animation-fade-in.px-2(style="padding-top: 50px; width: 100%; ")
+        .text-xs-center(style="margin-top: 100px; margin-bottom: 100px;", :class="$vuetify.breakpoint.xsOnly ? 'headline' : 'display-1'")
             strong IoTips
             span 는 다양한 브랜드,
             br
-            span 서비스 및 개발사들과 함께 하겠습니다.
+            span 서비스 및 개발사들과&nbsp;
+            br(v-if="$vuetify.breakpoint.xsOnly")
+            span 함께 하겠습니다.
 
-            div
-                button(v-on:click="say('Thank you! :)')") click!
-        
+            v-layout.py-3(row, wrap, justify-center, align-center)
+                v-btn.logo_blue.elevation-0(dark, large, @click="say('Thank you! :)')", style="border-radius: 10px;") click!
+
+            v-container( grid-list-xs)
+                v-layout(row, wrap)
+                    v-flex(v-for='(partner, i) in partners', :key='i', xs6, sm3)
+                        a(:href="partner.url")
+                            img(:src="partner.img", style="max-width: 100%; max-height: 100%;")
+
 
     include footer
 

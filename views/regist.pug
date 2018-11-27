@@ -44,10 +44,15 @@ block content
                         v-card-text.px-0.py-2.text-xs-center(v-show="originalLoading")
                             v-progress-circular(indeterminate='', color='green')
 
-                        v-card-text(v-show="!originalLoading")
+
+                        v-card-text.pb-5(v-show="!originalLoading", :class="$vuetify.breakpoint.xsOnly ? 'px-0' : ''")
                             v-layout
                                 v-flex(xs12)
-                                    v-card.pa-0.elevation-4
+                                    //v-divider(v-if="$vuetify.breakpoint.xsOnly")
+                                    v-divider
+
+                                    //v-card.pa-0.elevation-0(:class="$vuetify.breakpoint.xsOnly ? 'elevation-0' : 'elevation-0'")
+                                    v-card.pa-0.elevation-0
 
 
                                         v-card-text.py-1.px-0
