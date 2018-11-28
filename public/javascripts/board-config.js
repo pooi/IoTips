@@ -30,7 +30,7 @@ function init(init_user, BOARD_TYPE, init_page) {
             pageStep: 20,
             totalBoardCount: 0,
             items: [],
-            showCard: false,
+            showCard: true,
 
             searchText: null,
 
