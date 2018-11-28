@@ -31,13 +31,17 @@ block content
                     template(v-if="!loading")
 
                         v-card-title.pt-0(v-if="items.length > 0")
-                            v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
+                            v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;", v-if="!showCard")
                                 v-list-tile(v-for='(item, index) in items', :key='index', @click='moveDetail(item)', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
                                     include board_item
 
                                 v-list-tile(:style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
                                     v-layout.ma-2.pa-2(row, wrap, justify-center, align-center, style="height: 100px;", :class="isDark ? 'grey darken-2' : 'grey lighten-4'")
                                         .body-1 Ads
+                            v-container( grid-list-xs, v-else)
+                                v-layout(row, wrap)
+                                    v-flex(v-for='(item, index) in items', :key='index', xs12, sm6, md4, lg3)
+                                        include ecosystem_card_item
 
                         v-card-text.py-5.title.text-xs-center(v-else) 결과가 없습니다.
                             //v-layout.text-xs-center(row, wrap, style="width: 100%;")
@@ -46,6 +50,9 @@ block content
 
                         v-card-text.py-0
                             v-layout.px-0.pb-2(row, wrap, justify-center, style="font-weight: 300;")
+                                v-btn.ma-0(flat, icon, @click="showCard = !showCard", v-if="boardType === 'ecosystem'")
+                                    v-icon(v-if="showCard") view_headline
+                                    v-icon(v-else) view_module
                                 v-spacer
                                 v-btn.ma-0(flat, icon, @click="isDark = !isDark")
                                     v-icon invert_colors

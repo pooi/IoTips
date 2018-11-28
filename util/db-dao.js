@@ -195,18 +195,38 @@ exports.getBoardListData = function (type, page, query, callback) {
 
     var countSql = "select count(id) as total FROM board WHERE type=?";
 
-    var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
-        "FROM board as A " +
-        "LEFT OUTER JOIN ( " +
-        "SELECT * FROM user " +
-        "GROUP BY id) as B on(B.id = A.user_id) " +
-        "LEFT OUTER JOIN ( " +
-        "SELECT board_id, COUNT(id) as num FROM comment " +
-        "GROUP BY board_id) as C on(C.board_id = A.id) " +
-        "LEFT OUTER JOIN ( " +
-        "SELECT board_id, COUNT(id) as num FROM recommend " +
-        "GROUP BY board_id) as D on(D.board_id = A.id) " +
-        "WHERE type=? ";
+    var sql = "";
+    if(type === "ecosystem"){
+        sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike, P.product_images as product_images " +
+            "FROM board as A " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT * FROM user " +
+            "GROUP BY id) as B on(B.id = A.user_id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, COUNT(id) as num FROM comment " +
+            "GROUP BY board_id) as C on(C.board_id = A.id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, COUNT(id) as num FROM recommend " +
+            "GROUP BY board_id) as D on(D.board_id = A.id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, group_concat(image) as product_images FROM board_product " +
+            "GROUP BY board_id) as P on(P.board_id = A.id) "+
+            "WHERE type=? ";
+    }else{
+        sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
+            "FROM board as A " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT * FROM user " +
+            "GROUP BY id) as B on(B.id = A.user_id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, COUNT(id) as num FROM comment " +
+            "GROUP BY board_id) as C on(C.board_id = A.id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, COUNT(id) as num FROM recommend " +
+            "GROUP BY board_id) as D on(D.board_id = A.id) " +
+            "WHERE type=? ";
+    }
+
 
     var countArguments = [type];
     var arguments = [type];
@@ -234,6 +254,16 @@ exports.getBoardListData = function (type, page, query, callback) {
         if(err){
             callback(true, err);
         }else{
+            if(type === "ecosystem") {
+                for (var i = 0; i < results[1].length; i++) {
+                    var result = results[1][i];
+                    if (result.product_images !== null) {
+                        var product_urls = result.product_images;
+                        var array = product_urls.split(",");
+                        results[1][i].product_images = array;
+                    }
+                }
+            }
             // console.log(results);
             callback(false, results);
         }

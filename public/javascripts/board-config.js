@@ -30,6 +30,7 @@ function init(init_user, BOARD_TYPE, init_page) {
             pageStep: 20,
             totalBoardCount: 0,
             items: [],
+            showCard: false,
 
             searchText: null,
 
@@ -121,6 +122,7 @@ function init(init_user, BOARD_TYPE, init_page) {
                         vue.items = data;
                         for(var i=0; i<vue.items.length; i++){
                             vue.items[i].rgt_date = new Date(vue.items[i].rgt_date);
+                            vue.items[i].tags = JSON.parse(vue.items[i].tags);
                         }
                         vue.loading = false;
                     }).catch(function (error) {
