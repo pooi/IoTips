@@ -1244,6 +1244,12 @@ class GraphManager {
                 style[mxConstants.STYLE_EDGE] = mxEdgeStyle.OrthConnector;
                 // style[mxConstants.STYLE_SPACING] = '8';
                 style[mxConstants.STYLE_LABEL_PADDING] = '3';
+
+                var vStyle = graph.getStylesheet().getDefaultVertexStyle();
+                vStyle[mxConstants.STYLE_ROUNDED] = true;
+                vStyle[mxConstants.STYLE_STROKECOLOR] = '#656f8f';
+                vStyle[mxConstants.STYLE_FILLCOLOR] = '#656f8f';
+                vStyle[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
             }
 
             { // Graph Listener
@@ -1633,12 +1639,48 @@ class GraphManager {
                     });
 
                     var submenu1 = menu.addItem('More', null, null);
-                    menu.addItem('Subitem 1', null, function () {
-                        // alert('Subitem 1');
+                    menu.addItem('Cloud', null, function () {
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 100, 40, 'shape=cloud;perimeter=cloudPerimeter');
+                        }
+                        finally {
+                            graph.getModel().endUpdate();
+                        }
                     }, submenu1);
-                    menu.addItem('Subitem 1', null, function () {
-                        // alert('Subitem 2');
+                    menu.addItem('Actor', null, function () {
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'Actor', evt.layerX, evt.layerY, 50, 70, 'shape=actor;perimeter=actorPerimeter');
+                        }
+                        finally {
+                            graph.getModel().endUpdate();
+                        }
                     }, submenu1);
+                    menu.addItem('Hexagon', null, function () {
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 100, 40, 'shape=hexagon;perimeter=hexagonPerimeter');
+                        }
+                        finally {
+                            graph.getModel().endUpdate();
+                        }
+                    }, submenu1);
+                    menu.addItem('Triangle', null, function () {
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 100, 'shape=triangle;perimeter=trianglePerimeter');
+                        }
+                        finally {
+                            graph.getModel().endUpdate();
+                        }
+                    }, submenu1);
+                    // mxConstants.SHAPE_DOUBLE_ELLIPSE
+
 
 
                     if (cell !== null) {
@@ -1794,7 +1836,7 @@ class GraphManager {
 
             var style = [];
             style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
-            style[mxConstants.STYLE_STROKECOLOR] = '#e43535';
+            style[mxConstants.STYLE_STROKECOLOR] = '#ed6e6e';
             style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
             style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
             style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_LABEL;

@@ -206,7 +206,7 @@ function init(init_user, init_boardID) {
                         '/board',
                         data
                     ).then(function (res) {
-                        var data = res.data;
+                        var data = res.data[1];
                         vue.board = data;
                         for(var i=0; i<vue.board.length; i++){
                             vue.board[i].rgt_date = new Date(vue.board[i].rgt_date);

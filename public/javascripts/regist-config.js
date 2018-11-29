@@ -329,6 +329,41 @@ function init(init_user, BOARD_TYPE) {
                     }else{
                         this.graphManager.addCircleNode(this.tempPlatform.title, this.tempPlatform.id);
                     }
+
+                    var parentID = this.tempPlatform.id;
+                    var platform = this.tempPlatform;
+
+                    setTimeout(function () {
+                        var parentCell = null;
+                        for(var i=0; i<platform.selectedProducts.length; i++){
+                            for(var j=0; j<vue.graphManager.graph.getChildCells().length; j++){
+                                var cell = vue.graphManager.graph.getChildCells()[j];
+                                if(cell.id === parentID){
+                                    parentCell = cell;
+                                    break;
+                                }
+                            }
+                            if(parentCell !== null){
+                                break;
+                            }
+                        }
+
+                        if(platform.selectedProducts !== null && platform.selectedProducts.length > 0){
+                            for(var i=0; i<platform.selectedProducts.length; i++){
+                                var productID = platform.selectedProducts[i].id;
+                                for(var j=0; j<vue.graphManager.graph.getChildCells().length; j++){
+                                    var cell = vue.graphManager.graph.getChildCells()[j];
+                                    if(cell.id === productID){
+                                        vue.graphManager.graph.insertEdge(vue.graphManager.graph.getDefaultParent(), parentID + j, '', parentCell, cell)
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }, 500);
+
+
                     this.addPlatformDialog = false;
                 }
 
@@ -340,6 +375,15 @@ function init(init_user, BOARD_TYPE) {
                 // })
             },
             removePlatform: function (index) {
+                for(var i=0; i<this.graphManager.graph.getChildCells().length; i++){
+                    var cell = this.graphManager.graph.getChildCells()[i];
+                    if(cell.id === this.platforms[index].id){
+                        this.graphManager.graph.clearSelection();
+                        this.graphManager.graph.addSelectionCell(cell);
+                        this.graphManager.graph.removeCells();
+                    }
+                }
+
                 if(index < this.platforms.length){
                     this.platforms.splice(index, 1);
                 }
@@ -396,6 +440,16 @@ function init(init_user, BOARD_TYPE) {
             },
             removeProduct: function (index) {
                 if(index < this.products.length){
+
+                    for(var i=0; i<this.graphManager.graph.getChildCells().length; i++){
+                        var cell = this.graphManager.graph.getChildCells()[i];
+                        if(cell.id === this.products[index].id){
+                            this.graphManager.graph.clearSelection();
+                            this.graphManager.graph.addSelectionCell(cell);
+                            this.graphManager.graph.removeCells();
+                        }
+                    }
+
                     for(var i=0; i<this.platforms.length; i++){
                         this.platforms[i].deleteProduct(this.products[index]);
                     }
