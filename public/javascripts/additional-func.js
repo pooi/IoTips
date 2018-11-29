@@ -1965,6 +1965,40 @@ class GraphManager {
 
     }
 
+    addPlatformImageStyle(id, img, callback){
+        var graph = this.graph;
+        this.getImageMeta(img, 80, function (width, height) {
+            console.log(width, height);
+
+            var style = new Object();
+            style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
+            style[mxConstants.STYLE_STROKECOLOR] = '#ed6e6e';
+            style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
+            style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+            // style[mxConstants.STYLE_ROUNDED] = true;
+            style[mxConstants.STYLE_IMAGE] = img;
+            style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_LABEL;
+            // style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
+            // style[mxConstants.STYLE_IMAGE_ALIGN] = mxConstants.ALIGN_LEFT;
+            // style[mxConstants.STYLE_SPACING_LEFT] = '55';
+            style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+            style[mxConstants.STYLE_IMAGE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+            style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_RIGHT;
+            style[mxConstants.STYLE_IMAGE_ALIGN] = mxConstants.ALIGN_RIGHT;
+            style[mxConstants.STYLE_SPACING_RIGHT] = (width + 20).toString();
+
+            style[mxConstants.STYLE_IMAGE_WIDTH] = width.toString();
+            style[mxConstants.STYLE_IMAGE_HEIGHT] = height.toString();
+
+            style[mxConstants.STYLE_SPACING] = '4';
+            graph.getStylesheet().putCellStyle(id, style);
+
+            callback(width+20, height);
+
+        });
+
+    }
+
     addNodeWithImage(title, id, img){
         var gm = this;
         var graph = this.graph;

@@ -953,7 +953,7 @@ function init(init_user, init_boardID) {
                                 for(var i=0; i<vue.platforms.length; i++){
                                     var platform = vue.platforms[i];
                                     if(platform.img !== null){
-                                        vue.graphManager.addImageStyle(platform.id, platform.img, function (w, h) {
+                                        vue.graphManager.addPlatformImageStyle(platform.id, platform.img, function (w, h) {
                                             vue.graphManager.graph.refresh();
                                         });
                                     }
