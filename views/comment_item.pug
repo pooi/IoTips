@@ -1,5 +1,5 @@
 template(v-if="comment !== null")
-    v-layout.py-3.px-2(column, wrap)
+    v-layout.py-3.px-2(column, wrap, :style='"margin-left: " + (((comment.data.depth) - 1) * 56) + "px;"')
         //v-layout(row, wrap)
         //    v-layout(align-center, justify-start)
         //        v-avatar.mr-2(:tile='false', size='30px')

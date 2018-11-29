@@ -232,6 +232,7 @@ router.post('/comments', function(req, res, next){
 
 router.post('/registComment', function (req, res, next) {
     var data = req.body;
+    console.log("####", data);
     if("boardID" in data && "content" in data && "parentCommentID" in data && "graph" in data){
         var boardID = req.body.boardID;
         var user = support.ensureAuthenticated(req);

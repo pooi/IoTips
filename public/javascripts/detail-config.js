@@ -504,11 +504,14 @@ function init(init_user, init_boardID) {
                             vue.comments = [];
                             for(var i=0; i<data.length; i++){
                                 if(data[i].parent < 0){
+                                    console.log("1");
                                     var comment = new Comment(data[i]);
                                     vue.comments.push(comment);
                                     // vue.comments.push(data[i]);
                                 }else{
+                                    console.log("2");
                                     var parentID = data[i].parent;
+                                    console.log("parentID: ", parentID);
                                     var check = false;
                                     for(var j=0; j<vue.comments.length; j++){
                                         if(vue.comments[j].id === parentID){
@@ -519,6 +522,7 @@ function init(init_user, init_boardID) {
                                         }
                                     }
                                     if(!check){
+                                        console.log("3");
                                         var comment = new Comment(data[i]);
                                         vue.comments.push(comment);
                                         // vue.comments.push(data[i]);
@@ -619,6 +623,8 @@ function init(init_user, init_boardID) {
                     }else{
                         data['graph'] = null;
                     }
+
+                    console.log(data);
 
                     axios.post(
                         '/board/registComment',

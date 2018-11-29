@@ -450,8 +450,9 @@ exports.registComment = function (userID, boardID, content, parentCommentID, gra
             sql = "INSERT INTO comment(user_id, board_id, content, parent, depth) VALUES(?,?,?,?,?)";
         }else{
             sql = "INSERT INTO comment(user_id, board_id, content, graph, parent, depth) VALUES(?,?,?,?,?,?)";
+            argument.push(graph);
         }
-        argument.push(graph);
+
         argument.push(parentCommentID);
         argument.push(2);
     }
