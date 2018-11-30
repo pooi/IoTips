@@ -1232,7 +1232,7 @@ class GraphManager {
             graph.centerZoom = false;
             graph.setConnectable(true);
             graph.setPanning(true);
-            graph.setAutoSizeCells(true);
+            // graph.setAutoSizeCells(true);
 
             var highlight = new mxCellTracker(graph, '#00FF00');
 

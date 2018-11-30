@@ -394,6 +394,19 @@ function init(init_user, BOARD_TYPE) {
                 this.detailPlatformIndex = -1;
                 this.detailPlatformDialog= false;
             },
+            addPlatformNodeFromDetail: function(){
+                if(this.detailProductIndex < this.platforms.length){
+                    var tempPlatform = this.platforms[this.detailPlatformIndex];
+                    if(tempPlatform.img !== null){
+                        this.graphManager.addCircleNodeWithImage(tempPlatform.title, tempPlatform.id, tempPlatform.img);
+                    }else{
+                        this.graphManager.addCircleNode(tempPlatform.title, tempPlatform.id);
+                    }
+                }
+                this.detailPlatform = null;
+                this.detailPlatformIndex = -1;
+                this.detailPlatformDialog= false;
+            },
             resetPlatformForm: function () {
                 this.tempPlatform = new Platform();
                 this.choosePlatformImageDialog = false;
@@ -459,6 +472,19 @@ function init(init_user, BOARD_TYPE) {
             },
             removeProductFromDetail: function(){
                 this.removeProduct(this.detailProductIndex);
+                this.detailProduct = null;
+                this.detailProductIndex = -1;
+                this.detailProductDialog= false;
+            },
+            addProductNodeFromDetail: function(){
+                if(this.detailProductIndex < this.products.length){
+                    var tempProduct = this.products[this.detailProductIndex];
+                    if(tempProduct.img !== null) {
+                        this.graphManager.addNodeWithImage(tempProduct.title, tempProduct.id, tempProduct.img)
+                    }else{
+                        this.graphManager.addNode(tempProduct.title, tempProduct.id);
+                    }
+                }
                 this.detailProduct = null;
                 this.detailProductIndex = -1;
                 this.detailProductDialog= false;

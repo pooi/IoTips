@@ -473,6 +473,10 @@ block content
 
             v-card-text.py-2
                 v-layout(row, wrap)
+
+                    v-card-text.pt-0.pb-2.px-0.text-xs-center
+                        v-btn.logo_blue_text(flat, @click="addProductNodeFromDetail()") 그래프 노드 추가
+
                     v-card-text.py-2.px-0
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
                         .body-1 {{ detailProduct.title }}
@@ -529,6 +533,8 @@ block content
 
 
 
+
+
             v-divider.py-0.my-0
 
             v-card-actions
@@ -544,6 +550,10 @@ block content
 
             v-card-text.py-2
                 v-layout(row, wrap)
+
+                    v-card-text.pt-0.pb-2.px-0.text-xs-center
+                        v-btn.logo_blue_text(flat, @click="addPlatformNodeFromDetail()") 그래프 노드 추가
+
                     v-card-text.py-2.px-0
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
                         .body-1 {{ detailPlatform.title }}
