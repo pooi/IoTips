@@ -66,7 +66,7 @@ function init(init_user, BOARD_TYPE) {
 
             content: null,
             tags: [],
-            sugTags: ["1인가구", "반려견", "신혼집", "초보자"],
+            sugTags: ["1인가구", "3~4인가구", "IoT기기가 집 안에 많이 구축되어 있는 집", "노인", "노인이 있는 집", "단독 주택", "독거노인", "맞벌이 부부", "미세먼지", "반려동물", "반려동물이 있는 집", "사무실", "소규모 매장", "수험생", "아기가 있는 집", "아이가 있는 집", "남성", "여성", "워킹 맘", "워킹맘", "자취생", "조명", "직장인", "파티", "학원", "신혼집", "초보자"],
 
             CAPABILITY: null,
             capabilityLoading: false,
@@ -684,6 +684,9 @@ function init(init_user, BOARD_TYPE) {
                         break;
                     case "ecosystem":
                         this.boardType = this.boardTypes[3];
+                        break;
+                    case "my_ecosys":
+                        this.boardType = this.boardTypes[4];
                         break;
                     default:
                         this.boardType = this.boardTypes[0];
