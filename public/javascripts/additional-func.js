@@ -802,8 +802,13 @@ class Supporter {
         }
     }
 
+    replaceAll(str, searchStr, replaceStr) {
+        return str.split(searchStr).join(replaceStr);
+    }
+
     parseImageName(title){
-        return title.toLowerCase().replace(" ", "_");
+        return this.replaceAll(title.toLowerCase(), " ", "_");
+        // return title.toLowerCase().replace(" ", "_");
     }
 
     getJsonFromUrl() {
