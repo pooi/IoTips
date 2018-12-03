@@ -333,6 +333,34 @@ exports.getMostViewedBoardListData = function (callback) {
     })
 };
 
+
+exports.getUserEcosystemBoardListData = function (userID, callback) {
+
+    var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
+        "FROM board as A " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT * FROM user " +
+        "GROUP BY id) as B on(B.id = A.user_id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM comment " +
+        "GROUP BY board_id) as C on(C.board_id = A.id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM recommend " +
+        "GROUP BY board_id) as D on(D.board_id = A.id) " +
+        "WHERE A.user_id=? AND type=?" +
+        "ORDER BY id DESC " +
+        "LIMIT 0,10";
+
+    conn.query(sql, [userID, "my_ecosys"], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            // console.log(results);
+            callback(false, results);
+        }
+    })
+};
+
 exports.getUserBoardListData = function (userID, callback) {
 
     var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +

@@ -50,6 +50,21 @@ router.post('/related', function (req, res, next) {
 
 });
 
+router.post('/user/ecosystem', function (req, res, next) {
+    var body = req.body;
+    if("userID" in body){
+        dbDAO.getUserEcosystemBoardListData(body.userID, function (isErr, results) {
+            if(isErr){
+                res.send(null);
+            }else{
+                res.send(results);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
 router.post('/user', function (req, res, next) {
     var body = req.body;
     if("userID" in body){

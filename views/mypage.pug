@@ -67,6 +67,27 @@ block content
 
 
                     v-card-title.pb-0.align-end.logo_blue_text(style="margin-top: 20px;")
+                        span.display-2(style="font-weight: 800;") 나만의 구성도
+                        v-spacer
+                        v-btn.my-0(flat, small, color="green darken-1", style="min-width: 10px !important;", v-if="myEcosystemItems.length >= 10") 더보기
+
+                    v-card-text.py-0
+                        v-divider.my-3
+
+                    v-card-text.py-5.text-xs-center(v-if="loadingMyEcosystem")
+                        v-progress-circular(indeterminate='', color='green')
+
+                    template(v-if="!loadingMyEcosystem")
+
+                        v-card-title.pt-0(v-if="myEcosystemItems.length > 0")
+                            v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
+                                v-list-tile(v-for='(item, index) in myEcosystemItems', :key='index', @click='moveDetail(item)', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
+                                    include board_item_notype
+
+                        v-card-text.py-5.title.text-xs-center(v-else) 데이터가 없습니다.
+
+
+                    v-card-title.pb-0.align-end.logo_blue_text(style="margin-top: 20px;")
                         span.display-2(style="font-weight: 800;") 내 글
                         v-spacer
                         v-btn.my-0(flat, small, color="green darken-1", style="min-width: 10px !important;", v-if="myItems.length >= 10") 더보기
