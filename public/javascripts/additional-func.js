@@ -768,6 +768,11 @@ class Supporter {
                 type: "ecosystem",
                 title: "구성도",
                 fullTitle: "구성도 게시판"
+            },
+            {
+                type: "my_ecosys",
+                title: "구성도",
+                fullTitle: "나만의 구성도"
             }
         ];
         return boardTypes;

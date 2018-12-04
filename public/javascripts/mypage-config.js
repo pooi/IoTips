@@ -84,6 +84,9 @@ function init(init_user) {
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
             },
+            goMyEcosystemRegist: function () {
+                window.location.href = "/board/regist?boardType=my_ecosys";
+            },
 
             moveDetail: function(item){
                 window.location.href = "/board/" + item.id;

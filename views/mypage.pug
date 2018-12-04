@@ -86,6 +86,12 @@ block content
 
                         v-card-text.py-5.title.text-xs-center(v-else) 데이터가 없습니다.
 
+                        v-card-text.pt-0.pb-5.text-xs-center
+                            v-spacer
+                            v-btn.elevation-0(color='red', @click="goMyEcosystemRegist()", flat)
+                                v-icon.mr-2(left, dark) edit
+                                | 글작성
+
 
                     v-card-title.pb-0.align-end.logo_blue_text(style="margin-top: 20px;")
                         span.display-2(style="font-weight: 800;") 내 글
