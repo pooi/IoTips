@@ -2,44 +2,92 @@ extends layout
 
 block content
     script(src='/scripts/vue-fullpage.min.js')
+    script(src="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.js")
+    script(src="https://unpkg.com/v-data-table/dist/v-data-table.js")
+    script(src="https://nightcatsama.github.io/vue-slider-component/dist/index.js")
     link(rel='stylesheet', type='text/css', href='https://unpkg.com/fullpage.js/dist/fullpage.min.css')
+    link(rel='stylesheet', href="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.min.css")
+    meta(rel="stylesheet", href="https://unpkg.com/v-data-table/dist/v-data-table.css")
+    link(rel='stylesheet', href="/stylesheets/checkbox.css")
 
     include toolbar
 
-    //- div.animation-fade-in-2s
-    //-     full-page#fullpage(ref='fullpage', :options='options')
-    //-         .section
-    //-             v-btn.actions-button(flat, color="white", @click="$refs.fullpage.api.moveSectionDown()") go!
-    //-         .section
+    div(style="margin: 48px 0px;")
+        div(style="margin: 0 auto; width: 1300px; height: 350px; background: url('/images/bg_curation_1.jpg') no-repeat 50% 80%; background-size: 1300px 350px;")
+                div(style="width: 100%; height: 100%; background-color: rgba(0,0,0,0.3);") 
+                    div(style="padding: 70px 100px;")
+                        h1.txt(style="color: white;") Curation for Product
+                        br
+                        h3.txt(style="color: white;") IoTips만의 큐레이션 서비스로 나에게 꼭 맞는 IoT 제품 찾기
+                        p.txt(style="color: white;") Find My Own IoT Product with Our Curation Service
+            
+        #curation_result(v-if="completeCuration")
+            button.gotoCuration(v-on:click="gotoCuration") 뒤로 가기
+            div(v-if="noResult")
+                p no result
+            div(v-else)
+                div(v-for="result in curateResult")
+                    p.txt {{ result.title }}
+                    p.txt {{ result.description }}
+                    p.txt {{ result.company }}
+                    img(:src="result.imgUrl", onclick="javascript:location.href=result.url;", style="width: 30%; height: 30%;")
+        
+        #curation_ing(v-else)   
+            div#introduction
+                div(style="width: 500px; margin: 0 auto; text-align: center; font-size: 1.3em; ")
+                    h1(style="font-size: 2.5em; letter-spacing: 3px; font-weight: 300;") 나만의 IoT 제품
+                    br
+                    h4(style="color: gray; font-weight: 300;") 나에게 맞는 IoT 제품을 찾고 계신가요? 
+                    h4(style="color: gray; font-weight: 300;") 당신의 희망사항을 말씀해 주세요. IoTips에서 알려드립니다.
+                    br
+                    h4 ㅡ
+            div#content
+                form-wizard#form(@on-complete="onComplete", @on-loading="setLoading", @on-validate="handleValidation", @on-error="" shape="circle", color="#20a0ff")
+                    div(slot="title")
 
-    template
-        v-stepper(v-model='e1')
-            v-stepper-header
-            v-stepper-step(:complete='e1 > 1', step='1') Name of step 1
-            v-divider
-            v-stepper-step(:complete='e1 > 2', step='2') Name of step 2
-            v-divider
-            v-stepper-step(step='3') Name of step 3
-            v-stepper-items
-            v-stepper-content(step='1')
-                v-card.mb-5(color='grey lighten-1', height='200px')
-                v-btn(color='primary', @click='e1 = 2')
-                | Continue
-                v-btn(flat='') Cancel
-            v-stepper-content(step='2')
-                v-card.mb-5(color='grey lighten-1', height='200px')
-                v-btn(color='primary', @click='e1 = 3')
-                | Continue
-                v-btn(flat='') Cancel
-            v-stepper-content(step='3')
-                v-card.mb-5(color='grey lighten-1', height='200px')
-                v-btn(color='primary', @click='e1 = 1')
-                | Continue
-                v-btn(flat='') Cancel
+                    tab-content#con_circumstance.tab_con(title="주거환경", :before-change="validateTag", style="text-align: center; margin-top: 30px;")
+                        template
+                            h2.con_title 나의 주거환경을 선택해 주세요.
+                            form(style="margin-top: 30px;")
+                                div.form_tag(v-for="tag in TAG")
+                                    input.toggle_tag(v-bind:id="'cur_tag_'+tag.id", type="checkbox", v-bind:value="tag.id", v-model="checkedTag", style="display: none;")
+                                    label.toggle_tag(v-bind:for="'cur_tag_'+tag.id") {{tag.name}}
+                                
+                                //span 체크한 이름: {{ checkedTag }}
 
+                    tab-content#con_capability.tab_con(title="Capability", :before-change="validateCapa", style="text-align: center; margin-top: 30px;")
+                        h2.con_title 원하는 capability를 선택해 주세요.
+                        v-data-table#row_table.elevation-1(v-model='checkedCapa', :headers='headers', :items='CAPABILITY', :pagination.sync="pagination", select-all='' item-key='capability')
+                            template(slot='headers', slot-scope='props')
+                                tr
+                                    th
+                                    th
+                                    th(v-for='header in props.headers' :key='header.text')
+                                        |           {{ header.text }}
+                            template(slot='items', slot-scope='props')
+                                tr(:active='props.selected' @click='props.selected = !props.selected')
+                                    td.row_btn
+                                        v-checkbox(:input-value="props.selected")
+                                    td
+                                        img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(props.item.capability) + ".png"', style="max-width: 40%; max-height: 40%; object-fit: contain; border-radius: 0px;")
+                                    td.row_capa {{ props.item.capability }}
+                                    td.row_desc.text-xs {{ props.item.description }}
 
+                    tab-content#con_price.tab_con(title="가격", :before-change="validatePrice", style="text-align: center; margin-top: 80px;")
+                        h2.con_title 희망가격을 입력해 주세요.
+                        v-card-text#con_price
+                            v-layout(style="width: 660px; margin: 0 auto;")
+                                v-flex(shrink=true, style='width: 300px; margin: 30px;')
+                                    v-text-field.mt-0(v-model='price[0]', label="Minimum Price", prefix="￦")
+                                v-flex(shrink=true, style='width: 300px; margin: 30px;')
+                                    v-text-field.mt-0(v-model='price[1]', label="Maximum Price", prefix="￦")
+                            v-flex.px-3(style="display: block;")
+                                    v-range-slider(v-model='price' :max='500000' :min='0' :step='1')
+                                
+                    .loader(v-if="loadingWizard")
+                    
     include footer
 
     script(type="text/javascript" src="/javascripts/curation-config.js")
     script.
-        const vue = init('!{user}');
+        const vue = init('!{user}', '!{curation}');

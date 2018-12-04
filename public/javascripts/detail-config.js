@@ -634,7 +634,7 @@ function init(init_user, init_boardID) {
 
                 }).catch(function (error) {
                     alert(error);
-                    // vue.commentLoading = false;
+                    //D vue.commentLoading = false;
                 });
             }
             // function(){

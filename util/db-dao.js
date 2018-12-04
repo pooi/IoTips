@@ -393,6 +393,53 @@ exports.getCapabilities = function (callback) {
     })
 };
 
+exports.getTag = function (callback) {
+    var sql = "SELECT * FROM tag ORDER BY name";
+
+    conn.query(sql, [], function(err, results) {
+        if(err) {
+            callback(true, err);
+        } else {
+            callback(false, results);
+        }
+    })
+};
+
+exports.curateProduct = function (data, callback) {
+
+    var minPrice = data.minPrice;
+    var maxPrice = data.maxPrice;
+    var usdMinPrice = data.minPrice / 1100;
+    var usdMaxPrice = data.maxPrice / 1100;
+    var checkedTag = data.checkedTag;
+    var checkedCapa = data.checkedCapa;
+
+    var sqlTag = "";
+    var sqlCapa = "";
+    var sql = "SELECT * FROM product WHERE ((price BETWEEN ? AND ? " +
+        "AND currency='KRW')" +
+        "OR (price BETWEEN ? AND ? " +
+        "AND currency='USD'))";
+
+    for(var i = 0; i < checkedTag.length; i++) {
+        sqlTag = sqlTag + " AND tag LIKE '%\"" + checkedTag[i] + "\"%'";
+    }
+    for(var i = 0; i < checkedCapa.length; i++) {
+        sqlCapa = sqlCapa + " AND capability LIKE '%\"" + checkedCapa[i] + "\"%'";
+    }
+    
+    sql = sql + sqlTag + sqlCapa;
+
+    conn.query(sql, [minPrice, maxPrice, usdMinPrice, usdMaxPrice], function(err, results) {
+        if(err) {
+            console.log(err);
+            callback(true, err);
+        }else {
+            callback(false, results);
+        }
+    })
+};
+
 exports.saveScrap = function (boardID, userID, callback) {
     var sql = "SELECT * FROM scrap WHERE user_id=? and board_id=?";
     conn.query(sql, [userID, boardID], function(err, results){

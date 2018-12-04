@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var support = require('../util/support-func');
 const dbDAO = require('../util/db-dao');
-
+ 
 router.get('/', function(req, res, next) {
     var user = support.ensureAuthenticated(req);
     res.render('curation', { user: JSON.stringify(user), title: "Curation" });
@@ -24,6 +24,11 @@ router.post('/', function (req, res, next) {
 })
 */
 
+router.post('/', function(req, res, next) {
+    var data = res.body;
+
+});
+
 router.get('/composition', function(req, res, next) {
     var curationType = "composition";
     
@@ -38,6 +43,18 @@ router.get('/product', function(req, res, next) {
     var user = support.ensureAuthenticated(req);
     res.render('curation', { user: JSON.stringify(user), title: "제품 큐레이션", curationType: curationType});
     
+});
+
+router.post('/curateProduct', function (req, res, next) {
+    var data = req.body;
+
+    dbDAO.curateProduct(data, function (isErr, result) {
+        if(isErr){
+            res.send(404);
+        }else{
+            res.send(result);
+        }
+    });
 });
 
 module.exports = router;

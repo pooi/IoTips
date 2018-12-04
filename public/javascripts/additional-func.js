@@ -269,13 +269,8 @@ class Supporter {
                 "href" : "/",
                 "submenu" : [
                     {
-<<<<<<< HEAD
-                        "title" : "구성도",
-                        "href" : "/curation"
-=======
                         "title" : "구성",
-                        "href" : "/"
->>>>>>> e5a46ef636278ffeb1a014ffd54ca1a09571f13d
+                        "href" : "/curation/composition"
                     },
                    {
                         "title" : "제품",

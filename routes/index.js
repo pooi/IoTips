@@ -52,7 +52,7 @@ router.post('/parseurl', function (req, res, next) {
     data.imgs = imgs;
 
     // console.log(imgs);
-    console.log(data);
+    //console.log(data);
 
     res.send(data);
 
@@ -81,6 +81,16 @@ router.post('/getCapabilities', function (req, res, next) {
         if(isErr){
             res.send(404);
         }else{
+            res.send(result);
+        }
+    });
+});
+
+router.post('/getTag', function (req, res, next) {
+    dbDAO.getTag(function (isErr, result) {
+        if(isErr) {
+            res.send(404);
+        } else {
             res.send(result);
         }
     });
