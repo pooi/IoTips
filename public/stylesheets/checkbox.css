@@ -136,6 +136,8 @@ label:hover {
 .con_title {
     color: #383838;
     font-weight: 300;
+    margin-top: 50px;
+    margin-bottom: 60px;
 }
 
 .txt {

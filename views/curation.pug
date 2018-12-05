@@ -45,9 +45,9 @@ block content
                         h4(style="color: gray; font-weight: 300;") ㅡ
                         br
                    
-                div(style="width: 1000px; margin: 0 auto; display: flex;")
+                div(style="width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap;")
                     template(v-for="(result, i) in curateResult")
-                        v-card.dal-card-scale.text-xs-left(style="width: 30%; height: 450px; margin: 10px;", light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="result !== null", :href="result.url", target="_blank", :dark="isDark")
+                        v-card.dal-card-scale.text-xs-left(style="height: 450px; margin: 10px; width: 30%;", light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="result !== null", :href="result.url", target="_blank", :dark="isDark")
                             v-card-media(:height='Math.min($vuetify.breakpoint.height-400, 300)', style="width: auto;")
                                 v-layout.pa-0.ma-0(xs12, row, wrap, style="width: 100%; height: 100%; background-color: white;")
                                     v-flex.pa-0.ma-0.xs12(row, wrap, style="height: 100%;")
@@ -82,7 +82,7 @@ block content
 
                     tab-content#con_circumstance.tab_con(title="주거환경", :before-change="validateTag", style="text-align: center; margin-top: 30px;")
                         template
-                            h2.con_title 나의 주거환경을 선택해 주세요.
+                            h1.con_title " 나의 주거환경을 선택해 주세요 "
                             form(style="margin-top: 30px;")
                                 div.form_tag(v-for="tag in TAG")
                                     input.toggle_tag(v-bind:id="'cur_tag_'+tag.id", type="checkbox", v-bind:value="tag.id", v-model="checkedTag", style="display: none;")
@@ -91,8 +91,11 @@ block content
                                 //span 체크한 이름: {{ checkedTag }}
 
                     tab-content#con_capability.tab_con(title="Capability", :before-change="validateCapa", style="text-align: center; margin-top: 30px;")
-                        h2.con_title 원하는 capability를 선택해 주세요.
-                        v-data-table#row_table.elevation-1(v-model='checkedCapa', :headers='headers', :items='CAPABILITY', :pagination.sync="pagination", select-all='', item-key='capability')
+                        h1.con_title " 원하는 capability를 선택해 주세요 "
+                        div(style="width: 100%; height: 50px;")
+                            v-text-field(v-model="search", append-icon="search", label="Search", single-line, hide-details, style="width: 250px; margin: 0px 10px 30px 0px; float: right;")
+
+                        v-data-table#row_table.elevation-1(v-model='checkedCapa', :headers='headers', :items='CAPABILITY', :search="search", :pagination.sync="pagination", select-all='', item-key='capability')
                             template(slot='headers', slot-scope='props')
                                 tr
                                     th
@@ -107,14 +110,14 @@ block content
                                         img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(props.item.capability) + ".png"', style="max-width: 40%; max-height: 40%; object-fit: contain; border-radius: 0px;")
                                     td.row_capa {{ props.item.capability }}
                                     td.row_desc.text-xs {{ props.item.description }}
-
+                        
                     tab-content#con_price.tab_con(title="가격", :before-change="validatePrice", style="text-align: center; margin-top: 80px;")
-                        h2.con_title 희망가격을 입력해 주세요.
+                        h1.con_title " 희망가격을 입력해 주세요 "
                         v-card-text#con_price
-                            v-layout(style="width: 660px; margin: 0 auto;")
-                                v-flex(shrink=true, style='width: 300px; margin: 30px;')
+                            v-layout(style="width: 460px; margin: 0 auto;")
+                                v-flex(shrink=true, style='width: 200px; margin: 30px;')
                                     v-text-field.mt-0(v-model='price[0]', label="Minimum Price", prefix="￦")
-                                v-flex(shrink=true, style='width: 300px; margin: 30px;')
+                                v-flex(shrink=true, style='width: 200px; margin: 30px;')
                                     v-text-field.mt-0(v-model='price[1]', label="Maximum Price", prefix="￦")
                             v-flex.px-3(style="display: block;")
                                     p(style="width: 60px; color: gray; display: inline-block;") 0

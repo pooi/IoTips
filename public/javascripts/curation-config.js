@@ -57,6 +57,7 @@ function init(init_user) {
                 "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
             ],
             e1: 0,
+            search: "",
             value: 1,
             tagList: [],
             price: [0, 500000],
