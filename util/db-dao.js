@@ -107,6 +107,11 @@ exports.registBoard = function (id, data, callback) {
         values.push(JSON.stringify(data.tags));
     }
 
+    if("parent" in data){
+        argu.push("parent_board_id");
+        values.push(data.parent);
+    }
+
     var products = [];
     var platforms = [];
     if("products" in data){
@@ -184,9 +189,88 @@ function saveProductsAndPlatforms(boardID, products, platforms, callback){
     })
 }
 
-exports.getBoardListData = function (type, page, callback) {
+exports.getBoardListData = function (type, page, query, callback) {
     var pageStep = 20;
     page = Math.max(page-1, 0);
+
+    var countSql = "select count(id) as total FROM board WHERE type=?";
+
+    var sql = "";
+    if(type === "ecosystem"){
+        sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike, P.product_images as product_images " +
+            "FROM board as A " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT * FROM user " +
+            "GROUP BY id) as B on(B.id = A.user_id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, COUNT(id) as num FROM comment " +
+            "GROUP BY board_id) as C on(C.board_id = A.id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, COUNT(id) as num FROM recommend " +
+            "GROUP BY board_id) as D on(D.board_id = A.id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, group_concat(image) as product_images FROM board_product " +
+            "GROUP BY board_id) as P on(P.board_id = A.id) "+
+            "WHERE type=? ";
+    }else{
+        sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
+            "FROM board as A " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT * FROM user " +
+            "GROUP BY id) as B on(B.id = A.user_id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, COUNT(id) as num FROM comment " +
+            "GROUP BY board_id) as C on(C.board_id = A.id) " +
+            "LEFT OUTER JOIN ( " +
+            "SELECT board_id, COUNT(id) as num FROM recommend " +
+            "GROUP BY board_id) as D on(D.board_id = A.id) " +
+            "WHERE type=? ";
+    }
+
+
+    var countArguments = [type];
+    var arguments = [type];
+
+    if(query !== null){
+        sql += " AND (title like ? OR content like ? OR tags like ?) ";
+        arguments.push("%" + query + "%");
+        arguments.push("%" + query + "%");
+        arguments.push("%" + query + "%");
+
+        countSql += " AND (title like ? OR content like ? OR tags like ?) ";
+        countArguments.push("%" + query + "%");
+        countArguments.push("%" + query + "%");
+        countArguments.push("%" + query + "%");
+    }
+    sql += "ORDER BY id DESC LIMIT ?,?";
+
+    arguments.push(page*pageStep);
+    arguments.push(pageStep);
+
+    var totalSql = countSql + ";" + sql + ";";
+    var totalArguments = countArguments.concat(arguments);
+
+    conn.query(totalSql, totalArguments, function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            if(type === "ecosystem") {
+                for (var i = 0; i < results[1].length; i++) {
+                    var result = results[1][i];
+                    if (result.product_images !== null) {
+                        var product_urls = result.product_images;
+                        var array = product_urls.split(",");
+                        results[1][i].product_images = array;
+                    }
+                }
+            }
+            // console.log(results);
+            callback(false, results);
+        }
+    })
+};
+
+exports.getRelatedBoardListData = function (parentBoardID, callback) {
     var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
         "FROM board as A " +
         "LEFT OUTER JOIN ( " +
@@ -198,11 +282,11 @@ exports.getBoardListData = function (type, page, callback) {
         "LEFT OUTER JOIN ( " +
         "SELECT board_id, COUNT(id) as num FROM recommend " +
         "GROUP BY board_id) as D on(D.board_id = A.id) " +
-        "WHERE type=? " +
+        "WHERE parent_board_id=? " +
         "ORDER BY id DESC " +
-        "LIMIT ?,?";
+        "LIMIT 0,10";
 
-    conn.query(sql, [type, page*pageStep, pageStep], function(err, results){
+    conn.query(sql, [parentBoardID], function(err, results){
         if(err){
             callback(true, err);
         }else{
@@ -244,6 +328,34 @@ exports.getMostViewedBoardListData = function (callback) {
                     results[i].product_images = array;
                 }
             }
+            callback(false, results);
+        }
+    })
+};
+
+
+exports.getUserEcosystemBoardListData = function (userID, callback) {
+
+    var sql = "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike " +
+        "FROM board as A " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT * FROM user " +
+        "GROUP BY id) as B on(B.id = A.user_id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM comment " +
+        "GROUP BY board_id) as C on(C.board_id = A.id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM recommend " +
+        "GROUP BY board_id) as D on(D.board_id = A.id) " +
+        "WHERE A.user_id=? AND type=?" +
+        "ORDER BY id DESC " +
+        "LIMIT 0,10";
+
+    conn.query(sql, [userID, "my_ecosys"], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            // console.log(results);
             callback(false, results);
         }
     })
@@ -305,7 +417,7 @@ exports.getUserScrapBoardListData = function (userID, callback) {
 
 exports.getBoardDetailFromID = function (boardID, callback) {
     var sql = "UPDATE board SET hit=hit+1 WHERE id=?;" +
-        "SELECT A.*, B.nickname as nickname " +
+        "SELECT A.*, B.nickname as nickname, IFNULL((SELECT title FROM board WHERE id=A.parent_board_id), NULL) as parent_title " +
         "FROM board as A " +
         "LEFT OUTER JOIN ( " +
         "SELECT * FROM user " +
@@ -336,7 +448,8 @@ exports.getBoardComments = function (boardID, callback) {
         "LEFT OUTER JOIN ( " +
         "SELECT * FROM user " +
         "GROUP BY id) as B on(B.id = A.user_id) " +
-        "WHERE A.board_id=?";
+        "WHERE A.board_id=? " +
+        "ORDER BY id ASC";
 
     conn.query(sql, [boardID], function(err, results){
         if(err){
@@ -348,14 +461,26 @@ exports.getBoardComments = function (boardID, callback) {
     })
 };
 
-exports.registComment = function (userID, boardID, content, parentCommentID, callback) {
+exports.registComment = function (userID, boardID, content, parentCommentID, graph, callback) {
     var sql = "";
     var argument = [userID, boardID, content];
 
     if(parentCommentID === null){
-        sql = "INSERT INTO comment(user_id, board_id, content) VALUES(?,?,?)";
+        if(graph === null){
+            sql = "INSERT INTO comment(user_id, board_id, content) VALUES(?,?,?)";
+        }else{
+            sql = "INSERT INTO comment(user_id, board_id, content, graph) VALUES(?,?,?,?)";
+            argument.push(graph);
+        }
+
     }else{
-        sql = "INSERT INTO comment(user_id, board_id, content, parent, depth) VALUES(?,?,?,?,?)";
+        if(graph === null){
+            sql = "INSERT INTO comment(user_id, board_id, content, parent, depth) VALUES(?,?,?,?,?)";
+        }else{
+            sql = "INSERT INTO comment(user_id, board_id, content, graph, parent, depth) VALUES(?,?,?,?,?,?)";
+            argument.push(graph);
+        }
+
         argument.push(parentCommentID);
         argument.push(2);
     }
@@ -365,6 +490,45 @@ exports.registComment = function (userID, boardID, content, parentCommentID, cal
             callback(false);
         }else{
             callback(true);
+        }
+    })
+};
+
+exports.registReview = function (userID, boardID, title, content, rating, nickname, callback) {
+    var sql = "INSERT INTO review(user_id, board_id, title, content, star, nickname) VALUES(?,?,?,?,?,?)";
+
+    conn.query(sql, [userID, boardID, title, content, rating, nickname], function(err, results){
+        if(err){
+            callback(false);
+        }else{
+            callback(true);
+        }
+    })
+};
+
+exports.getReview = function (boardID, size, callback) {
+    var sql = "SELECT * FROM review WHERE board_id=? ORDER BY id DESC ";
+    if(size > 0){
+        sql += " limit 0, ?";
+    }
+
+    conn.query(sql, [boardID, size], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            callback(false, results);
+        }
+    })
+};
+
+exports.getReviewSummary = function (boardID, callback) {
+    var sql = "SELECT COUNT(id) as count, IFNULL(AVG(star),0) as rating FROM review where board_id=?";
+
+    conn.query(sql, [boardID], function(err, results){
+        if(err){
+            callback(true, err);
+        }else{
+            callback(false, results[0]);
         }
     })
 };
@@ -425,7 +589,7 @@ exports.curateProduct = function (data, callback) {
         sqlTag = sqlTag + " AND tag LIKE '%\"" + checkedTag[i] + "\"%'";
     }
     for(var i = 0; i < checkedCapa.length; i++) {
-        sqlCapa = sqlCapa + " AND capability LIKE '%\"" + checkedCapa[i] + "\"%'";
+        sqlCapa = sqlCapa + " AND capability LIKE '%\"" + checkedCapa[i].id + "\"%'";
     }
     
     sql = sql + sqlTag + sqlCapa;

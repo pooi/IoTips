@@ -21,27 +21,62 @@ block content
                         h3.txt(style="color: white;") IoTips만의 큐레이션 서비스로 나에게 꼭 맞는 IoT 제품 찾기
                         p.txt(style="color: white;") Find My Own IoT Product with Our Curation Service
             
+
+
         #curation_result(v-if="completeCuration")
-            button.gotoCuration(v-on:click="gotoCuration") 뒤로 가기
             div(v-if="noResult")
-                p no result
-            div(v-else)
-                div(v-for="result in curateResult")
-                    p.txt {{ result.title }}
-                    p.txt {{ result.description }}
-                    p.txt {{ result.company }}
-                    img(:src="result.imgUrl", onclick="javascript:location.href=result.url;", style="width: 30%; height: 30%;")
-        
+                div(style="padding-top: 80px;")
+                    div(style="width: 500px; margin: 0 auto; text-align: center; font-size: 1.3em; ")
+                        h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ") 결과가 없습니다.
+                        br
+                        h4(style="color: gray; font-weight: 300;") 당신의 희망사항에 맞는 제품을 찾지 못 하였네요..
+                        h4(style="color: gray; font-weight: 300;") 보다 폭 넓은 희망사항을 말씀해 주시면 꼭 찾아드릴게요!
+                        br
+                        h4(style="color: gray; font-weight: 300;") ㅡ
+                        br
+            div(v-else, style="width: auto; margin: 0 auto;")
+                div(style="padding-top: 80px;")
+                    div(style="width: 500px; margin: 0 auto; text-align: center; font-size: 1.3em; ")
+                        h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ") 당신만을 위한 IoT 제품
+                        br
+                        h4(style="color: gray; font-weight: 300;") 어떠신가요? 당신에게 딱 맞는 IoT 제품입니다.  
+                        h4(style="color: gray; font-weight: 300;") 클릭 시, 상세 페이지로 이동합니다.
+                        br
+                        h4(style="color: gray; font-weight: 300;") ㅡ
+                        br
+                   
+                div(style="width: 1000px; margin: 0 auto; display: flex;")
+                    template(v-for="(result, i) in curateResult")
+                        v-card.dal-card-scale.text-xs-left(style="width: 30%; height: 450px; margin: 10px;", light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="result !== null", :href="result.url", target="_blank", :dark="isDark")
+                            v-card-media(:height='Math.min($vuetify.breakpoint.height-400, 300)', style="width: auto;")
+                                v-layout.pa-0.ma-0(xs12, row, wrap, style="width: 100%; height: 100%; background-color: white;")
+                                    v-flex.pa-0.ma-0.xs12(row, wrap, style="height: 100%;")
+                                        img(:src="result.imgUrl", height="300px", width="300px", style="max-width: 100%; max-height: 100%; object-fit: cover; margin: 0 auto;")
+                                //- v-layout(xs12, row, wrap, style="width: 100%; height: 100%;", v-else)
+                                //-     v-flex(xs12, row, wrap, style="height: 100%;")
+                                //-         img(src="/images/no_img.png", height="100%", width="100%", style="max-width: 100%; max-height: 100%; object-fit: cover;")
+                            v-card-text.pt-2.pb-0.caption
+                                code.elevation-0 {{ result.category }}
+                                code.elevation-0 {{ result.company }}
+                            v-card-title.title.mb-0.pt-1.pb-2 {{ result.title }}
+                            v-card-text.mb-0.pt-1.pb-2 {{ result.description }}
+
+            div(style="width: 120px; margin: 0 auto; margin-top: 100px; padding-bottom: 80px;")
+                v-btn(@click="gotoCuration", color="rgb(0, 114, 201)", style="width: 120px; height: 50px; color: white; margin: 0 auto;") 다시하기
+
+
         #curation_ing(v-else)   
-            div#introduction
+            div#introduction(v-if="prevCuration")
                 div(style="width: 500px; margin: 0 auto; text-align: center; font-size: 1.3em; ")
-                    h1(style="font-size: 2.5em; letter-spacing: 3px; font-weight: 300;") 나만의 IoT 제품
+                    h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ") 나만의 IoT 제품
                     br
                     h4(style="color: gray; font-weight: 300;") 나에게 맞는 IoT 제품을 찾고 계신가요? 
                     h4(style="color: gray; font-weight: 300;") 당신의 희망사항을 말씀해 주세요. IoTips에서 알려드립니다.
                     br
-                    h4 ㅡ
-            div#content
+                    h4(style="color: gray; font-weight: 300;") ㅡ
+                    br
+                    v-btn(@click="startCuration", color="rgb(0, 114, 201)", style="width: 100px; height: 40px; color: white;") Start!
+            div#content(v-else)
                 form-wizard#form(@on-complete="onComplete", @on-loading="setLoading", @on-validate="handleValidation", @on-error="" shape="circle", color="#20a0ff")
                     div(slot="title")
 
@@ -57,7 +92,7 @@ block content
 
                     tab-content#con_capability.tab_con(title="Capability", :before-change="validateCapa", style="text-align: center; margin-top: 30px;")
                         h2.con_title 원하는 capability를 선택해 주세요.
-                        v-data-table#row_table.elevation-1(v-model='checkedCapa', :headers='headers', :items='CAPABILITY', :pagination.sync="pagination", select-all='' item-key='capability')
+                        v-data-table#row_table.elevation-1(v-model='checkedCapa', :headers='headers', :items='CAPABILITY', :pagination.sync="pagination", select-all='', item-key='capability')
                             template(slot='headers', slot-scope='props')
                                 tr
                                     th
@@ -68,7 +103,7 @@ block content
                                 tr(:active='props.selected' @click='props.selected = !props.selected')
                                     td.row_btn
                                         v-checkbox(:input-value="props.selected")
-                                    td
+                                    td.row_img
                                         img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(props.item.capability) + ".png"', style="max-width: 40%; max-height: 40%; object-fit: contain; border-radius: 0px;")
                                     td.row_capa {{ props.item.capability }}
                                     td.row_desc.text-xs {{ props.item.description }}
@@ -82,8 +117,10 @@ block content
                                 v-flex(shrink=true, style='width: 300px; margin: 30px;')
                                     v-text-field.mt-0(v-model='price[1]', label="Maximum Price", prefix="￦")
                             v-flex.px-3(style="display: block;")
-                                    v-range-slider(v-model='price' :max='500000' :min='0' :step='1')
-                                
+                                    p(style="width: 60px; color: gray; display: inline-block;") 0
+                                    v-range-slider(v-model='price' :max='500000' :min='0' :step='10' thumb-label=true thumb-size=50 style="width: 600px; display: inline-block; margin: 20px;")
+                                    p(style="width: 60px; color: gray; display: inline-block;") 500000
+
                     .loader(v-if="loadingWizard")
                     
     include footer

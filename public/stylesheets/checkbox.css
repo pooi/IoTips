@@ -56,14 +56,6 @@ label:hover {
     border: 1px solid lightslategray;
 }
 
-.gotoCuration {
-    width: 120px;
-    height: 60px;
-    background-color: rgb(0, 114, 201);
-    border-radius: 10px;
-    color: white;
-}
-
 #alphabet {
     width: 50px;
     color: rgb(0, 114, 201);
@@ -80,31 +72,44 @@ label:hover {
     width: 100px;
     margin: 0 auto;
 }
-
+.row_img {
+    width: 100px;
+}
 .row_capa {
-    width: 400px;
+    width: 350px;
 }
 
 .row_desc {
-    width: 500px;
+    width: 550px;
 }
 
 #con_price {
     width: 1000px;
     margin: 0 auto;
+    margin-top: 30px;
 }
 
 #curation_ing {
     width: 1300px;
     background-color: white;
     margin: 0 auto;
-    margin-top: 10px;
+    margin-top: 50px;
     font-weight: 300;
+    box-shadow: 2px 2px 10px #dadada;
+}
+
+#curation_result {
+    width: 1300px;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 50px;
+    font-weight: 300;
+    box-shadow: 2px 2px 10px #dadada;
 }
 
 #introduction {
     padding-top: 80px;
-    padding-bottom: 60px;
+    padding-bottom: 80px;
     background-color: #ffffff;
 }
 
@@ -116,7 +121,7 @@ label:hover {
 }
 
 #form {
-    width: 1100px; 
+    width: 1150px; 
     height: auto; 
     margin: 0 auto; 
     padding-top: 30px; 

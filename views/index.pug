@@ -7,7 +7,7 @@ block content
 
     include toolbar_index
 
-    div.animation-fade-in-2s(style="height: 100%; width: 100%; position: fixed; top: 0; left: 0; background-color: rgba(0, 0, 0, 0.5);")
+    div.animation-fade-in-2s.bottom-safe-area-margin(style="height: 100%; width: 100%; position: fixed; top: 0; left: 0; background-color: rgba(0, 0, 0, 0.5);")
         v-layout(style="height:100%;").slideshow
             .slideshow-image(style="background-image: url('/images/bg_index_1.jpg')")
             .slideshow-image(style="background-image: url('/images/bg_index_2.jpg')")
@@ -76,9 +76,9 @@ block content
 
 
             .section.section-full-page(style="z-index: 5;")
-                .overlay
+                .overlay(style="background-color: rgba(30, 50, 20, 0.3);")
 
-                    v-layout.safe-area-inset.px-4.xs12(row, wrap, style="height: 100%; padding-top: 50px; padding-bottom: 50px;", align-center, justify-center)
+                    v-layout.px-4.xs12(row, wrap, style="height: 100%; padding-top: 50px; padding-bottom: 50px;", align-center, justify-center)
 
                         v-flex(style="margin: auto;")
 
@@ -121,8 +121,8 @@ block content
 
 
             .section.section-full-page(style="z-index: 5;")
-                .overlay
-                    v-layout.safe-area-inset(style="height: 100%")
+                .overlay(style="background-color: rgba(30, 50, 60, 0.5);")
+                    v-layout(style="height: 100%")
                         v-flex.mx-3.text-xs-center(style="margin: auto;")
 
                             //v-container(fluid, grid-list-md, style="overflow:visible")
@@ -137,7 +137,7 @@ block content
                                     v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArray(mostViewItems)', :key='i', style="overflow:visible")
                                         v-layout
                                             v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md4, lg3)
-                                                include index_card_item
+                                                include ecosystem_card_item
 
                                 //v-btn.mt-0(style='margin: 0 auto;  min-width: 60px; font-size: 0.8em;', dark, small, flat, color="white", outline, round, href='/board/ecosystem')
                                 //    span MORE

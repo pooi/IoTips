@@ -26,6 +26,12 @@ function init(init_user, BOARD_TYPE) {
             viewer: null,
 
             loadingProgress: false,
+            originalProgress: {
+                product: true,
+                platform: true,
+                capability: true,
+                graph: true
+            },
 
             boardType: null,
             boardTypes: Supporter.getBoardTypes(),
@@ -60,7 +66,7 @@ function init(init_user, BOARD_TYPE) {
 
             content: null,
             tags: [],
-            sugTags: ["1인가구", "반려견", "신혼집", "초보자"],
+            sugTags: ["1인가구", "3~4인가구", "IoT기기가 집 안에 많이 구축되어 있는 집", "노인", "노인이 있는 집", "단독 주택", "독거노인", "맞벌이 부부", "미세먼지", "반려동물", "반려동물이 있는 집", "사무실", "소규모 매장", "수험생", "아기가 있는 집", "아이가 있는 집", "남성", "여성", "워킹 맘", "워킹맘", "자취생", "조명", "직장인", "파티", "학원", "신혼집", "초보자"],
 
             CAPABILITY: null,
             capabilityLoading: false,
@@ -318,7 +324,46 @@ function init(init_user, BOARD_TYPE) {
                 var form = this.$refs.platform_form;
                 if(form.validate()){
                     this.platforms.push(this.tempPlatform);
-                    this.graphManager.addCircleNode(this.tempPlatform.title, this.tempPlatform.id);
+                    if(this.tempPlatform.img !== null){
+                        this.graphManager.addCircleNodeWithImage(this.tempPlatform.title, this.tempPlatform.id, this.tempPlatform.img);
+                    }else{
+                        this.graphManager.addCircleNode(this.tempPlatform.title, this.tempPlatform.id);
+                    }
+
+                    var parentID = this.tempPlatform.id;
+                    var platform = this.tempPlatform;
+
+                    setTimeout(function () {
+                        var parentCell = null;
+                        for(var i=0; i<platform.selectedProducts.length; i++){
+                            for(var j=0; j<vue.graphManager.graph.getChildCells().length; j++){
+                                var cell = vue.graphManager.graph.getChildCells()[j];
+                                if(cell.id === parentID){
+                                    parentCell = cell;
+                                    break;
+                                }
+                            }
+                            if(parentCell !== null){
+                                break;
+                            }
+                        }
+
+                        if(platform.selectedProducts !== null && platform.selectedProducts.length > 0){
+                            for(var i=0; i<platform.selectedProducts.length; i++){
+                                var productID = platform.selectedProducts[i].id;
+                                for(var j=0; j<vue.graphManager.graph.getChildCells().length; j++){
+                                    var cell = vue.graphManager.graph.getChildCells()[j];
+                                    if(cell.id === productID){
+                                        vue.graphManager.graph.insertEdge(vue.graphManager.graph.getDefaultParent(), parentID + j, '', parentCell, cell)
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }, 500);
+
+
                     this.addPlatformDialog = false;
                 }
 
@@ -330,12 +375,34 @@ function init(init_user, BOARD_TYPE) {
                 // })
             },
             removePlatform: function (index) {
+                for(var i=0; i<this.graphManager.graph.getChildCells().length; i++){
+                    var cell = this.graphManager.graph.getChildCells()[i];
+                    if(cell.id === this.platforms[index].id){
+                        this.graphManager.graph.clearSelection();
+                        this.graphManager.graph.addSelectionCell(cell);
+                        this.graphManager.graph.removeCells();
+                    }
+                }
+
                 if(index < this.platforms.length){
                     this.platforms.splice(index, 1);
                 }
             },
             removePlatformFromDetail: function(){
                 this.removePlatform(this.detailPlatformIndex);
+                this.detailPlatform = null;
+                this.detailPlatformIndex = -1;
+                this.detailPlatformDialog= false;
+            },
+            addPlatformNodeFromDetail: function(){
+                if(this.detailProductIndex < this.platforms.length){
+                    var tempPlatform = this.platforms[this.detailPlatformIndex];
+                    if(tempPlatform.img !== null){
+                        this.graphManager.addCircleNodeWithImage(tempPlatform.title, tempPlatform.id, tempPlatform.img);
+                    }else{
+                        this.graphManager.addCircleNode(tempPlatform.title, tempPlatform.id);
+                    }
+                }
                 this.detailPlatform = null;
                 this.detailPlatformIndex = -1;
                 this.detailPlatformDialog= false;
@@ -374,7 +441,11 @@ function init(init_user, BOARD_TYPE) {
                 if(form.validate()){
                     this.tempProduct.saveSelectedPlatform();
                     this.products.push(this.tempProduct);
-                    this.graphManager.addNode(this.tempProduct.title, this.tempProduct.id);
+                    if(this.tempProduct.img !== null){
+                        this.graphManager.addNodeWithImage(this.tempProduct.title, this.tempProduct.id, this.tempProduct.img);
+                    }else{
+                        this.graphManager.addNode(this.tempProduct.title, this.tempProduct.id);
+                    }
                     this.addProductDialog = false;
                     // this.calcTotalCapabilities();
                 }
@@ -382,6 +453,16 @@ function init(init_user, BOARD_TYPE) {
             },
             removeProduct: function (index) {
                 if(index < this.products.length){
+
+                    for(var i=0; i<this.graphManager.graph.getChildCells().length; i++){
+                        var cell = this.graphManager.graph.getChildCells()[i];
+                        if(cell.id === this.products[index].id){
+                            this.graphManager.graph.clearSelection();
+                            this.graphManager.graph.addSelectionCell(cell);
+                            this.graphManager.graph.removeCells();
+                        }
+                    }
+
                     for(var i=0; i<this.platforms.length; i++){
                         this.platforms[i].deleteProduct(this.products[index]);
                     }
@@ -391,6 +472,19 @@ function init(init_user, BOARD_TYPE) {
             },
             removeProductFromDetail: function(){
                 this.removeProduct(this.detailProductIndex);
+                this.detailProduct = null;
+                this.detailProductIndex = -1;
+                this.detailProductDialog= false;
+            },
+            addProductNodeFromDetail: function(){
+                if(this.detailProductIndex < this.products.length){
+                    var tempProduct = this.products[this.detailProductIndex];
+                    if(tempProduct.img !== null) {
+                        this.graphManager.addNodeWithImage(tempProduct.title, tempProduct.id, tempProduct.img)
+                    }else{
+                        this.graphManager.addNode(tempProduct.title, tempProduct.id);
+                    }
+                }
                 this.detailProduct = null;
                 this.detailProductIndex = -1;
                 this.detailProductDialog= false;
@@ -447,6 +541,7 @@ function init(init_user, BOARD_TYPE) {
                     }
                     vue.totalCapabilities = JSON.parse(JSON.stringify( vue.CAPABILITY ));
                     vue.capabilityLoading = false;
+                    vue.originalProgress.capability = true;
 
                     // vue.tempCapabilities = [];
                     // for(var i=0; i<vue.CAPABILITY.length; i++){
@@ -541,6 +636,11 @@ function init(init_user, BOARD_TYPE) {
                         data['tags'] = this.tags;
                     }
 
+                    var parent = (new URL(window.location.href)).searchParams.get("originalPost");
+                    if(parent){
+                        data['parent'] = parent;
+                    }
+
                     axios.post(
                         '/board/regist',
                         data
@@ -585,9 +685,82 @@ function init(init_user, BOARD_TYPE) {
                     case "ecosystem":
                         this.boardType = this.boardTypes[3];
                         break;
+                    case "my_ecosys":
+                        this.boardType = this.boardTypes[4];
+                        break;
                     default:
                         this.boardType = this.boardTypes[0];
                         break;
+                }
+            },
+            function(){
+                // var url_string = window.location.href;
+                // var url = new URL(url_string);
+                var originalPost = (new URL(window.location.href)).searchParams.get("originalPost");
+
+                if(originalPost){
+                    // console.log("originalPost");
+
+                    for(var key in this.originalProgress){
+                        this.originalProgress[key] = false;
+                    }
+
+                    var data = {
+                        boardID: originalPost
+                    };
+
+                    axios.post(
+                        '/board/getDetail',
+                        data
+                    ).then(function (res) {
+                        var result = res.data.result;
+                        console.log(result);
+
+                        var platforms = res.data.platforms;
+                        var products = res.data.products;
+
+                        for(var i=0; i<platforms.length; i++){
+                            var platform = new Platform();
+                            platform.fromDicWithoutID(platforms[i]);
+                            vue.platforms.push(platform);
+                        }
+                        vue.originalProgress.platform = true;
+
+                        for(var i=0; i<products.length; i++){
+                            var product = new Product();
+                            product.fromDicWithoutID(products[i]);
+                            vue.products.push(product);
+                        }
+                        vue.originalProgress.product = true;
+
+                        if(products.length > 0){
+                            vue.getCapabilityList();
+                        }
+
+
+                        if("graph" in result){
+                            if(result.graph != null){
+                                document.getElementById("graph").innerHTML = '';
+                                // vue.graphManager = new GraphManager("graph", true);
+                                // var graph = JSON.parse(result.graph);
+                                // console.log(json2xml(graph));
+                                // vue.graphManager.makeFromXml(json2xml(graph));
+                                setTimeout(function () {
+                                    // vue.graphManager = new GraphManager("graph");
+                                    // vue.graphManager.main();
+                                    var graph = JSON.parse(result.graph);
+                                    vue.graphManager.makeFromXml(json2xml(graph));
+                                    vue.originalProgress.graph = true;
+                                }, 500);
+                            }
+                        }
+
+                    }).catch(function (error) {
+                        alert(error);
+                        // vue.commentLoading = false;
+                    });
+
+
                 }
             },
             function () {
@@ -667,6 +840,14 @@ function init(init_user, BOARD_TYPE) {
                 }
 
                 return capabilities
+            },
+            originalLoading: function () {
+                for(var key in this.originalProgress){
+                    if(!this.originalProgress[key]){
+                        return true;
+                    }
+                }
+                return false
             }
             // contentCode() {
             //     return hljs.highlightAuto(this.content).value

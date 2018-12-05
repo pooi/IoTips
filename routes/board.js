@@ -12,6 +12,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function (req, res, next) {
    var data = req.body;
+   console.log(data);
    var type = "free";
    var page = 1;
    if("type" in data){
@@ -20,8 +21,12 @@ router.post('/', function (req, res, next) {
    if("page" in data){
        page = data.page;
    }
+   var query = null;
+   if("query" in data){
+       query = data.query;
+   }
 
-   dbDAO.getBoardListData(type, page, function (isErr, results) {
+   dbDAO.getBoardListData(type, page, query, function (isErr, results) {
        if(isErr){
            res.send(null);
        }else{
@@ -29,6 +34,35 @@ router.post('/', function (req, res, next) {
        }
    })
 
+});
+
+router.post('/related', function (req, res, next) {
+    var body = req.body;
+    if("parentBoardID" in body) {
+        dbDAO.getRelatedBoardListData(body.parentBoardID, function (isErr, results) {
+            if (isErr) {
+                res.send(null);
+            } else {
+                res.send(results);
+            }
+        })
+    }
+
+});
+
+router.post('/user/ecosystem', function (req, res, next) {
+    var body = req.body;
+    if("userID" in body){
+        dbDAO.getUserEcosystemBoardListData(body.userID, function (isErr, results) {
+            if(isErr){
+                res.send(null);
+            }else{
+                res.send(results);
+            }
+        })
+    }else{
+        res.send(404);
+    }
 });
 
 router.post('/user', function (req, res, next) {
@@ -136,7 +170,7 @@ router.get('/regist', function(req, res, next) {
     if(boardType === undefined){
         boardType = "free";
     }
-    console.log(boardType);
+    // console.log(boardType);
     var user = support.ensureAuthenticated(req);
     res.render('regist', { user: JSON.stringify(user), boardType: boardType });
 });
@@ -213,11 +247,64 @@ router.post('/comments', function(req, res, next){
 
 router.post('/registComment', function (req, res, next) {
     var data = req.body;
-    if("boardID" in data && "content" in data && "parentCommentID" in data){
+    console.log("####", data);
+    if("boardID" in data && "content" in data && "parentCommentID" in data && "graph" in data){
         var boardID = req.body.boardID;
         var user = support.ensureAuthenticated(req);
-        dbDAO.registComment(user.db_id, boardID, data.content, data.parentCommentID, function (isSuccess) {
+        dbDAO.registComment(user.db_id, boardID, data.content, data.parentCommentID, data.graph, function (isSuccess) {
             res.send(isSuccess);
+        });
+    }else{
+        res.send(404);
+    }
+});
+
+router.post('/reviews', function(req, res, next){
+    var data = req.body;
+    if("boardID" in data && "size" in data){
+        dbDAO.getReview(data.boardID, data.size, function (isErr, results) {
+            if(isErr){
+                res.send(404);
+            }else{
+                res.send(results);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
+router.post('/reviewSummary', function(req, res, next){
+    var data = req.body;
+    if("boardID" in data){
+        dbDAO.getReviewSummary(data.boardID, function (isErr, result) {
+            if(isErr){
+                res.send(404);
+            }else{
+                res.send(result);
+            }
+        })
+    }else{
+        res.send(404);
+    }
+});
+
+router.post('/registReview', function (req, res, next) {
+    var data = req.body;
+    if("boardID" in data && "title" in data && "content" in data && "rating" in data && "nickname" in data){
+        var boardID = req.body.boardID;
+        var user = support.ensureAuthenticated(req);
+        dbDAO.registReview(user.db_id, boardID, data.title, data.content, data.rating, data.nickname, function (isSuccess) {
+            if(isSuccess){
+                res.send({
+                    statusCode: 200
+                });
+            }else{
+                res.send({
+                    statusCode: 500,
+                    errorMsg: "Error"
+                });
+            }
         });
     }else{
         res.send(404);

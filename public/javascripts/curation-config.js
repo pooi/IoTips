@@ -66,6 +66,7 @@ function init(init_user) {
             checkedCapa: [],
             loadingWizard: false,
             completeCuration: false,
+            prevCuration: true,
             noResult: false,
             curateProduct: [],
             curateResult: [],
@@ -107,9 +108,8 @@ function init(init_user) {
             ]
         },
         methods: {
-            remove (item) {
-                this.checkedCapa.splice(this.checkedCapa.indexOf(item), 1)
-                this.checkedCapa = [...this.checkedCapa]
+            startCuration() {
+                vue.prevCuration = false;
             },
             isInt(n) {
                 return n % 1 === 0;
@@ -203,7 +203,7 @@ function init(init_user) {
 
                     vue.CAPABILITY = data;
                     for(var i = 0; i < data.length; i++) vue.capa_name[i] = data[i].capability;
-                    console.log(vue.capa_name[0]);
+
                     vue.totalCapabilities = JSON.parse(JSON.stringify(vue.CAPABILITY ));
                     vue.capabilityLoading = false;
 
@@ -238,6 +238,7 @@ function init(init_user) {
                     checkedTag: this.checkedTag,
                     checkedCapa: this.checkedCapa
                 }
+                console.log("zzz", data);
                 axios.post(
                     '/curation/curateProduct',
                     data
@@ -263,6 +264,7 @@ function init(init_user) {
                             };
                             var product = vue.curateProduct[i];
                             tempResult.title = product.name;
+                            tempResult.category = product.category;
                             tempResult.description = product.description;
                             tempResult.company = product.manufacturer;
                             tempResult.url = product.url;

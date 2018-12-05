@@ -21,6 +21,8 @@ function init(init_user) {
             supporter: null,
             auth: new Auth(),
 
+            myEcosystemItems: [],
+            loadingMyEcosystem: false,
             myItems: [],
             loadingMyItem: false,
             scraps: [],
@@ -82,9 +84,40 @@ function init(init_user) {
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
             },
+            goMyEcosystemRegist: function () {
+                window.location.href = "/board/regist?boardType=my_ecosys";
+            },
 
             moveDetail: function(item){
                 window.location.href = "/board/" + item.id;
+            },
+
+            getMyEcosystemBoardData: function () {
+                this.loadingMyEcosystem = true;
+                var data = {};
+                if(this.auth.user !== null && "db_id" in this.auth.user){
+                    data["userID"] = this.auth.user.db_id;
+                }
+
+                setTimeout(function () {
+                    axios.post(
+                        '/board/user/ecosystem',
+                        data
+                    ).then(function (res) {
+                        var data = res.data;
+                        vue.myEcosystemItems = [];
+                        for(var i=0; i<Math.min(data.length, 10); i++){
+                            data[i].rgt_date = new Date(data[i].rgt_date);
+                            vue.myEcosystemItems.push(data[i]);
+                        }
+                        vue.loadingMyEcosystem = false;
+                    }).catch(function (error) {
+                        alert(error);
+                        vue.loadingMyEcosystem = false;
+                    });
+                }, 500);
+
+
             },
 
             getMyBoardData: function () {
@@ -148,6 +181,7 @@ function init(init_user) {
         mounted:[
             function () {
                 this.auth.parseUserData(init_user);
+                this.getMyEcosystemBoardData();
                 this.getMyBoardData();
                 this.getScrapData();
             },

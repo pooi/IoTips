@@ -41,12 +41,24 @@ block content
                                     v-select(v-model='boardType', :items='boardTypes', item-text='title', item-value='type', label='게시판선택', persistent-hint, return-object, single-line, hide-details, full-width, required, style="border-bottom: .4px solid rgba(0,0,0,0.2);", :disabled="loadingProgress")
 
 
+                        v-card-text.px-0.py-2.text-xs-center(v-show="originalLoading")
+                            v-progress-circular(indeterminate='', color='green')
 
-                        v-card-text
+
+                        v-card-text.pb-5(v-show="!originalLoading", :class="$vuetify.breakpoint.xsOnly ? 'px-0' : ''")
                             v-layout
                                 v-flex(xs12)
-                                    v-card.pa-0.elevation-4
+                                    //v-divider(v-if="$vuetify.breakpoint.xsOnly")
+                                    //v-divider
 
+                                    //v-card.pa-0.elevation-0(:class="$vuetify.breakpoint.xsOnly ? 'elevation-0' : 'elevation-0'")
+                                    v-card.pa-0.elevation-0
+
+                                        v-card-text.py-1.px-0.mb-3(v-if="boardType.type === 'my_ecosys'")
+                                            v-layout.px-2(row, wrap, style="width: 100%;", align-center, justify-center)
+                                                v-card.dal-card.pa-3.mx-3(style="width:100%;", dark, color="red lighten-1")
+                                                    //v-card-text.caption.pa-0.pb-1.grey--text Original Post
+                                                    v-card-text.pa-0.text-xs-center 본 작성글은 본인만 조회할 수 있습니다.
 
                                         v-card-text.py-1.px-0
                                             //span.headline.red--text.text--darken-1(style="font-weight: 700;") 제목
@@ -71,7 +83,7 @@ block content
 
 
 
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' || boardType.type === 'my_ecosys'")
                                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Capability
                                             //v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="capabilities.length === 0")
                                             //    v-btn(flat, color="blue darken-3", @click="resetCapabilityForm()") 사용된 Capability 추가
@@ -85,7 +97,7 @@ block content
                                                 //            v-card-media.white--text(height='75px', :src='"/images/capabilities/" + capa.component + ".png"')
                                                 //            v-card-text.py-1.text-xs-center {{ capa.title }} {{ index }}
                                             v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="totalCapabilities === null")
-                                                .caption 등록된 Capability가 없습니다.
+                                                .caption 등록된 제품이 없습니다.
                                             v-layout.mt-2(row, wrap, justify-center, align-top)
                                                 template(v-for="(capa, index) in totalCapabilities", :key="index" v-if="capa.check")
                                                     v-card.dal-small-card.mr-3.mb-3.animation-fade-in(hover, raised, :width="150", style="height: fit-content;", @mouseenter="showDetailCapability($event, capa)")
@@ -99,7 +111,7 @@ block content
                                                 //        .display-2(style="font-weight: 100;") +
 
 
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' || boardType.type === 'review'" )
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' || boardType.type === 'my_ecosys' || boardType.type === 'review'" )
                                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Products
                                             v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="products.length === 0")
                                                 v-btn(flat, color="blue darken-3", @click="resetProductForm()") 사용된 제품 추가
@@ -124,7 +136,7 @@ block content
                                                         .display-2(style="font-weight: 100;") +
 
 
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'|| boardType.type === 'review'")
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'|| boardType.type === 'my_ecosys' || boardType.type === 'review'")
                                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Platforms
                                             v-layout.mt-2.text-xs-center(row, wrap, justify-center, align-center, v-if="platforms.length === 0")
                                                 v-btn(flat, color="blue darken-3", @click="resetPlatformForm()") 사용된 플랫폼 추가
@@ -149,7 +161,7 @@ block content
                                                         .display-2(style="font-weight: 100;") +
 
 
-                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem'")
+                                        v-card-text.py-2.mt-4(v-show="boardType.type === 'ecosystem' || boardType.type === 'my_ecosys'")
                                             span.headline.red--text.text--darken-1(style="font-weight: 700;") 구성도
                                             v-card.my-3.dal-card-blue(hover, raised)
                                                 //v-card-media.pa-0(height="400px")
@@ -177,7 +189,7 @@ block content
                                                     strong.caption.mr-1 #
                                                     strong {{ tag }}
                                             v-flex.text-xs-center.mt-2(xs12)
-                                                .small-caption.grey--text 클릭해서 활성화
+                                                .small-caption.grey--text 클릭해서 활성화 혹은 타이
 
 
 
@@ -278,7 +290,7 @@ block content
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
-                            v-text-field(v-model='tempProduct.company', ref="product_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempProduct.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempProduct.company=""')
+                            v-text-field(v-model='tempProduct.company', ref="product_company", color="green darken-1", required, :rules="[supporter.rules.required, supporter.rules.counter_30]", :disabled="tempProduct.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempProduct.company=""')
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
@@ -388,7 +400,7 @@ block content
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Company
-                            v-text-field(v-model='tempPlatform.company', ref="platform_company", color="green darken-1", required, :rules="[supporter.rules.required]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempPlatform.company=""')
+                            v-text-field(v-model='tempPlatform.company', ref="platform_company", color="green darken-1", required, :rules="[supporter.rules.required, supporter.rules.counter_30]", :disabled="tempPlatform.parsingProgress", clear-icon='cancel', clearable, label='Company', type='text', @click:clear='tempPlatform.company=""')
 
                         v-card-text.py-2.mt-3.px-0
                             span.headline.red--text.text--darken-1(style="font-weight: 700;") Price
@@ -466,6 +478,10 @@ block content
 
             v-card-text.py-2
                 v-layout(row, wrap)
+
+                    v-card-text.pt-0.pb-2.px-0.text-xs-center
+                        v-btn.logo_blue_text(flat, @click="addProductNodeFromDetail()") 그래프 노드 추가
+
                     v-card-text.py-2.px-0
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
                         .body-1 {{ detailProduct.title }}
@@ -522,6 +538,8 @@ block content
 
 
 
+
+
             v-divider.py-0.my-0
 
             v-card-actions
@@ -537,6 +555,10 @@ block content
 
             v-card-text.py-2
                 v-layout(row, wrap)
+
+                    v-card-text.pt-0.pb-2.px-0.text-xs-center
+                        v-btn.logo_blue_text(flat, @click="addPlatformNodeFromDetail()") 그래프 노드 추가
+
                     v-card-text.py-2.px-0
                         span.headline.red--text.text--darken-1(style="font-weight: 700;") Title
                         .body-1 {{ detailPlatform.title }}

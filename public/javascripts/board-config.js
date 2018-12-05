@@ -27,7 +27,10 @@ function init(init_user, BOARD_TYPE, init_page) {
             fab: false,
             boardType: BOARD_TYPE,
             page : parseInt(init_page),
+            pageStep: 20,
+            totalBoardCount: 0,
             items: [],
+            showCard: true,
 
             searchText: null,
 
@@ -90,6 +93,10 @@ function init(init_user, BOARD_TYPE, init_page) {
             goRegist: function () {
                 window.location.href = "/board/regist?boardType=" + this.boardType;
             },
+            goBoardMain: function(){
+                window.location.href = "/board/" + this.boardType;
+
+            },
 
             getBoardData: function () {
                 this.loading = true;
@@ -98,15 +105,24 @@ function init(init_user, BOARD_TYPE, init_page) {
                     page: this.page
                 }
 
+                var query = (new URL(window.location.href)).searchParams.get("query");
+                if(query){
+                    data['query'] = query;
+                }
+
                 setTimeout(function () {
                     axios.post(
                         '/board',
                         data
                     ).then(function (res) {
-                        var data = res.data;
+                        console.log(res.data);
+                        vue.totalBoardCount = res.data[0][0].total;
+
+                        var data = res.data[1];
                         vue.items = data;
                         for(var i=0; i<vue.items.length; i++){
                             vue.items[i].rgt_date = new Date(vue.items[i].rgt_date);
+                            vue.items[i].tags = JSON.parse(vue.items[i].tags);
                         }
                         vue.loading = false;
                     }).catch(function (error) {
@@ -120,6 +136,24 @@ function init(init_user, BOARD_TYPE, init_page) {
 
             moveDetail: function(item){
                 window.location.href = "/board/" + item.id;
+            },
+            search: function () {
+                if(this.searchText !== null && this.searchText.length > 0){
+                    var pathname = window.location.pathname;
+                    window.location.href = pathname + "?" + this.supporter.encodeQueryData({query: this.searchText})
+                }else{
+                    this.goBoardMain();
+                }
+            },
+            searchEnter: function (e) {
+                if(e.keyCode === 13){
+                    this.search();
+                }
+            },
+
+            movePage: function(page){
+                var pathname = window.location.pathname;
+                window.location.href = pathname + "?" + this.supporter.encodeQueryData({page: page});
             }
 
         },
@@ -157,12 +191,26 @@ function init(init_user, BOARD_TYPE, init_page) {
             //     }
             // },
             function () {
+
+                var query = (new URL(window.location.href)).searchParams.get("query");
+                if(query){
+                    this.searchText = query;
+                }
+
+                var page = (new URL(window.location.href)).searchParams.get("page");
+                if(page){
+                    this.page = page;
+                }else{
+                    this.page = 1;
+                }
+
                 this.getBoardData();
             }
         ],
         watch: {
             page: function (val) {
                 this.getBoardData();
+                // this.movePage(val);
             }
         }
     });

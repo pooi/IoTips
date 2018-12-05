@@ -13,7 +13,7 @@ block content
                 v-card.safe-area-inset.elevation-0.mb-4.pt-3.pb-5(:dark="isDark" :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'px-0' : 'px-3'")
 
                     v-card-title.pb-0.logo_blue_text(style="margin-top: 20px;")
-                        span.display-2(style="font-weight: 800;") !{title}
+                        span.display-2.mouse-over(style="font-weight: 800;", @click="goBoardMain()") !{title}
                         v-spacer
                         v-menu(bottom, left)
                             v-btn.ma-0(slot='activator', icon)
@@ -31,13 +31,19 @@ block content
                     template(v-if="!loading")
 
                         v-card-title.pt-0(v-if="items.length > 0")
-                            v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;")
+                            v-container( grid-list-xs, v-if="boardType === 'ecosystem' && showCard")
+                                v-layout(row, wrap)
+                                    v-flex(v-for='(item, index) in items', :key='index', xs12, sm6, md4, lg3)
+                                        include ecosystem_card_item
+
+                            v-list.no-padding-list.resizeable-row-list.py-0(style="width: 100%;", v-else)
                                 v-list-tile(v-for='(item, index) in items', :key='index', @click='moveDetail(item)', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
                                     include board_item
 
                                 v-list-tile(:style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
                                     v-layout.ma-2.pa-2(row, wrap, justify-center, align-center, style="height: 100px;", :class="isDark ? 'grey darken-2' : 'grey lighten-4'")
                                         .body-1 Ads
+
 
                         v-card-text.py-5.title.text-xs-center(v-else) 결과가 없습니다.
                             //v-layout.text-xs-center(row, wrap, style="width: 100%;")
@@ -46,6 +52,9 @@ block content
 
                         v-card-text.py-0
                             v-layout.px-0.pb-2(row, wrap, justify-center, style="font-weight: 300;")
+                                v-btn.ma-0(flat, icon, @click="showCard = !showCard", v-if="boardType === 'ecosystem'")
+                                    v-icon(v-if="showCard") view_headline
+                                    v-icon(v-else) view_module
                                 v-spacer
                                 v-btn.ma-0(flat, icon, @click="isDark = !isDark")
                                     v-icon invert_colors
@@ -54,7 +63,7 @@ block content
                             v-layout(row, wrap, justify-center)
                                 v-flex.xs3(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
                                 v-layout.text-xs-center(justify-center, :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'xs12' : 'xs6'")
-                                    v-pagination.custom-pagination(v-model='page', :length='10', color="blue darken-1")
+                                    v-pagination.custom-pagination(v-model='page', :length='parseInt((totalBoardCount / pageStep) + 1, 10)', color="blue darken-1")
                                 v-flex.xs3.text-xs-right(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
                                     v-btn.white--text.elevation-0(color='red', @click="goRegist()")
                                         v-icon.mr-2(left, dark) edit
@@ -64,7 +73,7 @@ block content
                             v-layout(row, wrap, justify-center)
                                 v-flex.xs2(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
                                 v-layout.xs8.text-xs-center(justify-center, :class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly ? 'xs12' : 'xs8'")
-                                    v-text-field(v-model='searchText', label='Search', :hide-details="searchText === null || searchText.length >= 2", single-line, full-width, required, :rules="[supporter.rules.counter_2]", append-icon="search", clear-icon='close', clearable,  @click:append='', @click:clear='searchText=""', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
+                                    v-text-field(v-model='searchText', label='Search', hide-details, single-line, full-width, required, :rules="[]", append-icon="search", clear-icon='close', clearable,  @click:append='search()', @click:clear='searchText=""', @keyup="searchEnter($event)", :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
                                 v-flex.xs2(v-if="!($vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly)")
 
 

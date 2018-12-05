@@ -1,0 +1,52 @@
+v-card.dal-card-scale.text-xs-left(light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="item !== null", :href="'/board/'+item.id", :dark="isDark")
+
+    v-card-media(:height='Math.min($vuetify.breakpoint.height-400, 250)')
+        v-layout.pa-0.ma-0(xs12, row, wrap, style="width: 100%; height: 100%; background-color: white;", v-if="item.product_images !== null && item.product_images.length > 0")
+            v-flex.pa-0.ma-0(:class="item.product_images.length === 1 ? 'xs12' : 'xs6'", row, wrap, style="height: 100%;")
+                img(:src="item.product_images[0]", height="100%", width="100%", style="max-width: 100%; max-height: 100%; object-fit: cover;")
+            v-flex.pa-0.ma-0(xs6, row, wrap, style="height: 100%;")
+                v-layout.pa-0.ma-0(xs12, column, wrap, style="width: 100%; height: 100%;")
+                    v-flex.pa-0.ma-0(row, wrap, :style="item.product_images.length===2 ? 'height:100%;' : 'height:50%;'")
+                        img(:src="item.product_images[1]", height="100%", width="100%", style="max-width: 100%; max-height: 100%; object-fit: cover;")
+                    v-flex.pa-0.ma-0(row, wrap, style="height:50%;", v-if="item.product_images.length > 2")
+                        img(:src="item.product_images[2]", height="100%", width="100%", style="max-width: 100%; max-height: 100%; object-fit: cover;")
+        v-layout(xs12, row, wrap, style="width: 100%; height: 100%;", v-else)
+            v-flex(xs12, row, wrap, style="height: 100%;")
+                img(src="/images/no_img.png", height="100%", width="100%", style="max-width: 100%; max-height: 100%; object-fit: cover;")
+            //v-layout(row, wrap, style="height: 100%;")
+            //    v-flex(xs12, style="height:50%;")
+            //        img(:src="item.product_images[0]", style="max-width: 100%; max-height: 100%; object-fit: contain;")
+            //    v-flex(xs12, style="height:50%;")
+            //        img(:src="item.product_images[0]", style="max-width: 100%; max-height: 100%; object-fit: contain;")
+
+    v-card-text.pt-2.pb-0.caption
+        code.elevation-0 {{item.nickname}}
+    v-card-title.title.mb-0.pt-1.pb-2 {{ item.title }}
+
+    //v-card-text.py-0.text-xs-left(v-if="item.tags !== null && item.tags.length > 0")
+    //    span.caption.grey--text {{ supporter.hashTagsToString(item.tags, 3) }}
+
+    v-card-text.pt-1.pb-2.small-caption.grey--text
+        v-layout(row, wrap, align-center style="font-weight: 300;")
+            v-icon.small-caption.grey--text.mr-1 access_time
+            | {{supporter.parseBoardDate(item.rgt_date)}}
+            v-spacer
+            v-icon.small-caption.grey--text.mr-1 chat_bubble
+            | {{item.numOfComment}}
+
+            v-icon.small-caption.grey--text.ml-2.mr-1 remove_red_eye
+            | {{item.hit}}
+
+            v-icon.small-caption.grey--text.ml-2.mr-1 thumb_up_alt
+            | {{item.numOfLike}}
+
+    //v-card-actions
+    //    v-spacer
+    //    //v-btn(flat, small, slot='activator', color='orange', dark, @click="shareSheet=true; shareItem=item;") Share
+    //    v-btn.logo_blue_text(flat, small, slot='activator', dark, @click="") Share
+    //    v-btn.logo_blue_text(flat,small, :href="'/board/'+item.id") Detail
+    //v-divider
+    //v-card-text.py-1.text-xs-left
+    //    span.caption.grey--text {{item.rgt_date.toLocaleString()}}
+
+div(v-else)

@@ -80,6 +80,23 @@ class Platform{
         }
     }
 
+    fromDicWithoutID(data){
+        // this.id = data.id;
+        this.title = data.title;
+        this.description = data.description;
+        this.company = data.company;
+        this.price = data.price;
+        this.isFree = (data.price === 0);
+        this.img = data.image;
+        this.url = JSON.parse(data.urls)[0];
+        for(var i=0; i<this.currencies.length; i++){
+            if(this.currencies[i].currency === data.currency){
+                this.currency = this.currencies[i];
+                break;
+            }
+        }
+    }
+
 }
 
 class Product {
@@ -168,6 +185,32 @@ class Product {
             }
         }
         this.capabilities = JSON.parse(data.capability);
+    }
+
+    fromDicWithoutID(data){
+        // this.id = data.id;
+        this.title = data.title;
+        this.description = data.description;
+        this.company = data.company;
+        this.price = data.price;
+        this.isFree = (data.price === 0);
+        this.img = data.image;
+        this.url = JSON.parse(data.urls)[0];
+        for(var i=0; i<this.currencies.length; i++){
+            if(this.currencies[i].currency === data.currency){
+                this.currency = this.currencies[i];
+                break;
+            }
+        }
+        this.capabilities = JSON.parse(data.capability);
+    }
+}
+
+class Comment{
+    constructor(data){
+        this.data = data;
+        this.graphManager = null;
+        this.id = data.id;
     }
 }
 
@@ -305,12 +348,32 @@ class Supporter {
         this.rules = {
             required: value => !!value || 'Required.',
             counter: value => value.length <= 20 || 'Max 20 characters',
-            counter_2: value => value.length >= 2 || 'Min 2 characters',
+            counter_2: value => {
+                if(value === null){
+                    return 'Please enter text'
+                }else{
+                    return value.length >= 2 || 'Min 2 characters'
+                }
+            },
+            counter_10: value => {
+                if(value === null){
+                    return 'Please enter text'
+                } else{
+                    return value.length <= 10 || 'Max 10 characters'
+                }
+            },
             counter_20: value => {
                 if(value === null){
                     return 'Please enter text'
                 } else{
                     return value.length <= 20 || 'Max 20 characters'
+                }
+            },
+            counter_30: value => {
+                if(value === null){
+                    return 'Please enter text'
+                } else{
+                    return value.length <= 30 || 'Max 30 characters'
                 }
             },
             counter_40: value => {
@@ -513,6 +576,11 @@ class Supporter {
         return timeString;
     }
 
+    getTempText(len){
+        var str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse pretium nisi sed quam sollicitudin vehicula. Suspendisse pretium ut ante non vehicula. Duis quis consectetur lectus, pellentesque tempus elit. Aliquam erat volutpat. Donec pellentesque eleifend nisi ac vulputate. Pellentesque ullamcorper a lorem eu rhoncus. Morbi pharetra, dolor non fermentum porttitor, metus ipsum finibus nisi, ut commodo nunc magna malesuada massa. Vestibulum auctor arcu id vestibulum sagittis. Praesent tortor nulla, volutpat eu porttitor quis, mattis eu dolor. Integer sollicitudin eros efficitur dui varius dignissim. Ut imperdiet nec urna vel sodales.";
+        return str.substring(0, len);
+    }
+
     reduceString (str, len) {
         var newStr = str.substring(0, len);
         if(str.length > 100){
@@ -544,6 +612,35 @@ class Supporter {
             chunk = 3;
         else
             chunk = 4;
+        // console.log(this.__proto__.$vuetify.breakpoint);
+        // console.log("chunk", chunk);
+
+        var i,j,temparray;
+        var newArray = [];
+        for (i=0,j=array.length; i<j; i+=chunk) {
+            temparray = array.slice(i,i+chunk);
+
+            while(temparray.length < chunk){
+                temparray.push(null);
+            }
+
+            newArray.push(temparray);
+        }
+        // console.log(newArray);
+        return newArray;
+    }
+
+    splitArrayBig (array) {
+        var chunk = 1;
+        var breakpoint = this.vue.__proto__.$vuetify.breakpoint;
+        if(breakpoint.xs || breakpoint.xl)
+            chunk = 1;
+        else if(breakpoint.sm)
+            chunk = 2;
+        else if(breakpoint.md)
+            chunk = 2;
+        else
+            chunk = 3;
         // console.log(this.__proto__.$vuetify.breakpoint);
         // console.log("chunk", chunk);
 
@@ -640,6 +737,11 @@ class Supporter {
                 type: "ecosystem",
                 title: "구성도",
                 fullTitle: "구성도 게시판"
+            },
+            {
+                type: "my_ecosys",
+                title: "나만의 구성도",
+                fullTitle: "나만의 구성도"
             }
         ];
         return boardTypes;
@@ -666,6 +768,11 @@ class Supporter {
                 type: "ecosystem",
                 title: "구성도",
                 fullTitle: "구성도 게시판"
+            },
+            {
+                type: "my_ecosys",
+                title: "구성도",
+                fullTitle: "나만의 구성도"
             }
         ];
         return boardTypes;
@@ -700,9 +807,39 @@ class Supporter {
         }
     }
 
-    parseImageName(title){
-        return title.toLowerCase().replace(" ", "_");
+    replaceAll(str, searchStr, replaceStr) {
+        return str.split(searchStr).join(replaceStr);
     }
+
+    parseImageName(title){
+        return this.replaceAll(title.toLowerCase(), " ", "_");
+        // return title.toLowerCase().replace(" ", "_");
+    }
+
+    getJsonFromUrl() {
+        var query = location.search.substr(1);
+        var result = {};
+        query.split("&").forEach(function(part) {
+            var item = part.split("=");
+            result[item[0]] = decodeURIComponent(item[1]);
+        });
+        return result;
+    }
+
+    encodeQueryData(data) {
+
+        var originalData = this.getJsonFromUrl();
+        for(let d in data){
+            originalData[d] = data[d];
+        }
+
+        const ret = [];
+        for(let od in originalData)
+            ret.push(od + '=' + originalData[od]);
+
+        return ret.join('&');
+    }
+
 }
 
 class Auth {
@@ -1079,7 +1216,7 @@ class GraphManager {
 
         var container = document.getElementById(this.containerId);
         this.container = container;
-        console.log(container);
+        // console.log(container);
 
         // Checks if the browser is supported
         if (!mxClient.isBrowserSupported()) {
@@ -1110,6 +1247,9 @@ class GraphManager {
             graph.centerZoom = false;
             graph.setConnectable(true);
             graph.setPanning(true);
+            // graph.setAutoSizeCells(true);
+
+            var highlight = new mxCellTracker(graph, '#00FF00');
 
             { // Style
 
@@ -1117,6 +1257,45 @@ class GraphManager {
                 var style = graph.getStylesheet().getDefaultEdgeStyle();
                 style[mxConstants.STYLE_ROUNDED] = true;
                 style[mxConstants.STYLE_EDGE] = mxEdgeStyle.OrthConnector;
+                // style[mxConstants.STYLE_SPACING] = '8';
+                style[mxConstants.STYLE_LABEL_PADDING] = '3';
+
+                var vStyle = graph.getStylesheet().getDefaultVertexStyle();
+                vStyle[mxConstants.STYLE_ROUNDED] = true;
+                vStyle[mxConstants.STYLE_STROKECOLOR] = '#656f8f';
+                vStyle[mxConstants.STYLE_FILLCOLOR] = '#656f8f';
+                vStyle[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+            }
+
+            { // Graph Listener
+
+                graph.addListener(mxEvent.CLICK, function(sender, evt) {
+                    var cell = evt.getProperty('cell');
+
+                    if (cell != null) {
+                        console.log(cell);
+
+                        // var overlays = graph.getCellOverlays(cell);
+
+                        // if (overlays == null) {
+                        //     // Creates a new overlay with an image and a tooltip
+                        //     var overlay = new mxCellOverlay(
+                        //         new mxImage('editors/images/overlays/check.png', 16, 16),
+                        //         'Overlay tooltip');
+                        //
+                        //     // Installs a handler for clicks on the overlay
+                        //     overlay.addListener(mxEvent.CLICK, function(sender, evt2) {
+                        //         mxUtils.alert('Overlay clicked');
+                        //     });
+                        //
+                        //     // Sets the overlay for the cell in the graph
+                        //     graph.addCellOverlay(cell, overlay);
+                        // } else {
+                        //     graph.removeCellOverlays(cell);
+                        // }
+                    }
+                });
+
             }
 
 
@@ -1427,7 +1606,7 @@ class GraphManager {
                 // Installs context menu
                 graph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
                     menu.addItem('Add node', null, function () {
-                        console.log(menu, cell, evt);
+                        // console.log(menu, cell, evt);
                         // var zl = gm.zoomLevel;
                         // gm.setZoomLevel(0);
                         var parent = graph.getDefaultParent();
@@ -1443,7 +1622,7 @@ class GraphManager {
                     });
 
                     menu.addItem('Add circle node', null, function () {
-                        console.log(menu, cell, evt);
+                        // console.log(menu, cell, evt);
                         // var zl = gm.zoomLevel;
                         // gm.setZoomLevel(0);
                         var parent = graph.getDefaultParent();
@@ -1459,7 +1638,7 @@ class GraphManager {
                     });
 
                     menu.addItem('Add rhombus node', null, function () {
-                        console.log(menu, cell, evt);
+                        // console.log(menu, cell, evt);
                         // var zl = gm.zoomLevel;
                         // gm.setZoomLevel(0);
                         var parent = graph.getDefaultParent();
@@ -1475,12 +1654,48 @@ class GraphManager {
                     });
 
                     var submenu1 = menu.addItem('More', null, null);
-                    menu.addItem('Subitem 1', null, function () {
-                        // alert('Subitem 1');
+                    menu.addItem('Cloud', null, function () {
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 100, 40, 'shape=cloud;perimeter=cloudPerimeter');
+                        }
+                        finally {
+                            graph.getModel().endUpdate();
+                        }
                     }, submenu1);
-                    menu.addItem('Subitem 1', null, function () {
-                        // alert('Subitem 2');
+                    menu.addItem('Actor', null, function () {
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'Actor', evt.layerX, evt.layerY, 50, 70, 'shape=actor;perimeter=actorPerimeter');
+                        }
+                        finally {
+                            graph.getModel().endUpdate();
+                        }
                     }, submenu1);
+                    menu.addItem('Hexagon', null, function () {
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 100, 40, 'shape=hexagon;perimeter=hexagonPerimeter');
+                        }
+                        finally {
+                            graph.getModel().endUpdate();
+                        }
+                    }, submenu1);
+                    menu.addItem('Triangle', null, function () {
+                        var parent = graph.getDefaultParent();
+                        graph.getModel().beginUpdate();
+                        try {
+                            var v1 = graph.insertVertex(parent, null, 'New node', evt.layerX, evt.layerY, 80, 100, 'shape=triangle;perimeter=trianglePerimeter');
+                        }
+                        finally {
+                            graph.getModel().endUpdate();
+                        }
+                    }, submenu1);
+                    // mxConstants.SHAPE_DOUBLE_ELLIPSE
+
 
 
                     if (cell !== null) {
@@ -1636,9 +1851,11 @@ class GraphManager {
 
             var style = [];
             style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
-            style[mxConstants.STYLE_STROKECOLOR] = '#e43535';
+            style[mxConstants.STYLE_STROKECOLOR] = '#ed6e6e';
             style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
             style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+            style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_LABEL;
+            style[mxConstants.STYLE_ROUNDED] = true;
             graph.getStylesheet().putCellStyle('ellipse_red', style);
 
             this.graph = graph;
@@ -1683,6 +1900,33 @@ class GraphManager {
 
     }
 
+    getImageMeta(url, size, callback){
+        var img = new Image();
+        img.addEventListener("load", function(){
+            // alert( this.naturalWidth +' '+ this.naturalHeight );
+
+            var width = this.naturalWidth;
+            var height = this.naturalHeight;
+
+            if(width > height){
+                height = (height * size)/width;
+                width = size;
+            }else{
+                width = (width * size)/height;
+                height = size;
+            }
+
+
+
+            callback(width, height)
+            // return {
+            //     width: this.naturalWidth,
+            //     height: this.naturalHeight
+            // };
+        });
+        img.src = url;
+    }
+
     addNode(title, id){
         var graph = this.graph;
         var parent = graph.getDefaultParent();
@@ -1700,6 +1944,99 @@ class GraphManager {
             // Updates the display
             graph.getModel().endUpdate();
         }
+    }
+
+    addImageStyle(id, img, callback){
+        var graph = this.graph;
+        this.getImageMeta(img, 80, function (width, height) {
+            console.log(width, height);
+
+            var style = new Object();
+            style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
+            // style[mxConstants.STYLE_STROKECOLOR] = '#e43535';
+            // style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
+            // style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+            // style[mxConstants.STYLE_ROUNDED] = true;
+            style[mxConstants.STYLE_IMAGE] = img;
+            style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_LABEL;
+            // style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
+            // style[mxConstants.STYLE_IMAGE_ALIGN] = mxConstants.ALIGN_LEFT;
+            // style[mxConstants.STYLE_SPACING_LEFT] = '55';
+            style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+            style[mxConstants.STYLE_IMAGE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+            style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_RIGHT;
+            style[mxConstants.STYLE_IMAGE_ALIGN] = mxConstants.ALIGN_RIGHT;
+            style[mxConstants.STYLE_SPACING_RIGHT] = (width + 20).toString();
+
+            style[mxConstants.STYLE_IMAGE_WIDTH] = width.toString();
+            style[mxConstants.STYLE_IMAGE_HEIGHT] = height.toString();
+
+            style[mxConstants.STYLE_SPACING] = '4';
+            graph.getStylesheet().putCellStyle(id, style);
+
+            callback(width+20, height);
+
+        });
+
+    }
+
+    addPlatformImageStyle(id, img, callback){
+        var graph = this.graph;
+        this.getImageMeta(img, 80, function (width, height) {
+            console.log(width, height);
+
+            var style = new Object();
+            style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
+            style[mxConstants.STYLE_STROKECOLOR] = '#ed6e6e';
+            style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
+            style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+            // style[mxConstants.STYLE_ROUNDED] = true;
+            style[mxConstants.STYLE_IMAGE] = img;
+            style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_LABEL;
+            // style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
+            // style[mxConstants.STYLE_IMAGE_ALIGN] = mxConstants.ALIGN_LEFT;
+            // style[mxConstants.STYLE_SPACING_LEFT] = '55';
+            style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+            style[mxConstants.STYLE_IMAGE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+            style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_RIGHT;
+            style[mxConstants.STYLE_IMAGE_ALIGN] = mxConstants.ALIGN_RIGHT;
+            style[mxConstants.STYLE_SPACING_RIGHT] = (width + 20).toString();
+
+            style[mxConstants.STYLE_IMAGE_WIDTH] = width.toString();
+            style[mxConstants.STYLE_IMAGE_HEIGHT] = height.toString();
+
+            style[mxConstants.STYLE_SPACING] = '4';
+            graph.getStylesheet().putCellStyle(id, style);
+
+            callback(width+20, height);
+
+        });
+
+    }
+
+    addNodeWithImage(title, id, img){
+        var gm = this;
+        var graph = this.graph;
+        var parent = graph.getDefaultParent();
+
+
+        this.addImageStyle(id, img, function (imgWidth, imgHeight) {
+            graph.getModel().beginUpdate();
+            try {
+                var v1 = graph.insertVertex(parent, id, title, gm.addOffsetX, gm.addOffsetY, title.length * 8 + imgWidth, imgHeight+20, id);
+
+                gm.addOffsetY += 20;
+                if(gm.addOffsetY > 300){
+                    gm.addOffsetY = gm.addOffsetY % 300 + 20;
+                    gm.addOffsetX += 20;
+                }
+
+            }
+            finally {
+                // Updates the display
+                graph.getModel().endUpdate();
+            }
+        });
     }
 
     addCircleNode(title, id){
@@ -1722,13 +2059,47 @@ class GraphManager {
         }
     }
 
+    addCircleNodeWithImage(title, id, img){
+        var gm = this;
+        var graph = this.graph;
+        var parent = graph.getDefaultParent();
+        console.log(title);
+
+        this.addImageStyle(id, img, function (imgWidth, imgHeight) {
+            graph.getModel().beginUpdate();
+            try {
+
+                var style = graph.getStylesheet().getCellStyle(id);
+                style[mxConstants.STYLE_STROKECOLOR] = '#e43535';
+                style[mxConstants.STYLE_FILLCOLOR] = '#ed6e6e';
+                style[mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+                style[mxConstants.STYLE_ROUNDED] = true;
+
+                graph.getStylesheet().putCellStyle(id, style);
+
+                var v1 = graph.insertVertex(parent, id, title, gm.addOffsetX, gm.addOffsetY, title.length * 8 + imgWidth, imgHeight+20, id);
+
+                gm.addOffsetY += 20;
+                if(gm.addOffsetY > 300){
+                    gm.addOffsetY = gm.addOffsetY % 300 + 20;
+                    gm.addOffsetX += 20;
+                }
+
+            }
+            finally {
+                // Updates the display
+                graph.getModel().endUpdate();
+            }
+        });
+    }
+
     toXML(){
         var graph = this.graph;
         var encoder = new mxCodec();
         var node = encoder.encode(graph.getModel());
 
         var xml = mxUtils.getXml(node);
-        console.log(xml);
+        // console.log(xml);
         // alert(xml);
         return xml;
         // mxUtils.popup(mxUtils.getXml(node), true);

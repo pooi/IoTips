@@ -390,6 +390,22 @@
     box-shadow: none !important;
 }
 
+.no-padding-rating{
+
+}
+
+.no-padding-rating .v-icon {
+    padding: 0px !important;
+}
+
+.fit-height-list .v-list__tile{
+    height: fit-content !important;
+}
+
+.fit-height-list .review-height{
+    width: 100%;
+}
+
 /* MxGraph Menu Style */
 body div.mxPopupMenu {
     border-radius: 10px !important;

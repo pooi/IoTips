@@ -1,5 +1,5 @@
 v-layout
-    v-navigation-drawer.white--text(v-model='supporter.drawer', app, width="400", fixed, temporary, dark, style="z-index: 101; background : rgba(31,31,31,.99); overflow-y:scroll;", :style="$vuetify.breakpoint.xsOnly ? 'width: 100% !important;' : ''")
+    v-navigation-drawer.white--text(v-model='supporter.drawer', app, :width="$vuetify.breakpoint.xsOnly ? $vuetify.breakpoint.width : 400", fixed, temporary, dark, style="z-index: 101; background : rgba(31,31,31,.99); overflow-y:scroll;")
         //v-card.pa-0(style="background: none;")
         //    v-card-text.pa-0.ma-0
         v-card-text.pa-2.pl-4

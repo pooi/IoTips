@@ -36,6 +36,7 @@ module.exports = function (app) {
     router.get('/google', function (req, res, next) {
         // console.log(req, res, next);
         var redirectTo = req.query.redirectTo ? req.query.redirectTo : "/";
+        redirectTo = req.query.originalPost ? redirectTo + "&originalPost=" + req.query.originalPost : redirectTo;
         req.session.redirectTo = redirectTo;
         console.log("redirectTo: ", redirectTo);
         passport.authenticate('google', {
@@ -56,6 +57,7 @@ module.exports = function (app) {
     router.get('/kakao', function (req, res, next) {
         // console.log(req, res, next);
         var redirectTo = req.query.redirectTo ? req.query.redirectTo : "/";
+        redirectTo = req.query.originalPost ? redirectTo + "&originalPost=" + req.query.originalPost : redirectTo;
         req.session.redirectTo = redirectTo;
         console.log("redirectTo: ", redirectTo);
         passport.authenticate('kakao', {
@@ -76,6 +78,7 @@ module.exports = function (app) {
     router.get('/naver', function (req, res, next) {
         // console.log(req, res, next);
         var redirectTo = req.query.redirectTo ? req.query.redirectTo : "/";
+        redirectTo = req.query.originalPost ? redirectTo + "&originalPost=" + req.query.originalPost : redirectTo;
         req.session.redirectTo = redirectTo;
         console.log("redirectTo: ", redirectTo);
         passport.authenticate('naver', {
