@@ -1,4 +1,4 @@
-v-card.dal-card-scale.text-xs-left(light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="item !== null", :href="'/board/'+item.id", target="_blank", :dark="isDark")
+v-card.dal-card-scale.text-xs-left(light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="item !== null", :href="'/board/'+item.id", :dark="isDark")
 
     v-card-media(:height='Math.min($vuetify.breakpoint.height-400, 250)')
         v-layout.pa-0.ma-0(xs12, row, wrap, style="width: 100%; height: 100%; background-color: white;", v-if="item.product_images !== null && item.product_images.length > 0")

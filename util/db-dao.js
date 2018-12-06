@@ -78,6 +78,7 @@ exports.registBoard = function (id, data, callback) {
 
     var argu = [];
     var values = [];
+    var totalCost = 0;
 
     argu.push("user_id");
     values.push(id);
@@ -95,6 +96,16 @@ exports.registBoard = function (id, data, callback) {
     if("content" in data){
         argu.push("content");
         values.push(JSON.stringify(data.content));
+    }
+
+    if("products" in data) {
+        for(var i = 0; i < data.products.length; i++) {
+            if(data.products[i].currency == "KRW") totalCost += data.products[i].price;
+            else if(data.products[i].currency == "USD") totalCost = totalCost + data.products[i].price * 1100;
+            else if(data.products[i].currency == "EUR") totalCost = totalCost + data.products[i].price * 1200;
+        }
+        argu.push("totalCost");
+        values.push(totalCost);
     }
 
     if("graph" in data){
@@ -652,7 +663,7 @@ exports.curateEcosystem = function (data, callback) {
         "GROUP BY board_id) as P on(P.board_id = A.id) "+
         "WHERE type='ecosystem' " +
         ") as Z" + sqlCapa;
-        
+
     // var sql = "SELECT Z.* FROM (" +
     //     "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike, P.product_images as product_images, P.product_capability as product_capability " +
     //     "FROM (" + sqlId +") as A " +
