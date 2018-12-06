@@ -586,7 +586,7 @@ exports.curateProduct = function (data, callback) {
         "AND currency='USD'))";
 
     for(var i = 0; i < checkedTag.length; i++) {
-        sqlTag = sqlTag + " AND tag LIKE '%\"" + checkedTag[i] + "\"%'";
+        sqlTag = sqlTag + " AND tag LIKE '%" + checkedTag[i] + "%'";
     }
     for(var i = 0; i < checkedCapa.length; i++) {
         sqlCapa = sqlCapa + " AND capability LIKE '%\"" + checkedCapa[i].id + "\"%'";
@@ -599,6 +599,98 @@ exports.curateProduct = function (data, callback) {
             console.log(err);
             callback(true, err);
         }else {
+            callback(false, results);
+        }
+    })
+};
+
+exports.curateEcosystem = function (data, callback) {
+    
+    var minCost = data.minPrice;
+    var maxCost = data.maxPrice;
+    var checkedTag = data.checkedTag;
+    var checkedCapa = data.checkedCapa;
+    
+    var sqlId = "";
+    var sqlTag = "";
+    var sqlCapa = "";
+
+    for(var i = 0; i < checkedTag.length; i++) {
+        if(i==0) {
+            sqlTag = " WHERE X.tags LIKE '%" + checkedTag[i] + "%'";
+        }
+        else {
+            sqlTag = sqlTag + " AND X.tags LIKE '%" + checkedTag[i] + "%'";
+        }
+    }
+
+    for(var i = 0; i < checkedCapa.length; i++) {
+        if(i==0) {
+            sqlCapa = " WHERE Z.product_capability LIKE '%\"check\": true, \"capability\": \"" + checkedCapa[i].capability + "\"%'";
+        }
+        else {
+            sqlCapa = sqlCapa + " AND Z.product_capability LIKE '%\"check\": true, \"capability\": \"" + checkedCapa[i].capability + "\"%'";
+        }
+    }
+
+    sqlId ="SELECT X.* FROM board AS X" + sqlTag;
+
+    var sql = "SELECT Z.* FROM (" +
+        "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike, P.product_images as product_images, P.product_capability as product_capability " +
+        "FROM (" + sqlId +") as A " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT * FROM user " +
+        "GROUP BY id) as B on(B.id = A.user_id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM comment " +
+        "GROUP BY board_id) as C on(C.board_id = A.id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, COUNT(id) as num FROM recommend " +
+        "GROUP BY board_id) as D on(D.board_id = A.id) " +
+        "LEFT OUTER JOIN ( " +
+        "SELECT board_id, group_concat(image) as product_images, group_concat(capability) as product_capability FROM board_product " +
+        "GROUP BY board_id) as P on(P.board_id = A.id) "+
+        "WHERE type='ecosystem' " +
+        ") as Z" + sqlCapa;
+        
+    // var sql = "SELECT Z.* FROM (" +
+    //     "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike, P.product_images as product_images, P.product_capability as product_capability " +
+    //     "FROM (" + sqlId +") as A " +
+    //     "LEFT OUTER JOIN ( " +
+    //     "SELECT * FROM user " +
+    //     "GROUP BY id) as B on(B.id = A.user_id) " +
+    //     "LEFT OUTER JOIN ( " +
+    //     "SELECT board_id, COUNT(id) as num FROM comment " +
+    //     "GROUP BY board_id) as C on(C.board_id = A.id) " +
+    //     "LEFT OUTER JOIN ( " +
+    //     "SELECT board_id, COUNT(id) as num FROM recommend " +
+    //     "GROUP BY board_id) as D on(D.board_id = A.id) " +
+    //     "LEFT OUTER JOIN ( " +
+    //     "SELECT board_id, group_concat(image) as product_images, group_concat(capability) as product_capability FROM board_product " +
+    //     "GROUP BY board_id) as P on(P.board_id = A.id) "+
+    //     "WHERE type='ecosystem' " +
+    //     ") as Z";
+
+    var cntSql = "SELECT COUNT(id) FROM capability"
+    console.log(sql);
+
+    var totalSql = cntSql + "; " + "SET SESSION group_concat_max_len = 10000000000; " + sql + ";"
+
+    conn.query(totalSql, [], function(err, results) {
+        if(err) {
+            console.log("zz", err);
+            callback(true, err);
+        } else {
+
+            for (var i = 0; i < results[2].length; i++) {
+                var result = results[2][i];
+                if (result.product_images !== null) {
+                    var product_urls = result.product_images;
+                    var array = product_urls.split(",");
+                    results[2][i].product_images = array;
+                }
+            }
+        
             callback(false, results);
         }
     })

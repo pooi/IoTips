@@ -313,7 +313,7 @@ class Supporter {
                 "submenu" : [
                     {
                         "title" : "구성",
-                        "href" : "/curation/composition"
+                        "href" : "/curation/ecosystem"
                     },
                    {
                         "title" : "제품",

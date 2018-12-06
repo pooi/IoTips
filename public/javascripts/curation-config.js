@@ -1,4 +1,4 @@
-function init(init_user) {
+function init(init_user, curationType) {
 
     var vue = new Vue({
         el: '#app',
@@ -61,6 +61,7 @@ function init(init_user) {
             value: 1,
             tagList: [],
             price: [0, 500000],
+            cost: [0, 1000000],
             minPrice: 0,
             maxPrice: 500000,
             checkedTag: [],
@@ -71,7 +72,10 @@ function init(init_user) {
             noResult: false,
             curateProduct: [],
             curateResult: [],
+            curateEcosystem: [],
             resultCnt: 0,
+            items: [],
+            loading: false,
 
             // for Tag
             tagLoading: false,
@@ -106,6 +110,10 @@ function init(init_user) {
                 { 
                     text: 'Description', 
                     value: 'description' }
+            ],
+
+            message: [
+
             ]
         },
         methods: {
@@ -127,9 +135,14 @@ function init(init_user) {
             // },
             onComplete: function() {
                 this.curateProduct = [];
-                this.curateResult = [];
+                this.curateResult = []; // ProductName
+                this.curateEcosystem = [];
                 this.resultCnt = 0;
-                this.curateProductList();
+                if(curationType == "ecosystem") {
+                    this.curateEcosystemList();
+                } else {
+                    this.curateProductList();
+                }
                 this.completeCuration = true;
             },
             gotoCuration: function() {
@@ -143,8 +156,14 @@ function init(init_user) {
                 console.log('Tab: '+tabIndex+' valid: '+isValid);
             },
             validatePrice: function() {
-                this.minPrice = this.price[0];
-                this.maxPrice = this.price[1];
+                if(curationType == "ecosystem") {
+                    this.minPrice = this.cost[0];
+                    this.maxPrice = this.cost[1];
+                } else {
+                    this.minPrice = this.price[0];
+                    this.maxPrice = this.price[1];
+                }
+                
                 if(!this.isInt(this.minPrice) || !this.isInt(this.maxPrice)) {
                     alert("숫자만 입력해 주세요");
                     return false;
@@ -233,6 +252,7 @@ function init(init_user) {
                 });
             },
             curateProductList: function(callback) {
+                vue.loading = true;
                 var data = {
                     minPrice: this.minPrice,
                     maxPrice: this.maxPrice,
@@ -275,12 +295,54 @@ function init(init_user) {
                         }
                         
                         console.log(JSON.stringify(vue.curateProduct));
+                        vue.loading = false;
                     }
 
                 }).catch(function (error) {
                     alert(error);
+                    vue.loading = false;
                 });
             },
+            curateEcosystemList: function(callback) {
+                vue.loading = true;
+                var data = {
+                    minPrice: this.minPrice,
+                    maxPrice: this.maxPrice,
+                    checkedTag: this.checkedTag,
+                    checkedCapa: this.checkedCapa
+                }
+                console.log("xxx", data);
+                axios.post(
+                    '/curation/curateEcosystem',
+                    data
+                ).then(function(res) {
+
+                    console.log(res);
+
+                    var cntOfCapa = res.data[0][0];
+                    var data = res.data[2];
+
+                    // for(var i=0; i<data.length; i++) {
+                    //     for(var j=0; j<this.checkedCapa.length; j++) {
+                    //         if()
+                    //     }
+
+                    // }
+
+
+                    vue.items = data;
+
+                    for(var i=0; i<vue.items.length; i++){
+                        vue.items[i].rgt_date = new Date(vue.items[i].rgt_date);
+                        vue.items[i].tags = JSON.parse(vue.items[i].tags);
+                    }
+                    vue.loading = false;
+
+                }).catch(function (error) {
+                    alert(error);
+                    vue.loading = false;
+                });
+            }
             // parsingURL: function (product) {
 
             //     var data = {
