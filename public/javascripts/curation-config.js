@@ -95,7 +95,7 @@ function init(init_user) {
             pagination: {
                 sortBy: 'capability',
                 page: 1,
-                rowsPerPage: 5
+                rowsPerPage: 20
             },
             selected: [],
             headers: [
@@ -130,7 +130,7 @@ function init(init_user) {
                 this.curateResult = [];
                 this.resultCnt = 0;
                 this.curateProductList();
-                this.completeCuration = true;
+
             },
             gotoCuration: function() {
                 this.completeCuration = false;  
@@ -251,6 +251,7 @@ function init(init_user) {
 
                     if(vue.curateProduct.length <= 0) {
                         vue.noResult = true;
+                        vue.completeCuration = true;
                     }
                     else {
                         
@@ -273,7 +274,8 @@ function init(init_user) {
                             vue.curateResult[i] = tempResult;
                             vue.resultCnt++;
                         }
-                        
+
+                        vue.completeCuration = true;
                         console.log(JSON.stringify(vue.curateProduct));
                     }
 
