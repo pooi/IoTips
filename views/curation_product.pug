@@ -13,31 +13,35 @@ block content
     include toolbar
 
     div(style="margin: 48px 0px;")
-        div(style="margin: 0 auto; width: 1300px; height: 350px; background: url('/images/bg_curation_1.jpg') no-repeat 50% 80%; background-size: 1300px 350px;")
-                div(style="width: 100%; height: 100%; background-color: rgba(0,0,0,0.3);") 
-                    div(style="padding: 70px 100px;")
-                        h1.txt(style="color: white;") Curation for Product
-                        br
-                        h3.txt(style="color: white;") IoTips만의 큐레이션 서비스로 나에게 꼭 맞는 IoT 제품 찾기
-                        p.txt(style="color: white;") Find My Own IoT Product with Our Curation Service
+        div(style="margin: 0 auto; height: 350px; background: url('/images/bg_curation_1.jpg') no-repeat 50% 80%; background-size: auto 350px;")
+            div(style="width: 100%; height: 100%; background-color: rgba(0,0,0,0.3);")
+                div(style="padding-top: 100px; padding-bottom: 100px;", :class="$vuetify.breakpoint.xsOnly ? 'px-3' : 'px-5 mx-5'")
+                    h1.txt(style="color: white;") Curation for Product
+                    br
+                    h3.txt(style="color: white;") IoTips만의 큐레이션 서비스로 나에게 꼭 맞는 IoT 제품 찾기
+                    p.txt(style="color: white;") Find My Own IoT Product with Our Curation Service
             
 
 
         #curation_result(v-if="completeCuration")
-            div(v-if="noResult")
+            div(v-if="curateResult.length <= 0")
                 div(style="padding-top: 80px;")
-                    div(style="width: 500px; margin: 0 auto; text-align: center; font-size: 1.3em; ")
+                    div(style="margin: 0 auto; text-align: center; font-size: 1.3em; ")
                         h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ") 결과가 없습니다.
                         br
-                        h4(style="color: gray; font-weight: 300;") 당신의 희망사항에 맞는 제품을 찾지 못 하였네요..
-                        h4(style="color: gray; font-weight: 300;") 보다 폭 넓은 희망사항을 말씀해 주시면 꼭 찾아드릴게요!
+                        div.px-5
+                            h4(style="color: gray; font-weight: 300;") 당신의 희망사항에 맞는 제품을 찾지 못 하였네요..
+                            h4(style="color: gray; font-weight: 300;") 보다 폭 넓은 희망사항을 말씀해 주시면 꼭 찾아드릴게요!
                         br
                         h4(style="color: gray; font-weight: 300;") ㅡ
                         br
             div(v-else, style="width: auto; margin: 0 auto;")
                 div(style="padding-top: 80px;")
-                    div(style="width: 500px; margin: 0 auto; text-align: center; font-size: 1.3em; ")
-                        h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ") 당신만을 위한 IoT 제품
+                    div(style="margin: 0 auto; text-align: center; font-size: 1.3em; ")
+                        h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ")
+                            | 당신만을 위한
+                            br(v-if="$vuetify.breakpoint.xsOnly")
+                            | IoT 제품
                         br
                         h4(style="color: gray; font-weight: 300;") 어떠신가요? 당신에게 딱 맞는 IoT 제품입니다.  
                         h4(style="color: gray; font-weight: 300;") 클릭 시, 상세 페이지로 이동합니다.
@@ -45,21 +49,35 @@ block content
                         h4(style="color: gray; font-weight: 300;") ㅡ
                         br
                    
-                div(v-if="!loading", style="width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap;")
-                    template(v-for="(result, i) in curateResult")
-                        v-card.dal-card-scale.text-xs-left(style="height: 480px; margin: 10px; width: 30%;", light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="result !== null", :href="result.url", target="_blank", :dark="isDark")
-                            v-card-media(:height='Math.min($vuetify.breakpoint.height-400, 300)', style="width: auto;")
-                                v-layout.pa-0.ma-0(xs12, row, wrap, style="width: 100%; height: 100%; background-color: white;")
-                                    v-flex.pa-0.ma-0.xs12(row, wrap, style="height: 100%;")
-                                        img(:src="result.imgUrl", height="300px", width="300px", style="max-width: 100%; max-height: 100%; object-fit: cover; margin: 0 auto;")
-                                //- v-layout(xs12, row, wrap, style="width: 100%; height: 100%;", v-else)
-                                //-     v-flex(xs12, row, wrap, style="height: 100%;")
-                                //-         img(src="/images/no_img.png", height="100%", width="100%", style="max-width: 100%; max-height: 100%; object-fit: cover;")
-                            v-card-text.pt-2.pb-0.caption
-                                code.elevation-0 {{ result.category }}
-                                code.elevation-0 {{ result.company }}
-                            v-card-title.title.mb-0.pt-1.pb-2 {{ result.title }}
-                            v-card-text.mb-0.pt-1.pb-2 {{ result.description }}
+                //- div(v-if="!loading", style="width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap;")
+                //-     template(v-for="(result, i) in curateResult")
+                //-         v-card.dal-card-scale.text-xs-left(style="height: 480px; margin: 10px; width: 30%;", light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="result !== null", :href="result.url", target="_blank", :dark="isDark")
+                //-             v-card-media(:height='Math.min($vuetify.breakpoint.height-400, 300)', style="width: auto;")
+                //-                 v-layout.pa-0.ma-0(xs12, row, wrap, style="width: 100%; height: 100%; background-color: white;")
+                //-                     v-flex.pa-0.ma-0.xs12(row, wrap, style="height: 100%;")
+                //-                         img(:src="result.imgUrl", height="300px", width="300px", style="max-width: 100%; max-height: 100%; object-fit: cover; margin: 0 auto;")
+                //-                 //- v-layout(xs12, row, wrap, style="width: 100%; height: 100%;", v-else)
+                //-                 //-     v-flex(xs12, row, wrap, style="height: 100%;")
+                //-                 //-         img(src="/images/no_img.png", height="100%", width="100%", style="max-width: 100%; max-height: 100%; object-fit: cover;")
+                //-             v-card-text.pt-2.pb-0.caption
+                //-                 code.elevation-0 {{ result.category }}
+                //-                 code.elevation-0 {{ result.company }}
+                //-             v-card-title.title.mb-0.pt-1.pb-2 {{ result.title }}
+                //-             v-card-text.mb-0.pt-1.pb-2 {{ result.description }}
+
+                v-layout(v-if="!loading", row, wrap, style="width: 100%;")
+                    v-container.px-5(grid-list-xs)
+                        v-layout(row, wrap)
+                            v-flex(v-for="(result, i) in curateResult", :key='i', xs12, sm6, md4, lg3)
+                                v-card.dal-card-scale.text-xs-left(style="margin: 10px;", light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="result !== null", :href="result.url", target="_blank", :dark="isDark")
+                                    v-card-media(:height='Math.min($vuetify.breakpoint.height-400, 300)', style="width: auto;")
+                                        img(:src="result.imgUrl", height="100%", width="100%", style="max-width: 100%; max-height: 100%; object-fit: cover;")
+                                    v-card-text.pt-2.pb-0.caption
+                                        code.elevation-0 {{ result.category }}
+                                        code.elevation-0 {{ result.company }}
+                                    v-card-title.title.mb-0.pt-1.pb-2 {{ result.title }}
+                                    v-card-text.mb-0.pt-1.pb-2 {{ result.description }}
+
 
             div(style="width: 120px; margin: 0 auto; margin-top: 100px; padding-bottom: 80px;")
                 v-btn(@click="gotoCuration", color="rgb(0, 114, 201)", style="width: 120px; height: 50px; color: white; margin: 0 auto;") 다시하기
@@ -67,7 +85,7 @@ block content
 
         #curation_ing(v-else)   
             div#introduction(v-if="prevCuration")
-                div(style="width: 500px; margin: 0 auto; text-align: center; font-size: 1.3em; ")
+                .px-3(style="margin: 0 auto; text-align: center; font-size: 1.3em; ")
                     h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ") 나만의 IoT 제품
                     br
                     h4(style="color: gray; font-weight: 300;") 나에게 맞는 IoT 제품을 찾고 계신가요? 
@@ -76,13 +94,16 @@ block content
                     h4(style="color: gray; font-weight: 300;") ㅡ
                     br
                     v-btn(@click="startCuration", color="rgb(0, 114, 201)", style="width: 100px; height: 40px; color: white;") Start!
-            div#content(v-else)
-                form-wizard#form(@on-complete="onComplete", @on-loading="setLoading", @on-validate="handleValidation", @on-error="" shape="circle", color="#20a0ff")
+            .px-0.py-5#content(v-else)
+                form-wizard#form(@on-complete="onComplete", @on-loading="setLoading", @on-validate="handleValidation", @on-error="" shape="circle", color="#20a0ff", style="margin-left: 0px; margin-right: 0px;")
                     div(slot="title")
 
                     tab-content#con_circumstance.tab_con(title="주거환경", :before-change="validateTag", style="text-align: center; margin-top: 30px;")
                         template
-                            h1.con_title " 나의 주거환경을 선택해 주세요 "
+                            h1.con_title
+                                | " 나의 주거환경을&nbsp;
+                                br(v-if="$vuetify.breakpoint.xsOnly")
+                                | 선택해 주세요 "
                             form(style="margin-top: 30px;")
                                 div.form_tag(v-for="tag in TAG")
                                     input.toggle_tag(v-bind:id="'cur_tag_'+tag.id", type="checkbox", v-bind:value="tag.name", v-model="checkedTag", style="display: none;")
@@ -91,7 +112,10 @@ block content
                                 //span 체크한 이름: {{ checkedTag }}
 
                     tab-content#con_capability.tab_con(title="Capability", :before-change="validateCapa", style="text-align: center; margin-top: 30px;")
-                        h1.con_title " 원하는 capability를 선택해 주세요 "
+                        h1.con_title
+                            | " 원하는 capability를&nbsp;
+                            br(v-if="$vuetify.breakpoint.xsOnly")
+                            | 선택해 주세요 "
                         div(style="width: 100%; height: 50px;")
                             v-text-field(v-model="search", append-icon="search", label="Search", single-line, hide-details, style="width: 250px; margin: 0px 10px 30px 0px; float: right;")
 
@@ -104,24 +128,27 @@ block content
                                         |           {{ header.text }}
                             template(slot='items', slot-scope='props')
                                 tr(:active='props.selected' @click='props.selected = !props.selected')
-                                    td.row_btn
-                                        v-checkbox(:input-value="props.selected")
-                                    td.row_img
+                                    td
+                                        v-checkbox.pa-0(:input-value="props.selected", hide-details, primary)
+                                    td.row_img.pa-0
                                         img.png-shadow(:src='"/images/capabilities/" + supporter.parseImageName(props.item.capability) + ".png"', style="max-width: 40%; max-height: 40%; object-fit: contain; border-radius: 0px;")
                                     td.row_capa {{ props.item.capability }}
                                     td.row_desc.text-xs {{ props.item.description }}
                         
                     tab-content#con_price.tab_con(title="가격", :before-change="validatePrice", style="text-align: center; margin-top: 80px;")
-                        h1.con_title " 희망가격을 입력해 주세요 "
+                        h1.con_title
+                            | " 희망가격을&nbsp;
+                            br(v-if="$vuetify.breakpoint.xsOnly")
+                            | 입력해 주세요 "
                         v-card-text#con_price
-                            v-layout(style="width: 460px; margin: 0 auto;")
-                                v-flex(shrink=true, style='width: 200px; margin: 30px;')
+                            v-layout(row, wrap, align-center, justify-center)
+                                v-flex.xs12.sm6(shrink=true, style='margin: 30px;')
                                     v-text-field.mt-0(v-model='price[0]', label="Minimum Price", prefix="￦")
-                                v-flex(shrink=true, style='width: 200px; margin: 30px;')
+                                v-flex.xs12.sm6(shrink=true, style='margin: 30px;')
                                     v-text-field.mt-0(v-model='price[1]', label="Maximum Price", prefix="￦")
                             v-flex.px-3(style="display: block;")
                                     p(style="width: 60px; color: gray; display: inline-block;") 0
-                                    v-range-slider(v-model='price' :max='500000' :min='0' :step='10' thumb-label=true thumb-size=50 style="width: 600px; display: inline-block; margin: 20px;")
+                                    v-range-slider.px-5(v-model='price' :max='500000' :min='0' :step='10' thumb-label=true thumb-size=50 style="display: inline-block; width: 100%;")
                                     p(style="width: 60px; color: gray; display: inline-block;") 500000
 
                     .loader(v-if="loadingWizard")

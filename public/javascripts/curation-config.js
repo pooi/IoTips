@@ -99,7 +99,7 @@ function init(init_user, curationType) {
             pagination: {
                 sortBy: 'capability',
                 page: 1,
-                rowsPerPage: 5
+                rowsPerPage: 20
             },
             selected: [],
             headers: [
@@ -138,6 +138,7 @@ function init(init_user, curationType) {
                 this.curateResult = []; // ProductName
                 this.curateEcosystem = [];
                 this.resultCnt = 0;
+
                 if(curationType == "ecosystem") {
                     this.curateEcosystemList();
                 } else {
@@ -271,6 +272,7 @@ function init(init_user, curationType) {
 
                     if(vue.curateProduct.length <= 0) {
                         vue.noResult = true;
+                        vue.completeCuration = true;
                     }
                     else {
                         
@@ -293,7 +295,8 @@ function init(init_user, curationType) {
                             vue.curateResult[i] = tempResult;
                             vue.resultCnt++;
                         }
-                        
+
+                        vue.completeCuration = true;
                         console.log(JSON.stringify(vue.curateProduct));
                         vue.loading = false;
                     }
@@ -332,9 +335,15 @@ function init(init_user, curationType) {
 
                     vue.items = data;
 
-                    for(var i=0; i<vue.items.length; i++){
-                        vue.items[i].rgt_date = new Date(vue.items[i].rgt_date);
-                        vue.items[i].tags = JSON.parse(vue.items[i].tags);
+                    if(vue.items.length <= 0) {
+                        vue.noResult = true;
+                        vue.completeCuration = true;
+                    }
+                    else {
+                        for(var i=0; i<vue.items.length; i++){
+                            vue.items[i].rgt_date = new Date(vue.items[i].rgt_date);
+                            vue.items[i].tags = JSON.parse(vue.items[i].tags);
+                        }
                     }
                     vue.loading = false;
 
