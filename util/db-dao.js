@@ -627,12 +627,8 @@ exports.curateEcosystem = function (data, callback) {
     var sqlCapa = "";
 
     for(var i = 0; i < checkedTag.length; i++) {
-        if(i==0) {
-            sqlTag = " WHERE X.tags LIKE '%" + checkedTag[i] + "%'";
-        }
-        else {
-            sqlTag = sqlTag + " AND X.tags LIKE '%" + checkedTag[i] + "%'";
-        }
+        sqlTag = sqlTag + " AND X.tags LIKE '%" + checkedTag[i] + "%'";
+        
     }
 
     for(var i = 0; i < checkedCapa.length; i++) {
@@ -644,7 +640,8 @@ exports.curateEcosystem = function (data, callback) {
         }
     }
 
-    sqlId ="SELECT X.* FROM board AS X" + sqlTag;
+    // sqlId ="SELECT X.* FROM board AS X" + sqlTag;
+    sqlId = "SELECT X.* FROM board AS X WHERE X.totalCost BETWEEN ? AND ?" + sqlTag;
 
     var sql = "SELECT Z.* FROM (" +
         "SELECT A.*, B.nickname as nickname, IFNULL(C.num, 0) as numOfComment, IFNULL(D.num, 0) as numOfLike, P.product_images as product_images, P.product_capability as product_capability " +
@@ -687,7 +684,7 @@ exports.curateEcosystem = function (data, callback) {
 
     var totalSql = cntSql + "; " + "SET SESSION group_concat_max_len = 10000000000; " + sql + ";"
 
-    conn.query(totalSql, [], function(err, results) {
+    conn.query(totalSql, [minCost, maxCost], function(err, results) {
         if(err) {
             console.log("zz", err);
             callback(true, err);

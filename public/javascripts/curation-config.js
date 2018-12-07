@@ -1,7 +1,5 @@
 function init(init_user, curationType) {
 
-    console.log("first", curationType);
-
     var vue = new Vue({
         el: '#app',
         data: {
@@ -54,10 +52,6 @@ function init(init_user, curationType) {
             pageData: [],
 
             // for Curation
-            ALPHABET: [
-                "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
-                "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-            ],
             e1: 0,
             search: "",
             value: 1,
