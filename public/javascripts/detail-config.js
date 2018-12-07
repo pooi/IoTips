@@ -878,6 +878,13 @@ function init(init_user, init_boardID) {
                             case "ecosystem":
                                 vue.boardType = vue.boardTypes[3];
                                 break;
+                            case "my_ecosys":
+                                if(vue.auth.user === null || vue.auth.user.db_id !== result.user_id){
+                                    alert("본인만 조회할 수 있는 게시글입니다.");
+                                    window.history.back();
+                                }
+                                vue.boardType = vue.boardTypes[4];
+                                break;
                             default:
                                 vue.boardType = vue.boardTypes[0];
                                 break;
@@ -885,6 +892,7 @@ function init(init_user, init_boardID) {
                     }else{
                         vue.boardType = vue.boardTypes[0];
                     }
+
 
                     if("rgt_date" in result){
                         result.rgt_date = new Date(result.rgt_date);
@@ -967,58 +975,7 @@ function init(init_user, init_boardID) {
                     alert(error);
                     //D vue.commentLoading = false;
                 });
-            }
-            // function(){
-            //     this.content = JSON.parse(init_content);
-            //     if(this.content != null){
-            //         this.content = json2html(this.content);
-            //     }
-            // },
-            // function () {
-            //
-            //     var result = JSON.parse(init_result);
-            //
-            //     if("type" in result){
-            //         switch (result.type) {
-            //             case "free":
-            //                 this.boardType = this.boardTypes[0];
-            //                 break;
-            //             case "question":
-            //                 this.boardType = this.boardTypes[1];
-            //                 break;
-            //             case "review":
-            //                 this.boardType = this.boardTypes[2];
-            //                 break;
-            //             case "ecosystem":
-            //                 this.boardType = this.boardTypes[3];
-            //                 break;
-            //             default:
-            //                 this.boardType = this.boardTypes[0];
-            //                 break;
-            //         }
-            //     }else{
-            //         this.boardType = this.boardTypes[0];
-            //     }
-            //
-            //     if("rgt_date" in result){
-            //         result.rgt_date = new Date(result.rgt_date);
-            //     }
-            //
-            //     if("content" in result){
-            //         if(result.content != null){
-            //             result.content = json2html(result.content);
-            //         }
-            //     }
-            //
-            //     this.result = result;
-            //
-            //     console.log(this.result);
-            //
-            //
-            // },
-            // function () {
-            //     this.getComments();
-            // },
+            },
 
         ],
         computed: {
