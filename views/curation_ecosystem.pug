@@ -22,28 +22,32 @@ block content
                         p.txt(style="color: white;") Find My Own IoT Ecosystem with Our Curation Service
             
 
-
         #curation_result(v-if="completeCuration")
             div(v-if="noResult")
                 div(style="padding-top: 80px;")
-                    div(style="width: 500px; margin: 0 auto; text-align: center; font-size: 1.3em; ")
+                    div(style="margin: 0 auto; text-align: center; font-size: 1.3em; ")
                         h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ") 결과가 없습니다.
                         br
-                        h4(style="color: gray; font-weight: 300;") 당신의 희망사항에 맞는 구성도를 찾지 못 하였네요..
-                        h4(style="color: gray; font-weight: 300;") 보다 폭 넓은 희망사항을 말씀해 주시면 꼭 찾아드릴게요!
+                        div.px-5
+                            h4(style="color: gray; font-weight: 300;") 당신의 희망사항에 맞는 구성도를 찾지 못 하였네요..
+                            h4(style="color: gray; font-weight: 300;") 보다 폭 넓은 희망사항을 말씀해 주시면 꼭 찾아드릴게요!
                         br
                         h4(style="color: gray; font-weight: 300;") ㅡ
                         br
             div(v-else, style="width: auto; margin: 0 auto;")
                 div(style="padding-top: 80px;")
-                    div(style="width: 500px; margin: 0 auto; text-align: center; font-size: 1.3em; ")
-                        h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ") 당신만을 위한 IoT 구성도
+                    div(style="margin: 0 auto; text-align: center; font-size: 1.3em; ")
+                        h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ")
+                            | 당신만을 위한
+                            br(v-if="$vuetify.breakpoint.xsOnly")
+                            | IoT 구성도
                         br
                         h4(style="color: gray; font-weight: 300;") 어떠신가요? 당신에게 딱 맞는 IoT 구성도입니다.  
-                        h4(style="color: gray; font-weight: 300;") 클릭 시, 해당 글로 이동합니다.
+                        h4(style="color: gray; font-weight: 300;") 클릭 시, 상세 페이지로 이동합니다.
                         br
                         h4(style="color: gray; font-weight: 300;") ㅡ
                         br
+              
                 template(v-if="!loading")
                         v-card-title.pt-0(v-if="items.length > 0")
                             v-container( grid-list-xs)

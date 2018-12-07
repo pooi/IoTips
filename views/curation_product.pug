@@ -24,7 +24,7 @@ block content
 
 
         #curation_result(v-if="completeCuration")
-            div(v-if="curateResult.length <= 0")
+            div(v-if="noResult")
                 div(style="padding-top: 80px;")
                     div(style="margin: 0 auto; text-align: center; font-size: 1.3em; ")
                         h1(style="color: rgb(0, 114, 201); font-size: 2.5em; letter-spacing: 3px; ") 결과가 없습니다.
@@ -80,7 +80,7 @@ block content
 
 
             div(style="width: 120px; margin: 0 auto; margin-top: 100px; padding-bottom: 80px;")
-                v-btn(@click="gotoCuration", color="rgb(0, 114, 201)", style="width: 120px; height: 50px; color: white; margin: 0 auto;") 다시하기
+                v-btn(href="/curation/product", color="rgb(0, 114, 201)", style="width: 120px; height: 50px; color: white; margin: 0 auto;") 다시하기
 
 
         #curation_ing(v-else)   
@@ -157,4 +157,4 @@ block content
 
     script(type="text/javascript" src="/javascripts/curation-config.js")
     script.
-        const vue = init('!{user}', '!{curation}');
+        const vue = init('!{user}', '!{curationType}');

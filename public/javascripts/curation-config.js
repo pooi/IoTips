@@ -1,5 +1,7 @@
 function init(init_user, curationType) {
 
+    console.log("first", curationType);
+
     var vue = new Vue({
         el: '#app',
         data: {
@@ -69,7 +71,7 @@ function init(init_user, curationType) {
             loadingWizard: false,
             completeCuration: false,
             prevCuration: true,
-            noResult: false,
+            noResult: true,
             curateProduct: [],
             curateResult: [],
             curateEcosystem: [],
@@ -99,7 +101,7 @@ function init(init_user, curationType) {
             pagination: {
                 sortBy: 'capability',
                 page: 1,
-                rowsPerPage: 20
+                rowsPerPage: 10
             },
             selected: [],
             headers: [
@@ -134,21 +136,26 @@ function init(init_user, curationType) {
 
             // },
             onComplete: function() {
+                this.completeCuration = false;
                 this.curateProduct = [];
                 this.curateResult = []; // ProductName
                 this.curateEcosystem = [];
                 this.resultCnt = 0;
+                this.noResult = true;
+
+                console.log(curationType);
 
                 if(curationType == "ecosystem") {
                     this.curateEcosystemList();
-                } else {
+                } else if(curationType == "product") {
+                    console.log("???");
                     this.curateProductList();
                 }
                 this.completeCuration = true;
             },
             gotoCuration: function() {
                 this.completeCuration = false;  
-                this.noResult = false;
+                this.noResult = true;
             },
             setLoading: function(value) {
                 this.loadingWizard = value;
@@ -270,11 +277,7 @@ function init(init_user, curationType) {
                     console.log("aaa", data);
                     vue.curateProduct = data;
 
-                    if(vue.curateProduct.length <= 0) {
-                        vue.noResult = true;
-                        vue.completeCuration = true;
-                    }
-                    else {
+                    if(vue.curateProduct.length > 0) {
                         
                         for(var i = 0; i < vue.curateProduct.length; i++) {
                             //vue.parsingURL(vue.curateProduct[i]);
@@ -296,10 +299,13 @@ function init(init_user, curationType) {
                             vue.resultCnt++;
                         }
 
-                        vue.completeCuration = true;
+                        
                         console.log(JSON.stringify(vue.curateProduct));
-                        vue.loading = false;
+                        vue.noResult = false;
                     }
+
+                    vue.completeCuration = true;
+                    vue.loading = false;
 
                 }).catch(function (error) {
                     alert(error);
@@ -325,26 +331,18 @@ function init(init_user, curationType) {
                     var cntOfCapa = res.data[0][0];
                     var data = res.data[2];
 
-                    // for(var i=0; i<data.length; i++) {
-                    //     for(var j=0; j<this.checkedCapa.length; j++) {
-                    //         if()
-                    //     }
-
-                    // }
-
-
                     vue.items = data;
 
-                    if(vue.items.length <= 0) {
-                        vue.noResult = true;
-                        vue.completeCuration = true;
-                    }
-                    else {
+                    if(vue.items.length > 0) {
                         for(var i=0; i<vue.items.length; i++){
                             vue.items[i].rgt_date = new Date(vue.items[i].rgt_date);
                             vue.items[i].tags = JSON.parse(vue.items[i].tags);
                         }
+
+                        vue.noResult = false;
                     }
+                    
+                    vue.completeCuration = true;
                     vue.loading = false;
 
                 }).catch(function (error) {
