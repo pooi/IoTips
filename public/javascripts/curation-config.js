@@ -135,7 +135,7 @@ function init(init_user, curationType) {
                 this.curateResult = []; // ProductName
                 this.curateEcosystem = [];
                 this.resultCnt = 0;
-                this.noResult = true;
+                // this.noResult = true;
 
                 console.log(curationType);
 
@@ -145,7 +145,7 @@ function init(init_user, curationType) {
                     console.log("???");
                     this.curateProductList();
                 }
-                this.completeCuration = true;
+                // this.completeCuration = true;
             },
             gotoCuration: function() {
                 this.completeCuration = false;  
@@ -296,6 +296,8 @@ function init(init_user, curationType) {
                         
                         console.log(JSON.stringify(vue.curateProduct));
                         vue.noResult = false;
+                    }else{
+                        vue.noResult = true;
                     }
 
                     vue.completeCuration = true;
@@ -334,6 +336,8 @@ function init(init_user, curationType) {
                         }
 
                         vue.noResult = false;
+                    }else{
+                        vue.noResult = true;
                     }
                     
                     vue.completeCuration = true;
