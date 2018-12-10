@@ -16,7 +16,7 @@ v-toolbar.safe-area-inset-padding(fixed, flat, dark, dense, style="background: r
             //    v-list-tile-title About
     v-toolbar-items(v-if="!$vuetify.breakpoint.xsOnly ")
         template(v-for='item in supporter.menus', :key='item.title')
-            v-menu(open-on-hover, bottom, offset-y, dark, min-width="150", v-if="item.submenu.length > 0")
+            v-menu(open-on-hover, bottom, offset-y, light, min-width="150", v-if="item.submenu.length > 0")
                 v-btn(slot='activator', flat, color="white") {{item.title}}
                 v-list
                     v-list-tile(v-for='(subitem, index) in item.submenu', :key='index', @click='supporter.movePage(subitem.href)')

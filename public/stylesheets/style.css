@@ -195,7 +195,7 @@
 
 /* OVERRIDE*/
 .menuable__content__active {
-    border-radius: 20px !important;
+    border-radius: 10px !important;
     -webkit-box-shadow: 0 2px 43px -4px rgba(0, 0, 0, .19) !important;
     box-shadow: 0 2px 43px -4px rgba(0, 0, 0, .19) !important;
 }

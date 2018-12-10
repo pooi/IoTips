@@ -94,29 +94,29 @@ block content
                                             v-carousel-item.elevation-0(style="overflow:visible")
                                                 v-layout
                                                     v-flex(xs12)
-                                                        v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light)
-                                                            v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
-                                                            v-card-text.pt-3.pb-2.px-3.display-1 Tips
-                                                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                        v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light, @click="supporter.drawer = !supporter.drawer")
+                                                            v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)", @click="supporter.drawer = !supporter.drawer")
+                                                            v-card-text.pt-3.pb-2.px-3.display-1(@click="supporter.drawer = !supporter.drawer") Tips
+                                                            v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                                             v-carousel-item.elevation-0(style="overflow:visible")
                                                 v-layout
                                                     v-flex(xs12)
-                                                        v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light)
-                                                            v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
-                                                            v-card-text.pt-3.pb-2.px-3.display-1 Curation
-                                                            v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                        v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light, @click="supporter.drawer = !supporter.drawer")
+                                                            v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)", @click="supporter.drawer = !supporter.drawer")
+                                                            v-card-text.pt-3.pb-2.px-3.display-1(@click="supporter.drawer = !supporter.drawer") Curation
+                                                            v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 
 
 
                                 template(v-else)
-                                    v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
-                                        v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
-                                        v-card-text.pt-3.pb-2.px-3.display-1 Tips
-                                        v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                    v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'")
-                                        v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)")
-                                        v-card-text.pt-3.pb-2.px-3.display-1 Curation
-                                        v-card-text.py-2.px-3.grey--text.text--darken-1 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                    v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'", @click="supporter.drawer = !supporter.drawer")
+                                        v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)", @click="supporter.drawer = !supporter.drawer")
+                                        v-card-text.pt-3.pb-2.px-3.display-1(@click="supporter.drawer = !supporter.drawer") Tips
+                                        v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                    v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'", @click="supporter.drawer = !supporter.drawer")
+                                        v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)", @click="supporter.drawer = !supporter.drawer")
+                                        v-card-text.pt-3.pb-2.px-3.display-1(@click="supporter.drawer = !supporter.drawer") Curation
+                                        v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 
 
 
