@@ -9,14 +9,14 @@ function init(init_user) {
             options: {
                 afterLoad: function(origin, destination, direction){
                     console.log(origin, destination, direction);
-                    if(vue != null){
-                        var destinationIndex = destination.index;
-                        vue.toolbarItems[destinationIndex].color = "white";
-                        if(origin != null){
-                            var originIndex = origin.index;
-                            vue.toolbarItems[originIndex].color = "grey lighten-1";
-                        }
-                    }
+                    // if(vue != null){
+                    //     var destinationIndex = destination.index;
+                    //     // vue.toolbarItems[destinationIndex].color = "white";
+                    //     if(origin != null){
+                    //         var originIndex = origin.index;
+                    //         vue.toolbarItems[originIndex].color = "grey lighten-1";
+                    //     }
+                    // }
                 },
                 menu: '#menu',
                 navigation: true,
