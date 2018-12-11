@@ -219,8 +219,8 @@ block content
                                         v-flex.pt-3.mt-0.px-2(xs12, container, style="overflow:visible")
                                             v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, hide-controls, style="overflow:visible;", light, :style="'height: ' + (reviewHeight) + 'px;'")
                                                 v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArrayBig(reviews)', :key='i', style="overflow:visible")
-                                                    v-layout
-                                                        v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md6, lg4)
+                                                    v-layout(justify-center)
+                                                        v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md6, lg4, v-if="item !== null")
                                                             include review_item
 
                                         v-btn.elevation-0.ma-0.mt-2.logo_blue_text(flat, small, style="min-width: 10px !important;", @click="toggleReviewDialog()")

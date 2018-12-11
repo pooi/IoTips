@@ -76,7 +76,7 @@ block content
 
 
             .section.section-full-page(style="z-index: 5;")
-                .overlay(style="background-color: rgba(30, 50, 20, 0.3);")
+                .overlay
 
                     v-layout.px-4.xs12(row, wrap, style="height: 100%; padding-top: 50px; padding-bottom: 50px;", align-center, justify-center)
 
@@ -97,14 +97,14 @@ block content
                                                         v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light, @click="supporter.drawer = !supporter.drawer")
                                                             v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)", @click="supporter.drawer = !supporter.drawer")
                                                             v-card-text.pt-3.pb-2.px-3.display-1(@click="supporter.drawer = !supporter.drawer") Tips
-                                                            v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                            v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") IoT 구성 및 기기에 대한 활발한 토론을 이어갈 수 있는 소통의 장입니다.
                                             v-carousel-item.elevation-0(style="overflow:visible")
                                                 v-layout
                                                     v-flex(xs12)
                                                         v-card.dal-card-scale.pb-3(hover, raised, style="width: 100%;", light, @click="supporter.drawer = !supporter.drawer")
                                                             v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)", @click="supporter.drawer = !supporter.drawer")
                                                             v-card-text.pt-3.pb-2.px-3.display-1(@click="supporter.drawer = !supporter.drawer") Curation
-                                                            v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                            v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") 원하는 조건과 주거 환경 등을 입력받아 적합한 IoT 구성과 제품을 추천해주는 서비스입니다.
 
 
 
@@ -112,16 +112,16 @@ block content
                                     v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'", @click="supporter.drawer = !supporter.drawer")
                                         v-card-media(src="/images/bg_index_card_1.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)", @click="supporter.drawer = !supporter.drawer")
                                         v-card-text.pt-3.pb-2.px-3.display-1(@click="supporter.drawer = !supporter.drawer") Tips
-                                        v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                        v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") IoT 구성 및 기기에 대한 활발한 토론을 이어갈 수 있는 소통의 장입니다.
                                     v-card.dal-card-scale.mx-3.pb-3(hover, raised, :style="'width: ' + (Math.min(($vuetify.breakpoint.width - 120)/2, 350)) + 'px'", @click="supporter.drawer = !supporter.drawer")
                                         v-card-media(src="/images/bg_index_card_2.jpg", :height="Math.min($vuetify.breakpoint.height-120-70-170, 150)", @click="supporter.drawer = !supporter.drawer")
                                         v-card-text.pt-3.pb-2.px-3.display-1(@click="supporter.drawer = !supporter.drawer") Curation
-                                        v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                        v-card-text.py-2.px-3.grey--text.text--darken-1(@click="supporter.drawer = !supporter.drawer") 원하는 조건과 주거 환경 등을 입력받아 적합한 IoT 구성과 제품을 추천해주는 서비스입니다.
 
 
 
             .section.section-full-page(style="z-index: 5;")
-                .overlay(style="background-color: rgba(30, 50, 60, 0.5);")
+                .overlay
                     v-layout(style="height: 100%")
                         v-flex.mx-3.text-xs-center(style="margin: auto;")
 
@@ -135,9 +135,35 @@ block content
                             v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", v-if="mostViewItems.length > 0")
                                 v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, style="overflow:visible;", light, :style="'height: ' + (Math.min($vuetify.breakpoint.height-400, 250)+101) + 'px;'")
                                     v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArray(mostViewItems)', :key='i', style="overflow:visible")
-                                        v-layout
-                                            v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md4, lg3)
+                                        v-layout(justify-center)
+                                            v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md4, lg3, v-if="item !== null")
                                                 include ecosystem_card_item
+
+                                //v-btn.mt-0(style='margin: 0 auto;  min-width: 60px; font-size: 0.8em;', dark, small, flat, color="white", outline, round, href='/board/ecosystem')
+                                //    span MORE
+
+                            v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", :class="$vuetify.breakpoint.xsOnly ? '' : 'mx-3' ", v-else)
+                                v-progress-circular(indeterminate, color="orange darken-3")
+
+
+            .section.section-full-page(style="z-index: 5;")
+                .overlay
+                    v-layout(style="height: 100%")
+                        v-flex.mx-3.text-xs-center(style="margin: auto;")
+
+                            //v-container(fluid, grid-list-md, style="overflow:visible")
+                            //    v-layout(wrap, style="overflow:visible")
+                            v-flex.text-xs-center.pb-1(xs12, justify-center, align-center)
+                                p.white--text.mb-0(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'headline' : 'display-2'", style='font-weight: 800; font-size: 230%;') Top IoT 구성
+                                span.grey--text.text--lighten-1(:class="$vuetify.breakpoint.xsOnly || $vuetify.breakpoint.smOnly  ?  'body-2' : 'subheading'") 가장 좋은 평가를 받은 IoT 구성입니다.
+
+
+                            v-flex.pt-3.mt-3(xs12, container, style="overflow:visible", v-if="topRatingItems.length > 0")
+                                v-carousel.elevation-0.jumbotron-overlay(hide-delimiters, style="overflow:visible;", light, :style="'height: ' + (Math.min($vuetify.breakpoint.height-400, 250)+101) + 'px;'")
+                                    v-carousel-item.elevation-0(v-for='(array,i) in supporter.splitArray(topRatingItems)', :key='i', style="overflow:visible")
+                                        v-layout(justify-center)
+                                            v-flex(v-for="(item, index) in array", :key='index', xs12, sm6, md4, lg3, v-if="item !== null")
+                                                include ecosystem_card_item_with_rating
 
                                 //v-btn.mt-0(style='margin: 0 auto;  min-width: 60px; font-size: 0.8em;', dark, small, flat, color="white", outline, round, href='/board/ecosystem')
                                 //    span MORE

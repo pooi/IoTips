@@ -57,6 +57,7 @@ function init(init_user) {
             auth: new Auth(),
 
             mostViewItems: [],
+            topRatingItems: [],
 
             cItems: [
                 {
@@ -151,6 +152,24 @@ function init(init_user) {
                     }
                     vue.mostViewItems = [];
                     vue.mostViewItems = vue.mostViewItems.concat(data);
+                }).catch(function (error) {
+                    alert(error);
+                    // vue.filterDialog = false;
+                    // vue.isFilterProgress = false;
+                });
+
+                axios.post(
+                    '/topRating',
+                    data
+                ).then(function (response) {
+                    var res = response;
+                    var data = res.data;
+                    for(var i=0; i<data.length; i++){
+                        data[i].tags = JSON.parse(data[i].tags);
+                        data[i].rgt_date = new Date(data[i].rgt_date);
+                    }
+                    vue.topRatingItems = [];
+                    vue.topRatingItems = vue.topRatingItems.concat(data);
                 }).catch(function (error) {
                     alert(error);
                     // vue.filterDialog = false;
