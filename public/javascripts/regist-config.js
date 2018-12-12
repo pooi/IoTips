@@ -108,6 +108,10 @@ function init(init_user, BOARD_TYPE) {
             detailProductIndex: -1,
 
 
+            registSuccessDialog: false,
+            registeredBoardID: null,
+
+
         },
         methods:{
             onScroll (e) {
@@ -163,6 +167,9 @@ function init(init_user, BOARD_TYPE) {
                 $('html, body').animate({
                     scrollTop: $('#recent').offset().top - offset
                 }, 500);
+            },
+            goRegisteredBoard: function(){
+                window.location.href = "/board/" + this.registeredBoardID;
             },
 
             onEditorBlur(editor) {
@@ -650,8 +657,10 @@ function init(init_user, BOARD_TYPE) {
 
                         vue.loadingProgress = false;
                         if(data.isSuccess){
-                            alert("성공적으로 등록하였습니다.");
-                            window.location.href = "/board/" + data.boardID;
+                            // alert("성공적으로 등록하였습니다.");
+                            vue.registSuccessDialog = true;
+                            vue.registeredBoardID = data.boardID;
+                            // window.location.href = "/board/" + data.boardID;
                         }else{
                             alert("에러");
                         }

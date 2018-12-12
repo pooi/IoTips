@@ -4,7 +4,7 @@ template(v-if="item !== null")
         .px-2.body-1(style="width: fit-content; font-weight: 500;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{ supporter.convertTitle(item.title) }}
         .pr-2.caption.orange--text.text--lighten-2(style="", v-if="item.numOfComment > 0") {{ item.numOfComment }}
         v-spacer
-        .text-xs-center.px-2.body-1(style="width: 100px; font-weight: 500;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{ item.nickname }}
+        .text-xs-center.px-2.body-1(style="width: 140px; font-weight: 500;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{ item.nickname }}
         .text-xs-center.px-2.body-1.grey--text.text--darken-1(style="width: 70px;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{ item.hit }}
         .text-xs-center.px-2.body-1(style="width: 70px;", :style="isDark ? 'border-left: .4px solid rgba(255,255,255,0.2);' : 'border-left: .4px solid rgba(0,0,0,0.2);'") {{supporter.parseBoardDate(item.rgt_date)}}
 

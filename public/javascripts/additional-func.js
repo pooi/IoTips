@@ -604,7 +604,7 @@ class Supporter {
     splitArray (array) {
         var chunk = 1;
         var breakpoint = this.vue.__proto__.$vuetify.breakpoint;
-        if(breakpoint.xs || breakpoint.xl)
+        if(breakpoint.xs)
             chunk = 1;
         else if(breakpoint.sm)
             chunk = 2;
@@ -633,7 +633,7 @@ class Supporter {
     splitArrayBig (array) {
         var chunk = 1;
         var breakpoint = this.vue.__proto__.$vuetify.breakpoint;
-        if(breakpoint.xs || breakpoint.xl)
+        if(breakpoint.xs)
             chunk = 1;
         else if(breakpoint.sm)
             chunk = 2;
@@ -693,6 +693,14 @@ class Supporter {
 
     static movePage(href){
         window.location.href = href;
+    }
+
+    reload(){
+        window.location.reload();
+    }
+
+    static reload(){
+        window.location.reload();
     }
 
     isHomePage(){

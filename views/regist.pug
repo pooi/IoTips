@@ -611,6 +611,19 @@ block content
                 v-btn(color='success', flat, @click.native="detailPlatformDialog = false") 닫기
 
 
+    v-dialog.md6(v-model='registSuccessDialog', persistent, scrollable, max-width='500px')
+        v-card
+            v-card-title.headline(icon)
+                v-icon.mr-2(color='success') check_circle
+                | 성공
+            v-card-text.subheading
+                | 성공적으로 등록하였습니다.
+            v-card-actions
+                v-spacer
+                v-btn(color='error', flat, small, @click="supporter.reload()") 닫기
+                v-btn.logo_blue_text(flat, small, @click="goRegisteredBoard()") 확인하기
+
+
     include footer
     //include bottom_tab
 
