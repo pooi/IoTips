@@ -454,6 +454,10 @@ table.mxPopupMenu tr {
     font-size: 4pt;
 }
 
+.full-height-menu .v-menu__activator{
+    height: 100%;
+}
+
 #fp-nav.fp-right {
     right: 2px !important;
 }

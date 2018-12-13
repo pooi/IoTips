@@ -290,19 +290,35 @@ class Supporter {
                 "submenu" : [
                     {
                         "title" : "구성도",
-                        "href" : "/board/ecosystem"
+                        "href" : "/board/ecosystem",
+                        "menu" : false,
+                        "menu2" : false,
+                        "fullTitle": "구성도 게시판",
+                        "description": "IoT 구성에 대해 구성도를 작성할 수 있고, 제품과 플랫폼에 대한 토론 및 활발한 소통을 이어나갈 수 있는 게시판"
                     },
                     {
                         "title" : "자유",
-                        "href" : "/board/free"
+                        "href" : "/board/free",
+                        "menu" : false,
+                        "menu2" : false,
+                        "fullTitle": "자유 게시판",
+                        "description": "자유롭게 여러 사용자와 의견을 나눌 수 있는 게시판"
                     },
                     {
                         "title" : "질문",
-                        "href" : "/board/question"
+                        "href" : "/board/question",
+                        "menu" : false,
+                        "menu2" : false,
+                        "fullTitle": "질문 게시판",
+                        "description": "IoT 구성 및 제품에 대한 질문을 나눌 수 있는 게시판"
                     },
                     {
                         "title" : "품평",
-                        "href" : "/board/review"
+                        "href" : "/board/review",
+                        "menu" : false,
+                        "menu2" : false,
+                        "fullTitle": "품평 게시판",
+                        "description": "IoT 제품에 대한 품평 및 의견을 나눌 수 있는 게시판"
                     }
 
                 ]
@@ -313,11 +329,19 @@ class Supporter {
                 "submenu" : [
                     {
                         "title" : "구성",
-                        "href" : "/curation/ecosystem"
+                        "href" : "/curation/ecosystem",
+                        "menu" : false,
+                        "menu2" : false,
+                        "fullTitle": "IoT 구성 추천",
+                        "description": "사용 환경, 원하는 capability 및 금액 등을 이용해 적합한 IoT 구성을 추천해주는 서비스"
                     },
-                   {
+                    {
                         "title" : "제품",
-                        "href" : "/curation/product"
+                        "href" : "/curation/product",
+                        "menu" : false,
+                        "menu2" : false,
+                        "fullTitle": "IoT 제품 추천",
+                        "description": "사용 환경, 원하는 capability 및 금액 등을 이용해 적합한 IoT 제품을 추천해주는 서비스"
                     }
 
                 ]

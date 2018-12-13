@@ -60,7 +60,12 @@ v-layout
                 v-flex.xs7
                     v-list.no-padding-list.pa-0(v-if="item.submenu.length > 0")
                         v-list-tile(v-for='(subitem, index) in item.submenu', :key='index', @click='supporter.movePage(subitem.href)')
-                            v-list-tile-title.title.pl-2(style="height: fit-content; font-weight:100;") {{ subitem.title }}
+                            v-menu.full-height-menu(v-model='subitem.menu', open-on-hover, :close-on-content-click='false', :min-width='$vuetify.breakpoint.xsOnly ? $vuetify.breakpoint.width-50 : 300', :max-width='$vuetify.breakpoint.xsOnly ? $vuetify.breakpoint.width-50 : 300', offset-x, style="width: 100%; height: 100%;")
+                                v-list-tile-title.title.pl-2(slot="activator", style="height: fit-content; font-weight:100; width: 100%;") {{ subitem.title }}
+                                v-card
+                                    v-card-text.pt-3.pb-0.logo_blue_text.headline(style="height: fit-content; font-weight:700;") {{subitem.fullTitle}}
+                                    v-card-text.pt-0.pb-3.body-1 {{subitem.description}}
+
                     v-list.no-padding-list.pa-0(v-else)
                         v-list-tile(@click='supporter.movePage(item.href)')
                             v-list-tile-title.title.pl-2(style="height: fit-content; font-weight:100;") {{item.title}}
