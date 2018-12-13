@@ -4,6 +4,7 @@ const CURRENCIES = [{'symbol': '₩', 'code': '410', 'sign': '남한 원', 'curr
 class Platform{
     constructor() {
         this.id = Supporter.getTodayMs() + Supporter.makeid(20);
+        this.originalID = null;
 
         this.title = null;
         this.company = null;
@@ -82,6 +83,7 @@ class Platform{
 
     fromDicWithoutID(data){
         // this.id = data.id;
+        this.originalID = data.id;
         this.title = data.title;
         this.description = data.description;
         this.company = data.company;
@@ -102,6 +104,7 @@ class Platform{
 class Product {
     constructor() {
         this.id = Supporter.getTodayMs() + Supporter.makeid(20);
+        this.originalID = null;
 
         this.title = null;
         this.company = null;
@@ -189,6 +192,7 @@ class Product {
 
     fromDicWithoutID(data){
         // this.id = data.id;
+        this.originalID = data.id;
         this.title = data.title;
         this.description = data.description;
         this.company = data.company;

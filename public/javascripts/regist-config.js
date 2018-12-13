@@ -756,10 +756,61 @@ function init(init_user, BOARD_TYPE) {
                                 // vue.graphManager.makeFromXml(json2xml(graph));
                                 setTimeout(function () {
                                     // vue.graphManager = new GraphManager("graph");
-                                    // vue.graphManager.main();
+                                    vue.graphManager.main();
                                     var graph = JSON.parse(result.graph);
                                     vue.graphManager.makeFromXml(json2xml(graph));
+
+                                    console.log(vue.graphManager.graph.getChildCells());
+                                    for(var i=0; i<vue.graphManager.graph.getChildCells().length; i++){
+                                        console.log(i);
+                                        var cell = vue.graphManager.graph.getChildCells()[i];
+                                        console.log(cell);
+                                        var found = false;
+                                        var cell_id = cell.id;
+                                        for(var j=0; j<vue.products.length; j++){
+                                            var product = vue.products[j];
+                                            console.log(product);
+                                            if(product.originalID !== null && product.originalID === cell_id){
+                                                found = true;
+                                                vue.graphManager.graph.getChildCells()[i].id = product.id;
+                                                vue.graphManager.graph.getChildCells()[i].style = product.id;
+                                                console.log(cell);
+                                                break;
+                                            }
+                                        }
+                                        if(!found){
+                                            for(var j=0; j<vue.platforms.length; j++){
+                                                var platform = vue.platforms[j];
+                                                if(platform.originalID !== null && platform.originalID === cell_id){
+                                                    found = true;
+                                                    vue.graphManager.graph.getChildCells()[i].id = platform.id;
+                                                    vue.graphManager.graph.getChildCells()[i].style = platform.id;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    for(var i=0; i<vue.products.length; i++){
+                                        var product = vue.products[i];
+                                        if(product.img !== null){
+                                            vue.graphManager.addImageStyle(product.id, product.img, function (w, h) {
+                                                vue.graphManager.graph.refresh();
+                                            });
+                                        }
+                                    }
+
+                                    for(var i=0; i<vue.platforms.length; i++){
+                                        var platform = vue.platforms[i];
+                                        if(platform.img !== null){
+                                            vue.graphManager.addPlatformImageStyle(platform.id, platform.img, function (w, h) {
+                                                vue.graphManager.graph.refresh();
+                                            });
+                                        }
+                                    }
+
                                     vue.originalProgress.graph = true;
+
                                 }, 500);
                             }
                         }

@@ -226,7 +226,7 @@ function init(init_user, init_boardID) {
                     var data = {
                         parentBoardID: this.result.id
                     };
-                    console.log(data);
+                    // console.log(data);
 
                     axios.post(
                         '/board/related',
@@ -858,7 +858,7 @@ function init(init_user, init_boardID) {
                     data
                 ).then(function (res) {
                     var result = res.data.result;
-                    // console.log(result);
+                    console.log(res.data);
 
                     if(result.content != null){
                         vue.content = json2html(JSON.parse(result.content));

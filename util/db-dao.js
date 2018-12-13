@@ -479,6 +479,10 @@ exports.getBoardDetailFromID = function (boardID, callback) {
         "select * from board_product where board_id=?;" +
         "select * from board_platform where board_id=?;";
 
+    console.log(sql);
+
+
+
     conn.query(sql, [boardID, boardID, boardID, boardID], function(err, results){
         if(err){
             callback(true, err);
