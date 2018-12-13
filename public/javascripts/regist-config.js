@@ -750,6 +750,7 @@ function init(init_user, BOARD_TYPE) {
                         if("graph" in result){
                             if(result.graph != null){
                                 document.getElementById("graph").innerHTML = '';
+                                vue.originalProgress.graph = true;
                                 // vue.graphManager = new GraphManager("graph", true);
                                 // var graph = JSON.parse(result.graph);
                                 // console.log(json2xml(graph));
@@ -809,9 +810,8 @@ function init(init_user, BOARD_TYPE) {
                                         }
                                     }
 
-                                    vue.originalProgress.graph = true;
 
-                                }, 500);
+                                }, 2000);
                             }
                         }
 
