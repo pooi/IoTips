@@ -757,7 +757,7 @@ function init(init_user, BOARD_TYPE) {
                                 // vue.graphManager.makeFromXml(json2xml(graph));
                                 setTimeout(function () {
                                     // vue.graphManager = new GraphManager("graph");
-                                    vue.graphManager.main();
+                                    // vue.graphManager.main();
 
                                     var newjsonGraph = result.graph;
                                     for(var i=0; i<vue.products.length; i++){
