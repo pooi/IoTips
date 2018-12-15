@@ -36,8 +36,8 @@ IoT의 성장이 생각보다 더딘 이유 중 하나는 IoT에 대한 접근�
 ## Platforms
 <ul>
   <li>Responsive Web</li>
-  <li>Android (Hybrid mobile app)</li>
-  <li>iOS (Hybrid mobile app)</li>
+  <li>Android (Hybrid mobile app) - <a href='https://github.com/pooi/IoTips_Android'>IoTps_Android</a></li>
+  <li>iOS (Hybrid mobile app) - <a href='https://github.com/pooi/IoTips_iOS'>IoTps_iOS</a></li>
 </ul>
 
 <br>
@@ -71,10 +71,6 @@ IoT의 성장이 생각보다 더딘 이유 중 하나는 IoT에 대한 접근�
 
 <br>
 
-## Development Period
-> Using test-driven development (TDD)
-
-~ 2018.10.31 (2 months)
 
 <br>
 
