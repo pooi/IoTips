@@ -104,9 +104,9 @@ block content
                                 br(v-if="$vuetify.breakpoint.xsOnly")
                                 | 선택해 주세요 "
                             form(style="margin-top: 30px;")
-                                div.form_tag(v-for="tag in TAG")
-                                    input.toggle_tag(v-bind:id="'cur_tag_'+tag.id", type="checkbox", v-bind:value="tag.name", v-model="checkedTag", style="display: none;")
-                                    label.toggle_tag(v-bind:for="'cur_tag_'+tag.id") {{tag.name}}
+                                div.form_tag(v-for="tag in TAG", :style="$vuetify.breakpoint.xsOnly ? 'margin: 10px 0px !important;' : ''")
+                                    input.toggle_tag(:id="'cur_tag_'+tag.id", type="checkbox", :value="tag.name", v-model="checkedTag", style="display: none;")
+                                    label.toggle_tag(:for="'cur_tag_'+tag.id") {{tag.name}}
                                 
                                 //span 체크한 이름: {{ checkedTag }}
 
