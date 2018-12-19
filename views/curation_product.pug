@@ -66,7 +66,7 @@ block content
                 //-             v-card-text.mb-0.pt-1.pb-2 {{ result.description }}
 
                 v-layout(v-if="!loading", row, wrap, style="width: 100%;")
-                    v-container.px-5(grid-list-xs)
+                    v-container(grid-list-xs, :class="$vuetify.breakpoint.xsOnly ? 'px-3' : 'px-5'")
                         v-layout(row, wrap)
                             v-flex(v-for="(result, i) in curateResult", :key='i', xs12, sm6, md4, lg3)
                                 v-card.dal-card-scale.text-xs-left(style="margin: 10px;", light, flat='', tile='', hover, raised, :class="$vuetify.breakpoint.xsOnly ? 'mb-3' : 'ma-2' ", v-if="result !== null", :href="result.url", target="_blank", :dark="isDark")
