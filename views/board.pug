@@ -40,9 +40,9 @@ block content
                                 v-list-tile(v-for='(item, index) in items', :key='index', @click='moveDetail(item)', :style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
                                     include board_item
 
-                                v-list-tile(:style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
-                                    v-layout.ma-2.pa-2(row, wrap, justify-center, align-center, style="height: 100px;", :class="isDark ? 'grey darken-2' : 'grey lighten-4'")
-                                        .body-1 Ads
+                                //v-list-tile(:style="isDark ? 'border-bottom: .4px solid rgba(255, 255, 255,0.2) !important;' : 'border-bottom: .4px solid rgba(0,0,0,0.2) !important;'")
+                                //    v-layout.ma-2.pa-2(row, wrap, justify-center, align-center, style="height: 100px;", :class="isDark ? 'grey darken-2' : 'grey lighten-4'")
+                                //        .body-1 Ads
 
 
                         v-card-text.py-5.title.text-xs-center(v-else) 결과가 없습니다.
