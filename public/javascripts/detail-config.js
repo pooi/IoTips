@@ -860,10 +860,6 @@ function init(init_user, init_boardID) {
                     var result = res.data.result;
                     console.log(res.data);
 
-                    if(result.content != null){
-                        vue.content = json2html(JSON.parse(result.content));
-                    }
-
                     if("type" in result){
                         switch (result.type) {
                             case "free":
@@ -882,6 +878,7 @@ function init(init_user, init_boardID) {
                                 if(vue.auth.user === null || vue.auth.user.db_id !== result.user_id){
                                     alert("본인만 조회할 수 있는 게시글입니다.");
                                     window.history.back();
+                                    return;
                                 }
                                 vue.boardType = vue.boardTypes[4];
                                 break;
@@ -891,6 +888,10 @@ function init(init_user, init_boardID) {
                         }
                     }else{
                         vue.boardType = vue.boardTypes[0];
+                    }
+
+                    if(result.content != null){
+                        vue.content = json2html(JSON.parse(result.content));
                     }
 
 
