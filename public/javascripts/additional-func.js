@@ -353,7 +353,11 @@ class Supporter {
             {
                 "title" : "파트너",
                 "href" : "/partners",
-                "submenu" : []
+                "submenu" : [],
+                "menu" : false,
+                "menu2" : false,
+                "fullTitle": "파티너 소개",
+                "description": "IoTips와 협약을 맺은 파트너 목록입니다."
             }
         ];
         // this.menus = [
