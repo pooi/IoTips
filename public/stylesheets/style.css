@@ -417,6 +417,11 @@
     width: 100%;
 }
 
+.img-blur-5px {
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
+}
+
 /* MxGraph Menu Style */
 body div.mxPopupMenu {
     border-radius: 10px !important;
