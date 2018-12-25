@@ -18,7 +18,7 @@ block content
 
             v-container( grid-list-xs)
                 v-layout(row, wrap)
-                    v-flex(v-for='(partner, i) in partners', :key='i', xs6, sm3)
+                    v-flex(v-for='(partner, i) in supporter.shuffle(partners)', :key='i', xs6, sm3)
                         a(:href="partner.url")
                             img.img-blur-5px(:src="partner.img", style="max-width: 100%; max-height: 100%;")
 
