@@ -75,6 +75,9 @@ function init(init_user, init_boardID) {
                 }
             },
 
+            isLike: false,
+            isDislike: false,
+
             content: null,
             comments: [],
             commentLoading: false,
