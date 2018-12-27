@@ -796,6 +796,25 @@ function init(init_user, init_boardID) {
                 }else{
                     alert("제목, 내용 및 닉네임을 입력해주세요.");
                 }
+            },
+
+            submitLike: function (value) {
+                if(value){
+                    this.isLike = true;
+                    this.submitDislike(false);
+                }else{
+                    this.isLike = false;
+
+                }
+            },
+            submitDislike: function (value) {
+                if(value){
+                    this.isDislike = true;
+                    this.submitLike(false);
+                }else{
+                    this.isDislike = false;
+
+                }
             }
 
 
