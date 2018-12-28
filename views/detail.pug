@@ -62,10 +62,10 @@ block content
                                 v-spacer
                                 v-btn.elevation-0.ma-0.small-caption.py-1(:color="isLike ? 'blue' : 'grey lighten-1'", @click="submitLike(!isLike)", dark, flat, small, icon, style="min-width: 10px !important; height: fit-content;")
                                     v-icon.caption(dark) thumb_up
-                                .caption 20
+                                .caption {{result.like}}
                                 v-btn.elevation-0.ma-0.small-caption.py-1(:color="isDislike ? 'red' : 'grey lighten-1'", @click="submitDislike(!isDislike)", dark, flat, icon, small, style="min-width: 10px !important; height: fit-content;")
                                     v-icon.caption(dark) thumb_down
-                                .caption 5
+                                .caption {{result.dislike}}
 
                         v-card-text.py-0
                             v-divider.my-0

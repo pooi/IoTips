@@ -800,18 +800,30 @@ function init(init_user, init_boardID) {
 
             submitLike: function (value) {
                 if(value){
+                    if(this.isDislike){
+                        this.result.dislike -= 1;
+                    }
+                    this.result.like += 1;
                     this.isLike = true;
-                    this.submitDislike(false);
+                    this.isDislike = false;
+                    // this.submitDislike(false);
                 }else{
+                    this.result.like -= 1;
                     this.isLike = false;
 
                 }
             },
             submitDislike: function (value) {
                 if(value){
+                    if(this.isLike){
+                        this.result.like -= 1;
+                    }
+                    this.result.dislike += 1;
                     this.isDislike = true;
-                    this.submitLike(false);
+                    this.isLike = false;
+                    // this.submitLike(false);
                 }else{
+                    this.result.dislike -= 1;
                     this.isDislike = false;
 
                 }
@@ -932,6 +944,9 @@ function init(init_user, init_boardID) {
                     }
 
                     vue.result = result;
+
+                    vue.result.like = 20;
+                    vue.result.dislike = 5;
 
                     var platforms = res.data.platforms;
                     var products = res.data.products;
