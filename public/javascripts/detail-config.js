@@ -21,6 +21,7 @@ function init(init_user, init_boardID) {
             },
             statusColor: "#ffaf1d",
             bottomTab: "board",
+            isDark: false,
 
             supporter: null,
             auth: new Auth(),
@@ -507,14 +508,11 @@ function init(init_user, init_boardID) {
                             vue.comments = [];
                             for(var i=0; i<data.length; i++){
                                 if(data[i].parent < 0){
-                                    console.log("1");
                                     var comment = new Comment(data[i]);
                                     vue.comments.push(comment);
                                     // vue.comments.push(data[i]);
                                 }else{
-                                    console.log("2");
                                     var parentID = data[i].parent;
-                                    console.log("parentID: ", parentID);
                                     var check = false;
                                     for(var j=0; j<vue.comments.length; j++){
                                         if(vue.comments[j].id === parentID){
@@ -525,7 +523,6 @@ function init(init_user, init_boardID) {
                                         }
                                     }
                                     if(!check){
-                                        console.log("3");
                                         var comment = new Comment(data[i]);
                                         vue.comments.push(comment);
                                         // vue.comments.push(data[i]);
@@ -627,7 +624,7 @@ function init(init_user, init_boardID) {
                         data['graph'] = null;
                     }
 
-                    console.log(data);
+                    // console.log(data);
 
                     axios.post(
                         '/board/registComment',
@@ -755,7 +752,7 @@ function init(init_user, init_boardID) {
                 var form = this.$refs.form_review;
                 if(form.validate()){
 
-                    console.log("validate");
+                    // console.log("validate");
                     this.submitReviewProgress = true;
                     var boardID = this.result.id;
 
@@ -892,7 +889,7 @@ function init(init_user, init_boardID) {
                     data
                 ).then(function (res) {
                     var result = res.data.result;
-                    console.log(res.data);
+                    // console.log(res.data);
 
                     if("type" in result){
                         switch (result.type) {

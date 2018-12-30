@@ -40,12 +40,12 @@ template(v-if="comment !== null")
 
         v-layout.xs12.mt-3(row, wrap, align-center style="width: 100%; font-weight: 500; padding-left: 56px;")
             v-spacer
-            v-btn.elevation-0.ma-0.small-caption.py-1(:color="isLike ? 'blue' : 'grey lighten-1'",  dark, flat, small, icon, style="min-width: 10px !important; height: fit-content;")
+            v-btn.elevation-0.ma-0.small-caption.py-1(:color="comment.isLike ? 'blue' : 'grey lighten-1'", @click="comment.submitLike(!comment.isLike)", dark, flat, small, icon, style="min-width: 10px !important; height: fit-content;")
                 v-icon.caption(dark) thumb_up
-            .caption 20
-            v-btn.elevation-0.ma-0.small-caption.py-1(:color="isDislike ? 'red' : 'grey lighten-1'",  dark, flat, icon, small, style="min-width: 10px !important; height: fit-content;")
+            .caption {{comment.like}}
+            v-btn.elevation-0.ma-0.small-caption.py-1(:color="comment.isDislike ? 'red' : 'grey lighten-1'", @click="comment.submitDislike(!comment.isDislike)", dark, flat, icon, small, style="min-width: 10px !important; height: fit-content;")
                 v-icon.caption(dark) thumb_down
-            .caption 5
+            .caption {{comment.dislike}}
 
         //v-layout.pa-0.xs12.mt-2(row, wrap, style="width: 100%; font-weight: 500;")
         //    v-spacer

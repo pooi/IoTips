@@ -215,6 +215,42 @@ class Comment{
         this.data = data;
         this.graphManager = null;
         this.id = data.id;
+        this.like = 0;
+        this.dislike = 0;
+        this.isLike = false;
+        this.isDislike = false;
+    }
+
+    submitLike (value) {
+        if(value){
+            if(this.isDislike){
+                this.dislike -= 1;
+            }
+            this.like += 1;
+            this.isLike = true;
+            this.isDislike = false;
+            // this.submitDislike(false);
+        }else{
+            this.like -= 1;
+            this.isLike = false;
+
+        }
+    }
+
+    submitDislike (value) {
+        if(value){
+            if(this.isLike){
+                this.like -= 1;
+            }
+            this.dislike += 1;
+            this.isDislike = true;
+            this.isLike = false;
+            // this.submitLike(false);
+        }else{
+            this.dislike -= 1;
+            this.isDislike = false;
+
+        }
     }
 }
 
@@ -2005,7 +2041,7 @@ class GraphManager {
     addImageStyle(id, img, callback){
         var graph = this.graph;
         this.getImageMeta(img, 80, function (width, height) {
-            console.log(width, height);
+            // console.log(width, height);
 
             var style = new Object();
             style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
