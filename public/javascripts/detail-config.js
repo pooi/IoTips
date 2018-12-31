@@ -574,6 +574,14 @@ function init(init_user, init_boardID) {
 
             },
             fillCommentGraph: function(type){
+
+                if(type === 'clear'){
+                    var r = confirm("그래프를 삭제하겠습니까?");
+                    if(!r){
+                        return;
+                    }
+                }
+
                 this.commentGraph = null;
                 document.getElementById("comment-graph").innerHTML = '';
                 this.commentGraph = new GraphManager("comment-graph", true);
@@ -600,9 +608,12 @@ function init(init_user, init_boardID) {
 
             },
             removeCommentGraph: function(){
-                this.showCommentGraph = false;
-                this.commentGraph = null;
-                document.getElementById("comment-graph").innerHTML = '';
+                var r = confirm("그래프 추가를 취소하겠습니까?");
+                if (r) {
+                    this.showCommentGraph = false;
+                    this.commentGraph = null;
+                    document.getElementById("comment-graph").innerHTML = '';
+                }
             },
 
             submitComment: function(){
